@@ -42,7 +42,7 @@
 ## Block markup complet
 
 Le markup complet (~40 KB, 7 sections) est dans le fichier référence :
-[`templates/landing-formation-complete-markup.html`](../templates/landing-formation-complete-markup.html)
+[`examples/landing-formation-complete-markup.html`](../examples/landing-formation-complete-markup.html) (et son CSS associé [`examples/landing-formation-complete-page-css.css`](../examples/landing-formation-complete-page-css.css))
 
 Structure narrative en 7 root containers Spectra (`uagb/container` `isBlockRootParent:true`) :
 

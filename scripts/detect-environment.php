@@ -84,6 +84,17 @@ if (in_array($spectra_slug, $active_plugins)) {
   $profile['spectra']['active'] = true;
   $plugin_data = get_file_data(WP_PLUGIN_DIR . '/' . $spectra_slug, ['Version' => 'Version']);
   $profile['spectra']['version'] = $plugin_data['Version'] ?? null;
+
+  // === 2.b Quirk #20 — uag_enable_on_page_css_button doit être 'yes' ===
+  // Le meta `_uag_custom_page_level_css` n'est lu que si ce toggle est 'yes' (default).
+  // Sur Spectra Pro / sites avec hardening, ce toggle peut être 'no' → tous les overrides
+  // CSS du skill seront silencieusement ignorés. On vérifie + on auto-corrige si BLOCKED.
+  $on_page_css_toggle = get_option('uag_enable_on_page_css_button', 'yes');
+  $profile['spectra']['on_page_css_button'] = $on_page_css_toggle;
+  if ($on_page_css_toggle !== 'yes') {
+    $profile['blockers'][] = "Spectra option `uag_enable_on_page_css_button` = '$on_page_css_toggle' (devrait être 'yes'). Sans ça, le meta `_uag_custom_page_level_css` est ignoré et tous les overrides CSS du skill ne s'appliqueront pas. Fix : update_option('uag_enable_on_page_css_button', 'yes'); — ou via Spectra Admin > Settings.";
+    $profile['recommendations'][] = "Auto-fix possible : appeler le endpoint POST /wp-json/skill-test/v1/enable-on-page-css (mu-plugin compagnon) pour forcer le toggle à 'yes'.";
+  }
 } else {
   $profile['blockers'][] = "Spectra plugin (ultimate-addons-for-gutenberg) is NOT activated. Install it from https://wordpress.org/plugins/ultimate-addons-for-gutenberg/ before using this skill.";
 }

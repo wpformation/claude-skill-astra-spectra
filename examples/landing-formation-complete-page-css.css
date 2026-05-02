@@ -129,13 +129,33 @@
   .uagb-block-v93-cta-final-text .uagb-ifb-title { font-size: 32px !important; }
 }
 
-/* Eyebrows — 15px tracking 4px orange uppercase */
+/* Eyebrows — 15px tracking 4px orange uppercase
+   Migré depuis inline style="letter-spacing:Xpx;text-transform:uppercase" qui aurait été
+   strippé par Gutenberg save (cf quirk #4). 4px uniforme accepté (légère régression vs
+   3px sur certains eyebrows mais plus propre). */
 .uagb-ifb-title-prefix {
   font-size: 15px !important;
   font-weight: 800 !important;
   color: #FD9800 !important;
   letter-spacing: 4px !important;
   text-transform: uppercase !important;
+}
+
+/* Stats labels — uppercase 13px tracking 2px (« COURS RÉDIGÉS », etc.)
+   Migré depuis inline style="text-transform:uppercase;letter-spacing:2px" */
+.uagb-block-v93-stat-1-text .uagb-ifb-desc,
+.uagb-block-v93-stat-2-text .uagb-ifb-desc,
+.uagb-block-v93-stat-3-text .uagb-ifb-desc,
+.uagb-block-v93-stat-4-text .uagb-ifb-desc {
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+}
+
+/* FAQ wrapper — centré horizontalement
+   Migré depuis inline style="margin-left:auto;margin-right:auto" sur le <div> wrapper. */
+.uagb-block-v93-faq-w {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 /* Avatars circulaires testimonials — border subtle */

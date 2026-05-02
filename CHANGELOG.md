@@ -2,6 +2,112 @@
 
 Toutes les modifications notables de ce skill sont documentées dans ce fichier. Format basé sur [Keep a Changelog](https://keepachangelog.com/), versions selon [Semantic Versioning](https://semver.org/).
 
+## [1.0-rc2] — 2026-05-02 (soir) — Réponse aux 8 items du test régression prod cours-ndrc.fr
+
+> **Verdict reviewer externe sur v1.0-rc1** : « Pipeline a fonctionné en prod sur cours-ndrc.fr (Astra 4.13.1 + Spectra 2.19.21 + palette_3 + LiteSpeed + o2switch). Mais 3 nouveaux quirks bloquants + 1 incohérence dans tes propres examples détectés. Bouger rc1 → rc2 avec 8 items. »
+
+> **Action** : 8 items traités (3 P0, 4 P1, 2 P2). 19 → 22 quirks documentés. 1 faux positif pre-flight corrigé en cadeau.
+
+### 1. Quirk #20 ajouté + détection automatique
+
+**`uag_enable_on_page_css_button` doit être `yes`** sinon le meta `_uag_custom_page_level_css` est ignoré silencieusement par Spectra. Bug confirmé sur cours-ndrc.fr : tous les overrides CSS perdus, AUCUNE erreur, débogage cauchemardesque.
+
+- `references/spectra-attributes-quirks.md` quirk #20 documenté (Symptôme/Cause/Fix/Détection)
+- `references/persistent-css-overrides.md` nouvelle section **« Pré-requis Spectra »** + Limitations connues mises à jour
+- `scripts/detect-environment.php` : check ajouté en `blockers[]` si l'option n'est pas à `yes`
+- `scripts/mu-plugin-skill-test.php` : nouveau endpoint `POST /wp-json/skill-test/v1/enable-on-page-css` pour auto-fix
+
+### 2. Quirk #21 ajouté + audit de tous les CSS escapes
+
+**CSS Unicode escapes `\HHHH` strippés par `UAGB_Admin_Helper::sanitize_inline_css()`** → rendu littéral `201C` à la place de `“`. Découvert en prod : watermark guillemet variant 1.b cassait visuellement.
+
+- `references/spectra-attributes-quirks.md` quirk #21 documenté avec table des escapes courants → équivalent UTF-8 littéral
+- `patterns/testimonials-cards.md` ligne 226 : `content: "\201C"` → `content: "“"` (UTF-8 direct + commentaire pédagogique)
+- `references/persistent-css-overrides.md` : « Limitations connues » étendues (encoding obligatoire UTF-8 sans BOM, table des escapes courants)
+- Pre-flight check `pre-flight-check.php` : nouvelle regex sur le file CSS qui flag `content\s*:\s*['"]\\[0-9a-fA-F]{1,6}` en **P0 BLOCKER** + détection BOM UTF-8 en P1
+
+### 3. Quirk #22 ajouté + check pre-flight conflit width
+
+**`uagb/image` avec `width:N` (px) ET `widthDesktop:N` (%) simultanés** → le parser `parse_blocks → serialize_blocks` perd les valeurs au roundtrip. Conflit silencieux.
+
+- `references/spectra-attributes-quirks.md` quirk #22 documenté avec 2 conventions exclusives (Option A px fixed, Option B % container)
+- `scripts/pre-flight-check.php` : nouveau check qui flag `width:N` + `widthDesktop:N + widthTypeDesktop:%` simultanés en P1, et la double-définition de `widthTablet`/`widthMobile` dans le même JSON en P0
+
+> **Note** : le baseline `examples/landing-formation-complete-markup.html` ne contient PAS ce conflit (vérifié à 3 instances `uagb/image`). Le reviewer s'est trompé sur les « lignes 74-76 » qui sont des `uagb/container`. Le quirk reste documenté en prévention pour les nouveaux patterns.
+
+### 4. Migration des inline styles dans le baseline
+
+Le quirk #4 documente strict « inline `style="..."` strippé par Gutenberg save ». Le baseline contenait pourtant 15 occurrences de `style="letter-spacing:Xpx;text-transform:uppercase"` sur les eyebrows et labels. **Régression silencieuse** garantie au premier save Gutenberg.
+
+- `examples/landing-formation-complete-markup.html` : 15 inline styles strippés (script Python regex)
+- `examples/landing-formation-complete-page-css.css` : 3 nouvelles règles CSS pour récupérer les styles équivalents :
+  - `.uagb-ifb-title-prefix` global (eyebrows uniformes 4px tracking)
+  - `.uagb-block-v93-stat-X-text .uagb-ifb-desc` (labels stats uppercase 2px)
+  - `.uagb-block-v93-faq-w` (FAQ wrapper centré horizontalement)
+- Légère régression cosmétique acceptée : eyebrows passés de 3px (certains) à 4px uniforme
+
+### 5. Pre-flight regex inline title-prefix (QUIRK-4-PREFIX)
+
+Variante du QUIRK-4 ciblée spécifiquement sur les eyebrows. Détection en P1 + message qui guide explicitement vers la migration CSS.
+
+```
+P1 QUIRK-4-PREFIX : Inline style sur <p class="uagb-ifb-title-prefix"> détecté.
+Sera STRIPPÉ par Gutenberg dès le premier save (régression silencieuse de l'eyebrow).
+Migrer vers une règle CSS globale .uagb-ifb-title-prefix { ... } dans _uag_custom_page_level_css.
+```
+
+### 6. Pre-flight regex CSS escapes (QUIRK-21)
+
+Décrit en item 2.
+
+### 7. Note i18n sur conflit `&rsquo;` vs `'` ASCII
+
+`references/i18n-rules.md` : nouvelle section **« Cas particulier — convention site cible vs convention typographique »** avec table de décision (selon les conventions documentées du site cible). Explicite que cours-ndrc.fr a la convention « ASCII strict » dans son MEMORY.md → le skill DOIT respecter la convention du site, pas imposer la sienne.
+
+### 8. Vérification liens internes après refactor template→examples
+
+4 liens cassés corrigés (`templates/...` → `examples/...`) :
+
+- `workflows/visual-validation-loop.md:193`
+- `screenshots/loginarmor-dev-palette3/README.md:14`
+- `patterns/landing-formation-complete.md:45`
+- `references/persistent-css-overrides.md:138`
+
+CHANGELOG.md historique non touché (entrées v0.9.x = légitime).
+
+### Bonus — Faux positif QUIRK-9 corrigé
+
+Le check QUIRK-9 du pre-flight flagge `overlayOpacity > 0.85`. Or quand l'overlay est de type `gradient` avec colors stops `rgba(...,0.X)`, l'opacity 1 est OK car la transparence est dans les stops. Le check raffine maintenant : il skip si `overlayBackgroundType: gradient` ET au moins une stop rgba semi-transparente.
+
+Validation : pre-flight sur baseline migré passe de **WARNING (2 P1)** à **OK (0 P0, 0 P1, 1 P2 cosmétique)**.
+
+### Score de couverture v1.0-rc2
+
+| Item du verdict reviewer | État |
+|---|---|
+| Quirk #20 documenté + check pré-flight | ✅ Done (3 fichiers touchés) |
+| Quirk #21 documenté + audit complet + correction testimonials | ✅ Done (4 fichiers touchés) |
+| Quirk #22 documenté + check pre-flight | ✅ Done (vérification du baseline en bonus) |
+| Migration inline styles eyebrows | ✅ Done (15 occurrences strippées) |
+| Pre-flight regex inline title-prefix | ✅ Done (code QUIRK-4-PREFIX) |
+| Pre-flight regex CSS escapes | ✅ Done (code QUIRK-21) |
+| Note i18n conflit apostrophes | ✅ Done (section dédiée + table décision) |
+| Liens internes après refactor | ✅ Done (4 liens corrigés) |
+
+### Tests réalisés
+
+- `php pre-flight-check.php` sur baseline migré : **STATUS OK, 0 P0, 0 P1, 1 P2 cosmétique** (CONV-DEMO-PREFIX `v93-` accepté pour un example)
+- `php pre-flight-check.php` sur markup+CSS de test négatif (CSS avec `\201C`+`\2014` + inline title-prefix) : **STATUS BLOCKED, 2 P0 QUIRK-21, 1 P1 QUIRK-4-PREFIX**
+- 23 quirks vérifiés (vs 19 en rc1)
+
+### Issues résiduelles pour v1.0 stable
+
+- Validation indépendante par le reviewer externe (re-test régression sur cours-ndrc.fr post-rc2)
+- Baselines screenshots Astra default + preset_8 manquantes (différée v1.0.1)
+- Workflow GitHub Actions de régression visuelle automatisée (différé v1.0.1)
+
+---
+
 ## [1.0-rc1] — 2026-05-02 (17h) — Réponse aux 5 manques du verdict externe
 
 > **Verdict reviewer externe sur v1.0** : « v1.0 est conceptuellement la bonne version. Mais le tag stable est posé une étape trop tôt — il manque le test de régression final, 3 critiques non couvertes (testimonials plats, CTA marge bottom, eyebrows discrets), pas de pre-flight check, screenshots seulement sur 1 palette. Je recommande de bouger v1.0 → v1.0-rc1. »

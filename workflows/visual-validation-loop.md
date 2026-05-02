@@ -190,7 +190,7 @@ done
 # 5. Publier la page test
 python -c "
 import json
-content=open('templates/landing-formation-complete-markup.html').read()
+content=open('examples/landing-formation-complete-markup.html').read()
 open('payload.json','w').write(json.dumps({'title':'DEMO Skill','content':content,'status':'publish','slug':'demo-skill'}))
 "
 curl -X POST -u "admin:APP_PASS" \

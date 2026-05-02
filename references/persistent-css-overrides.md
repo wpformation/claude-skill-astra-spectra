@@ -4,6 +4,27 @@
 
 > **Solution propre et persistante** : Spectra a un meta natif `_uag_custom_page_level_css` qui est concaténé au stylesheet dynamique de la page à chaque rendu. Le CSS y est stocké séparément du `post_content`, donc Gutenberg ne le touche jamais.
 
+## Pré-requis Spectra (CRITIQUE)
+
+**Avant tout déploiement, vérifier que l'option globale Spectra `uag_enable_on_page_css_button` est à `yes`.** Sans ça, **tout le mécanisme de cette doc est inopérant** (cf quirk #20 dans `references/spectra-attributes-quirks.md`).
+
+```php
+// Vérification
+$toggle = get_option('uag_enable_on_page_css_button', 'yes');
+// 'yes'    → OK, meta lu et concaténé au stylesheet
+// 'no' / autre → meta ignoré silencieusement, AUCUNE erreur affichée
+
+// Auto-fix
+update_option('uag_enable_on_page_css_button', 'yes');
+```
+
+**Comportement par défaut** :
+- Spectra (gratuit) : default `yes` ✓
+- Spectra Pro : default `yes` mais peut être désactivé volontairement par admin
+- Sites multi-auteurs / hardening sécurité : peut être à `no` pour bloquer l'injection CSS arbitraire
+
+**Vérification automatique** : `scripts/detect-environment.php` flagge en `blockers[]` si l'option n'est pas à `yes`. Le mu-plugin compagnon expose `POST /wp-json/skill-test/v1/enable-on-page-css` pour forcer le toggle.
+
 ## Pourquoi cette technique est nécessaire
 
 Bug Spectra v2.19 confirmé sur loginarmor-dev (Astra 4.13.1) ET cours-ndrc.fr (palette_3) : le `<style id="uagb-style-frontend-{post_id}">` qui devrait être injecté dans `<head>` via le hook `wp_head` est **absent du HTML rendu**. Le `_uag_page_assets['css']` post_meta contient pourtant 240K+ chars.
@@ -114,7 +135,7 @@ Pour générer un CSS robuste, le skill utilise des `block_id` préfixés par ve
 | `hero-image-overlay` | `v93-hero-` | `.uagb-block-v93-hero-text` |
 | Custom user pattern | `{slug}-` | `.uagb-block-{slug}-{element}` |
 
-Exemple complet : voir [`templates/landing-formation-complete-page-css.css`](../templates/landing-formation-complete-page-css.css).
+Exemple complet : voir [`examples/landing-formation-complete-page-css.css`](../examples/landing-formation-complete-page-css.css).
 
 ## Workflow skill recommandé
 
@@ -128,13 +149,37 @@ Exemple complet : voir [`templates/landing-formation-complete-page-css.css`](../
 
 ## Limitations connues
 
-1. **`uag_enable_on_page_css_button` doit être `yes`** : si désactivé globalement (rare), le meta n'est pas lu. Vérifier dans Spectra Admin > Settings.
+1. **`uag_enable_on_page_css_button` doit être `yes`** : si désactivé globalement, le meta n'est pas lu (cf section Pré-requis Spectra ci-dessus + quirk #20). Vérifier dans Spectra Admin > Settings, ou auto-fix via l'endpoint compagnon.
 
-2. **Sanitize inline CSS** : `UAGB_Admin_Helper::sanitize_inline_css()` peut filtrer certaines déclarations CSS (e.g. `behavior:`, `expression()`, IE legacy). Tester ton CSS pour confirmer.
+2. **Pas de CSS Unicode escapes `\HHHH` dans les valeurs `content:`** (cf quirk #21). `UAGB_Admin_Helper::sanitize_inline_css()` strippe le backslash. Résultat : `content: "\201C"` rend le texte littéral `201C` au lieu du caractère « guillemet ». **Solution** : utiliser le caractère UTF-8 littéral directement :
 
-3. **Limite de taille** : le meta peut avoir des limites de taille MySQL (16 MB pour LONGTEXT). En pratique, on est très loin (5K chars typique pour un pattern complexe).
+   ```css
+   /* MAUVAIS — strippé par sanitize, rendu littéral */
+   .card::before { content: "\201C"; }
 
-4. **Cache LiteSpeed** : sur cours-ndrc.fr (LiteSpeed actif), purger les caches `wp litespeed-purge all` après update du meta. Sinon le CSS du meta est appliqué mais peut ne pas remonter dans le HTML cached.
+   /* BON — caractère UTF-8 littéral */
+   .card::before { content: "“"; }
+   ```
+
+   Caractères concernés (les plus fréquents) :
+
+   | Escape CSS | UTF-8 littéral | Nom |
+   |---|---|---|
+   | `\201C` | `“` | guillemet ouvrant anglais |
+   | `\201D` | `”` | guillemet fermant anglais |
+   | `\00AB` | `«` | guillemet ouvrant français |
+   | `\00BB` | `»` | guillemet fermant français |
+   | `\2014` | `—` | em-dash |
+   | `\2026` | `…` | hellip |
+   | `\00A9` | `©` | copyright |
+
+   **Encoding obligatoire** : le file CSS DOIT être UTF-8 sans BOM. Si Windows enregistre avec BOM (0xEF 0xBB 0xBF), les caractères UTF-8 littéraux peuvent être corrompus. Vérifier : `file --mime-encoding overrides.css` → attendu `utf-8`, pas `utf-8 with BOM`.
+
+3. **Autres déclarations CSS sanitize** : `UAGB_Admin_Helper::sanitize_inline_css()` peut filtrer d'autres déclarations CSS (e.g. `behavior:`, `expression()`, IE legacy, `@import` distant). Tester ton CSS pour confirmer.
+
+4. **Limite de taille** : le meta peut avoir des limites de taille MySQL (16 MB pour LONGTEXT). En pratique, on est très loin (5K chars typique pour un pattern complexe).
+
+5. **Cache LiteSpeed** : sur cours-ndrc.fr (LiteSpeed actif), purger les caches `wp litespeed-purge all` après update du meta. Sinon le CSS du meta est appliqué mais peut ne pas remonter dans le HTML cached.
 
 ## TODO v1.0
 

@@ -344,6 +344,148 @@ Pour vraiment renforcer, ajouter une **barre 32×3px orange** avant le texte (vi
 
 ---
 
+## 20. `uag_enable_on_page_css_button` doit être `yes` sinon meta `_uag_custom_page_level_css` ignoré
+
+**Symptôme** : tu déploies markup + CSS overrides via `_uag_custom_page_level_css`, tu force `regen-spectra`. Le `_uag_page_assets['css']` ne contient PAS ton CSS. Tous les overrides (entry-content padding-bottom, watermark, accent line, etc.) sont absents du rendu. **Aucune erreur, aucun warning** — le meta est bien sauvegardé en BDD, il n'est juste jamais lu.
+
+**Cause** : Spectra a un toggle global `uag_enable_on_page_css_button` (default `yes`, mais peut être désactivé par sécurité sur Spectra Pro / sites multi-auteurs / hardening). Code source [`class-uagb-post-assets.php:1432-1440`](https://github.com/brainstormforce/wp-spectra/blob/main/classes/class-uagb-post-assets.php) :
+
+```php
+$enable_on_page_css_button = UAGB_Admin_Helper::get_admin_settings_option( 'uag_enable_on_page_css_button', 'yes' );
+if ( 'yes' === $enable_on_page_css_button ) {
+    $custom_css = get_post_meta( $this->post_id, '_uag_custom_page_level_css', true );
+    if ( ! empty( $custom_css ) && ! self::$custom_css_appended ) {
+        $this->stylesheet .= UAGB_Admin_Helper::sanitize_inline_css( $custom_css );
+    }
+}
+```
+
+Si `uag_enable_on_page_css_button !== 'yes'`, toute la technique `persistent-css-overrides.md` est inopérante.
+
+**Fix** : avant tout déploiement skill, vérifier (et activer si besoin) :
+
+```php
+update_option('uag_enable_on_page_css_button', 'yes');
+```
+
+Ou via REST API custom (mu-plugin compagnon) :
+
+```php
+register_rest_route('skill-test/v1', '/enable-on-page-css', [
+    'methods' => 'POST',
+    'permission_callback' => function () { return current_user_can('manage_options'); },
+    'callback' => function () {
+        update_option('uag_enable_on_page_css_button', 'yes');
+        return ['ok' => true];
+    },
+]);
+```
+
+**Détection** : `pre-flight-check.php` flagge en P0 si `get_option('uag_enable_on_page_css_button')` retourne autre chose que `'yes'`. Vérification possible aussi via `wp option get uag_enable_on_page_css_button`.
+
+---
+
+## 21. CSS `content: "\HHHH"` (Unicode escapes) strippés par `sanitize_inline_css()`
+
+**Symptôme** : tu mets dans `_uag_custom_page_level_css` :
+
+```css
+.uagb-block-{slug}-testi-1::before {
+  content: "\201C"; /* &ldquo; */
+  font-size: 240px;
+  color: #f1f5f9;
+}
+```
+
+Au rendu, au lieu du caractère « guillemet anglais ouvrant » U+201C (ldquo `“`), le navigateur affiche le **texte littéral `201C`** sur chaque card. Watermark cassé, rendu catastrophique : code source en clair sur fond clair.
+
+**Cause** : `UAGB_Admin_Helper::sanitize_inline_css()` strippe le backslash `\` dans les valeurs CSS (probablement filtre `wp_kses` ou regex sécurité qui considère `\` comme suspect dans un context CSS inline). Résultat : `content: "\201C"` devient `content: "201C"` après sanitize, qui est interprété comme texte littéral par le navigateur (et non pas comme un escape Unicode CSS).
+
+**Fix** : utiliser le caractère UTF-8 direct dans le file CSS source (et s'assurer que le file est encodé UTF-8 sans BOM) :
+
+```css
+.uagb-block-{slug}-testi-1::before {
+  content: "“"; /* U+201C littéral, file CSS doit être UTF-8 */
+  font-size: 240px;
+  color: #f1f5f9;
+}
+```
+
+Caractères concernés (les plus fréquents en design éditorial) :
+
+| Escape CSS | Caractère UTF-8 | Nom |
+|---|---|---|
+| `\201C` | `“` | guillemet ouvrant anglais (ldquo) |
+| `\201D` | `”` | guillemet fermant anglais (rdquo) |
+| `\00AB` | `«` | guillemet ouvrant français (laquo) |
+| `\00BB` | `»` | guillemet fermant français (raquo) |
+| `\2014` | `—` | em-dash (mdash) |
+| `\2013` | `–` | en-dash (ndash) |
+| `\00A9` | `©` | copyright |
+| `\2026` | `…` | hellip |
+
+Tous **survivent** `sanitize_inline_css()` quand écrits en UTF-8 direct.
+
+**Détection** :
+- Pre-flight check : regex `content\s*:\s*['"]\\[0-9a-fA-F]{1,6}` sur le file CSS overrides → P0 BLOCKER
+- Visuel : screenshot la section où le watermark/icon::before doit apparaître. Si tu vois le code source brut (`201C`, `2014`, etc.) au lieu du caractère, c'est ce piège.
+
+**Pré-requis encoding** : le file CSS doit être en UTF-8 sans BOM. Si Windows en BOM, le `“` peut être encodé en bytes parasites. Toujours `file --mime-encoding overrides.css` → attendu `utf-8`, pas `utf-8 with BOM` ni `utf-16`.
+
+---
+
+## 22. `uagb/image` conflit `width:N` (px) + `widthDesktop:N` (%)
+
+**Symptôme** : tu génères un `uagb/image` avec :
+
+```json
+{
+  "width": 1200,
+  "widthTablet": 900,
+  "widthMobile": 600,
+  "widthDesktop": 42,
+  "widthTypeDesktop": "%",
+  "widthTablet": 100,
+  "widthTypeTablet": "%"
+}
+```
+
+Au roundtrip `parse_blocks() → serialize_blocks()`, on a un `diff_size > 0` et `valid: false` chez `validate-block-markup.php`. La clé `widthTablet` est définie deux fois (ligne 3 = `900` px, ligne 7 = `100` %) → le parser PHP retient la dernière, mais l'ordre n'est pas garanti.
+
+**Cause** : Spectra documente flou les attributs `widthTablet` / `widthMobile` qui peuvent signifier soit la dimension de l'image en px, soit la largeur du container en %, selon la valeur de `widthTypeXxx`. Quand tu mets les deux sets ensemble dans le même JSON, le parser perd la cohérence.
+
+**Fix** : sur chaque `uagb/image`, choisir UNE convention par breakpoint :
+
+**Option A — image fixed-size px** (recommandé pour avatars, icônes) :
+
+```json
+{
+  "width": 64, "height": 64,
+  "widthTablet": 64, "heightTablet": 64,
+  "widthMobile": 64, "heightMobile": 64,
+  "sizeSlug": "custom",
+  "objectFit": "cover"
+}
+```
+
+**Option B — image % container** (pour images responsive en grid) :
+
+```json
+{
+  "widthDesktop": 42, "widthTypeDesktop": "%",
+  "widthTablet": 100, "widthTypeTablet": "%",
+  "widthMobile": 100, "widthTypeMobile": "%"
+}
+```
+
+**Ne JAMAIS mélanger** : `width:1200` ET `widthDesktop:42` → conflit. Le `width:1200` est l'attribut media library WordPress, qui peut être ignoré par Spectra mais qui peut aussi recevoir un override CSS dynamique parasite.
+
+**Détection** :
+- Pre-flight check : flag P1 si une `uagb/image` contient à la fois `"width":<int>` ET `"widthDesktop":<int>` ET `"widthTypeDesktop":"%"`.
+- Validation roundtrip : `validate-block-markup.php` doit retourner `valid:true, diff_size:0`. Si `diff_size > 0` sur une `uagb/image`, c'est ce piège.
+
+---
+
 ## Comment cette doc évolue
 
 À chaque nouveau piège détecté lors d'un test sur un nouveau site / nouvelle palette / nouvelle version Spectra, ajouter une entrée numérotée avec les 4 sections **Symptôme / Cause / Fix / Détection**.

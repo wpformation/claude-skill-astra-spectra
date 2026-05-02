@@ -93,7 +93,7 @@ Pour les guillemets display 100-120px en haut de card testimonials, préférer `
 
 ## Apostrophes — typographique vs droite
 
-**Toujours typographique** dans le contenu rédactionnel :
+**Convention skill par défaut : typographique** dans le contenu rédactionnel (Académie française, manuels, presse écrite) :
 
 ```html
 <!-- BAD -->
@@ -104,6 +104,27 @@ J&rsquo;avais 2 mois pour r&eacute;viser
 ```
 
 L'apostrophe droite `'` est seulement pour le code (URLs, JSON keys).
+
+### Cas particulier — convention site cible vs convention typographique
+
+Certains sites ont une convention webdev pragmatique opposée : **apostrophe droite ASCII partout** (`'` U+0027, pas `’` U+2019). Raisons techniques :
+
+- Compatibilité moteurs de recherche WordPress (`SELECT * FROM posts WHERE post_content LIKE "%l'élève%"` ne match pas `l’élève` typo)
+- Facilité copy-paste utilisateur (les browsers convertissent inconsistamment `’` ↔ `'`)
+- Cohérence avec le code source du site (sans transformation typographique automatique)
+
+**Avant de générer du contenu**, le skill DOIT vérifier la convention du site cible :
+
+| Indicateur convention site | Convention skill à utiliser |
+|---|---|
+| Le site a une mémoire/CLAUDE.md disant « apostrophes ASCII » ou « pas d'apostrophe typographique » | `'` U+0027 (ASCII) |
+| Le site n'a pas de convention documentée | `&rsquo;` U+2019 (typographique, default) |
+| Le site est éditorial / luxe / institutionnel | `&rsquo;` U+2019 (force typo) |
+| Le site est blog tech / e-commerce volume / SaaS | confirmer avec l'utilisateur |
+
+**Comment vérifier** : grep dans le repo source du site `[‘’]` (rsquo / lsquo) et `'` (ASCII). Si le ratio est > 80 % en faveur d'un, suivre cette convention.
+
+Cas concret rencontré : site `cours-ndrc.fr` a la convention « apostrophes ASCII strict » dans son MEMORY.md. Le skill doit donc générer `l'élève` (ASCII) et NON `l&rsquo;élève` typographique. Conflit avec la convention skill default → **toujours respecter la convention du site cible**.
 
 ## Em-dash, en-dash, hyphen — choisir le bon
 

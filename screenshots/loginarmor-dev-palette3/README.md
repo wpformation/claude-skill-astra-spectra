@@ -11,7 +11,7 @@
 1. WP local Local by Flywheel → Astra theme + Spectra plugin installés
 2. Palette_3 configurée via mu-plugin compagnon (`/skill-test/v1/setup`)
 3. 6 images Unsplash uploadées via `/skill-test/v1/upload-image`
-4. Page démo générée à partir du markup `templates/landing-formation-complete-markup.html`
+4. Page démo générée à partir du markup `examples/landing-formation-complete-markup.html`
 5. CSS Spectra régénéré via `UAGB_Post_Assets::generate_assets()`
 6. Page ouverte dans agent-browser viewport 1440×900
 7. `loading="eager"` forcé sur toutes les images, scroll bottom + scroll top

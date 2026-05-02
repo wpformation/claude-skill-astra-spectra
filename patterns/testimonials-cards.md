@@ -223,7 +223,7 @@ CSS overrides :
 .uagb-block-{slug}-testi-1::before,
 .uagb-block-{slug}-testi-2::before,
 .uagb-block-{slug}-testi-3::before {
-  content: "\201C"; /* &ldquo; */
+  content: "“"; /* U+201C littéral, file CSS DOIT être UTF-8 sans BOM. NE PAS utiliser "\201C" — strippé par sanitize_inline_css() de Spectra (cf quirk #21). */
   position: absolute;
   top: -40px;
   right: -10px;

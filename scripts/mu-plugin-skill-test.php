@@ -5,6 +5,28 @@
  */
 
 add_action('rest_api_init', function () {
+    // === Quirk #20 — uag_enable_on_page_css_button doit être 'yes' ===
+    // Sans ça, le meta _uag_custom_page_level_css est ignoré silencieusement.
+    register_rest_route('skill-test/v1', '/enable-on-page-css', [
+        'methods' => 'POST',
+        'permission_callback' => function () { return current_user_can('manage_options'); },
+        'callback' => function () {
+            $before = get_option('uag_enable_on_page_css_button', 'yes');
+            update_option('uag_enable_on_page_css_button', 'yes');
+            // Force regen de tous les page assets pour que le toggle prenne effet
+            if (class_exists('UAGB_Helper') && method_exists('UAGB_Helper', 'delete_uag_asset_dir')) {
+                UAGB_Helper::delete_uag_asset_dir();
+            }
+            wp_cache_flush();
+            return [
+                'ok' => true,
+                'before' => $before,
+                'after' => get_option('uag_enable_on_page_css_button'),
+                'cache_flushed' => true,
+            ];
+        },
+    ]);
+
     register_rest_route('skill-test/v1', '/setup', [
         'methods' => 'POST',
         'permission_callback' => function () { return current_user_can('manage_options'); },

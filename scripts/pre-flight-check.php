@@ -18,12 +18,14 @@
  *   - p0[]   : violations bloquantes (ne PAS POST)
  *   - p1[]   : violations sérieuses (corriger fortement recommandé)
  *   - p2[]   : violations cosmétiques (acceptable mais à fixer si possible)
- *   - quirks_checked : liste des 19 pièges vérifiés
+ *   - quirks_checked : liste des 22 pièges vérifiés
  *
  * Convention de codes :
- *   QUIRK-{N}  : pièges 1-19 documentés
- *   I18N-{X}   : règles i18n
- *   CONV-{X}   : conventions skill (block_id, naming, etc.)
+ *   QUIRK-{N}      : pièges 1-22 documentés
+ *   QUIRK-4-PREFIX : variante QUIRK-4 spécifique aux title-prefix (eyebrows)
+ *   I18N-{X}       : règles i18n
+ *   CONV-{X}       : conventions skill (block_id, naming, etc.)
+ *   ENV-{X}        : check environnement runtime (option WP, etc. — exécuté côté WordPress)
  */
 
 // Whitelist d'icônes Spectra validées (sous-set de spectra-icons-list.md)
@@ -95,6 +97,7 @@ function pre_flight_main($content, $css = '') {
       '2_infobox_widthDesktop',
       '3_faq_answer_attr',
       '4_inline_styles_in_innerContent',
+      '4_inline_style_on_title_prefix',
       '5_blockid_unique',
       '6_spectra_dynamic_css',
       '7_palette_variable_slots',
@@ -110,6 +113,9 @@ function pre_flight_main($content, $css = '') {
       '17_button_padding',
       '18_astra_padding_bottom',
       '19_eyebrow_size',
+      '20_uag_enable_on_page_css_button',
+      '21_css_unicode_escapes_stripped',
+      '22_image_width_px_pct_conflict',
     ],
   ];
 
@@ -148,8 +154,8 @@ function pre_flight_main($content, $css = '') {
   }
 
   // === Quirk #2 : info-box avec widthDesktop (pas supporté) ===
-  preg_match_all('/<!-- wp:uagb\/info-box\s+\{([^}]*"widthDesktop"[^}]*)\}/', $content, $infobox_matches);
-  foreach ($infobox_matches[0] as $match) {
+  $infobox_count = preg_match_all('/<!-- wp:uagb\/info-box\s+\{[^}]*"widthDesktop"[^}]*\}/', $content);
+  for ($i = 0; $i < $infobox_count; $i++) {
     $report['p0'][] = [
       'code' => 'QUIRK-2',
       'msg' => 'info-box avec attribut `widthDesktop` détecté. Les info-box ne supportent pas cet attribut → empilement vertical au lieu de row. Wrapper dans uagb/container avec widthDesktop.',
@@ -168,13 +174,29 @@ function pre_flight_main($content, $css = '') {
   }
 
   // === Quirk #4 : inline style="..." dans innerContent (sera strippé par Gutenberg save) ===
-  // On ignore les style typo sécurité (text-transform, letter-spacing) qui sont parfois nécessaires sur title-prefix
-  preg_match_all('/<(?:p|h[1-6]|div|span)[^>]+style="([^"]*font-size[^"]*)"/', $content, $inline_matches);
-  foreach ($inline_matches[1] as $style) {
-    if (strpos($style, 'font-size') !== false) {
+  // Tout `style="..."` sur p/h/div/span dans le innerContent disparaît au premier save Gutenberg.
+  // Solution : tout passer par _uag_custom_page_level_css.
+  preg_match_all('/<(p|h[1-6]|div|span)([^>]*?)\sstyle="([^"]*)"/i', $content, $inline_matches, PREG_SET_ORDER);
+  foreach ($inline_matches as $m) {
+    $tag = $m[1];
+    $tag_attrs = $m[2];
+    $style = $m[3];
+    // Variante spécifique title-prefix (eyebrows) — alerte spécifique pour faciliter le fix
+    if (strpos($tag_attrs, 'uagb-ifb-title-prefix') !== false) {
+      $report['p1'][] = [
+        'code' => 'QUIRK-4-PREFIX',
+        'msg' => "Inline style sur `<$tag class=\"uagb-ifb-title-prefix\">` détecté : `$style`. Sera STRIPPÉ par Gutenberg dès le premier save (régression silencieuse de l'eyebrow). Migrer vers une règle CSS globale `.uagb-ifb-title-prefix { letter-spacing: ...; text-transform: uppercase; }` dans `_uag_custom_page_level_css`.",
+      ];
+    } elseif (strpos($style, 'font-size') !== false) {
       $report['p1'][] = [
         'code' => 'QUIRK-4',
         'msg' => "Inline style avec font-size détecté : `$style`. Sera STRIPPÉ par Gutenberg dès le premier save. Mettre dans _uag_custom_page_level_css.",
+      ];
+    } else {
+      // Tout autre inline style : warning P2 (peut être acceptable si volontaire, mais à challenger)
+      $report['p2'][] = [
+        'code' => 'QUIRK-4',
+        'msg' => "Inline style sur `<$tag>` détecté : `$style`. Sera STRIPPÉ par Gutenberg dès le premier save (régression silencieuse). Migrer vers `_uag_custom_page_level_css`.",
       ];
     }
   }
@@ -204,14 +226,24 @@ function pre_flight_main($content, $css = '') {
   }
 
   // === Quirk #9 : hero overlay opacity > 0.85 ===
-  preg_match_all('/"overlayOpacity":\s*([\d.]+)/', $content, $overlay_matches);
-  foreach ($overlay_matches[1] as $opacity) {
-    if ((float) $opacity > 0.85) {
-      $report['p1'][] = [
-        'code' => 'QUIRK-9',
-        'msg' => "overlayOpacity = $opacity. Trop opaque (>0.85), image background invisible. Recommandé : 0.65 max pour un overlay flat. Pour gradient overlay, utiliser color1 0.7 → color2 0.20.",
-      ];
+  // On match l'objet container complet pour pouvoir détecter si l'overlay est gradient
+  // (auquel cas opacity:1 est OK car la transparence est dans les color stops rgba).
+  preg_match_all('/<!-- wp:uagb\/container\s+\{([^}]*"overlayOpacity"[^}]*)\}/', $content, $container_overlays);
+  foreach ($container_overlays[1] as $attrs) {
+    if (!preg_match('/"overlayOpacity":\s*([\d.]+)/', $attrs, $om)) continue;
+    $opacity = (float) $om[1];
+    if ($opacity <= 0.85) continue;
+    // Si overlay gradient avec colors rgba semi-transparents → faux positif, on skip
+    $is_gradient = strpos($attrs, '"overlayBackgroundType":"gradient"') !== false;
+    $has_rgba_stops = (bool) preg_match('/"overlayBackgroundGradientColor[12]":"rgba\([^,]+,[^,]+,[^,]+,\s*0?\.\d+\s*\)"/', $attrs);
+    if ($is_gradient && $has_rgba_stops) {
+      // Cas légitime : opacity 1 + gradient rgba = transparence pilotée par les color stops
+      continue;
     }
+    $report['p1'][] = [
+      'code' => 'QUIRK-9',
+      'msg' => "overlayOpacity = $opacity. Trop opaque (>0.85), image background invisible. Recommandé : 0.65 max pour un overlay flat. Pour gradient overlay, utiliser color1 rgba(...,0.7) → color2 rgba(...,0.20).",
+    ];
   }
 
   // === Quirk #10 : blockRightPadding > 25% ===
@@ -357,6 +389,65 @@ function pre_flight_main($content, $css = '') {
         'msg' => "block_id '$bid' utilise préfixe `v{N}-` (pattern démo loginarmor-dev). Préférer un slug page : `{slug-page}-{section}-{element}` (e.g. `accueil-hero-text`).",
       ];
       break; // Juste flagger une fois
+    }
+  }
+
+  // === Quirk #21 : CSS Unicode escapes \HHHH dans content: → strippé par sanitize_inline_css() ===
+  // Vérifie que le file CSS overrides ne contient pas de `content: "\HHHH"` qui sera cassé.
+  if (!empty($css)) {
+    preg_match_all('/content\s*:\s*[\'"]\\\\([0-9a-fA-F]{1,6})[\'"]/', $css, $css_escape_matches, PREG_SET_ORDER);
+    foreach ($css_escape_matches as $m) {
+      $code = strtoupper($m[1]);
+      // Mapping rapide des escapes les plus fréquents
+      $hint = '';
+      $known = [
+        '201C' => '“', '201D' => '”',
+        '00AB' => '«', '00BB' => '»',
+        '2014' => '—', '2013' => '–',
+        '2026' => '…', '00A9' => '©',
+        '2018' => '‘', '2019' => '’',
+      ];
+      if (isset($known[$code])) {
+        $hint = " Remplacer par le caractère UTF-8 littéral : `\"{$known[$code]}\"` (file CSS doit être UTF-8 sans BOM).";
+      }
+      $report['p0'][] = [
+        'code' => 'QUIRK-21',
+        'msg' => "CSS escape `\\$code` détecté dans une déclaration `content:`. Strippé par `UAGB_Admin_Helper::sanitize_inline_css()` → rendu littéral `$code` au lieu du caractère.$hint",
+      ];
+    }
+    // Vérifier l'encoding du CSS (BOM UTF-8 = 0xEF 0xBB 0xBF en début)
+    if (substr($css, 0, 3) === "\xEF\xBB\xBF") {
+      $report['p1'][] = [
+        'code' => 'QUIRK-21',
+        'msg' => 'CSS overrides commence par un BOM UTF-8 (0xEF 0xBB 0xBF). Risque de mojibake sur les caractères UTF-8 littéraux (« “ » etc.). Sauvegarder le file en UTF-8 SANS BOM.',
+      ];
+    }
+  }
+
+  // === Quirk #22 : conflit width:N (px) + widthDesktop:N (%) sur uagb/image ===
+  preg_match_all('/<!-- wp:uagb\/image\s+\{([^}]*)\}/', $content, $image_matches);
+  foreach ($image_matches[1] as $img_attrs) {
+    $has_width_px = (bool) preg_match('/"width":\s*\d{2,5}\b/', $img_attrs);
+    $has_widthDesktop_pct = (bool) preg_match('/"widthDesktop":\s*\d+\s*,\s*[^}]*"widthTypeDesktop":"%"/', $img_attrs);
+    // Conflit si on définit à la fois width en px (media library) ET widthDesktop en %
+    if ($has_width_px && $has_widthDesktop_pct) {
+      $report['p1'][] = [
+        'code' => 'QUIRK-22',
+        'msg' => "uagb/image avec `width:N` (px, media library) ET `widthDesktop:N` + `widthTypeDesktop:\"%\"` simultanés. Conflit attribut → roundtrip parser perd les valeurs. Choisir UNE convention par breakpoint (cf quirk #22).",
+      ];
+    }
+    // Détection des doubles définitions widthTablet/widthMobile dans le JSON (parser garde la dernière)
+    if (preg_match_all('/"widthTablet":/', $img_attrs, $wt_count) && $wt_count[0] && count($wt_count[0]) > 1) {
+      $report['p0'][] = [
+        'code' => 'QUIRK-22',
+        'msg' => 'uagb/image avec `widthTablet` défini deux fois dans le même JSON. Parser garde la dernière, perte silencieuse de la première. Dédupliquer.',
+      ];
+    }
+    if (preg_match_all('/"widthMobile":/', $img_attrs, $wm_count) && $wm_count[0] && count($wm_count[0]) > 1) {
+      $report['p0'][] = [
+        'code' => 'QUIRK-22',
+        'msg' => 'uagb/image avec `widthMobile` défini deux fois dans le même JSON. Parser garde la dernière, perte silencieuse de la première. Dédupliquer.',
+      ];
     }
   }
 
