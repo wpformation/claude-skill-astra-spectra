@@ -15,6 +15,81 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 - Article WPFormation dédié
 - Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
 
+## [0.9.3-beta] — 2026-05-02 (14h)
+
+### 🎨 Refonte WOW — Stats drama + Testimonials grands guillemets + 3 mini-cards éditoriales
+
+> **Verdict utilisateur sur v0.9.2** : « Il manque certaines icônes. Les témoignages sont catastrophiques. C'est moche, c'est raté. Dans la section Notre approche, je ne comprends pas ta liste à puces, c'est incompréhensible. Je donne un peu de crédit aux leaders et aux metrics, mais les metrics ne sont pas assez mis en avant. » + rapport forensique 11 défauts P0/P1/P2 (stats verticales sur cours-ndrc.fr, FAQ pleine largeur 1100px, hex hardcodés, page title double H1, témoignages plats, icônes doublonnées Font Awesome).
+
+#### 4 défauts critiques corrigés
+
+**1. Stats peu mises en avant → drama bar éditoriale**
+- Section dédiée avec eyebrow `LE SITE EN CHIFFRES` + H2 `Tout ce qu'il te faut pour préparer le BTS NDRC` + desc
+- 4 stats horizontales (227 / 33 / 22 / 87 %) avec chiffres **80px** orange WPF
+- **Accent line orange 4px** sous chaque stat (border-bottom)
+- Padding 96px desktop, 72px tablet, 56px mobile
+
+**2. Témoignages catastrophiques → grands guillemets display + auteur plat**
+- Guillemet `&ldquo;` **120px** en orange massif en haut de chaque card
+- Card padding 56px desktop (vs 48), border-radius 24px (vs 20), shadow plus marquée `0 8px 40px rgba(15,23,42,0.10)`
+- Auteur PLAT : avatar 56px + nom-bold + meta-light, sans sub-card boxée
+
+**3. Liste à puces "Notre approche" incompréhensible → 3 mini-cards 3/2/5**
+- Remplacement de l'`uagb/icon-list` (rendue en row avec underline orange comme des liens) par 3 containers en grille 3-cols
+- Chiffre **88px** orange (3 / 2 / 5) en haut de chaque mini-card
+- Label sous-titre `Idées clés / Exemples concrets / Erreurs à éviter` en bold
+- Desc explicative en dessous
+- Background `#fafafa` cards arrondies 18px
+
+**4. Icônes Font Awesome doublonnées → numéros 01 / 02 / 03 éditoriaux**
+- Suppression des `uagb/icon` problématiques (book-open, clipboard-check, timer pas tous reconnus par Spectra → fallback)
+- Remplacement par numéros `01 / 02 / 03` **48px** orange + label uppercase `THÉORIE / PRATIQUE / AUTO-ÉVALUATION`
+- Style print magazine éditorial, plus distinctif que des icônes Font Awesome génériques
+
+#### Bug critique découvert : CSS Spectra dynamique par post NON injecté
+
+Cause racine confirmée sur loginarmor-dev (pas seulement cours-ndrc.fr) : `<style id="uagb-style-frontend-{post_id}">` est ABSENT du HTML rendu pour les pages publiées. Le `_uag_page_assets['css']` post_meta existe avec 240K+ chars mais le hook `wp_head` n'attache pas le style inline.
+
+**Conséquence** : tous les `headingFontSizeDesktop:80`, `headingFontSizeDesktop:120`, `letter-spacing` du markup Spectra sont **ignorés** au rendu — les chiffres restent en font-size par défaut (16px).
+
+**Workaround v0.9.3** : injection de **styles inline directs** sur les éléments critiques :
+```html
+<p class="uagb-ifb-title" style="font-size:88px;color:#FD9800;font-weight:800;line-height:0.9;letter-spacing:-3px;margin:0">3</p>
+```
+
+13 occurrences de styles inline ajoutées :
+- 3× chiffres recipe story (3 / 2 / 5) à 88px
+- 3× numéros features (01 / 02 / 03) à 48px
+- 4× chiffres stats (227 / 33 / 22 / 87 %) à 80px
+- 3× guillemets testimonials (&ldquo;) à 120px
+
+**À investiguer pour v0.9.4** : pourquoi le hook `UAGB_Post_Assets::print_stylesheet` ne s'enregistre pas sur `wp_head`. Possibles causes : page template Astra spécifique, conflit avec mu-plugin, version Spectra. Le styles inline du markup contournent le bug en attendant.
+
+#### Améliorations visuelles secondaires
+
+- **Hero overlay** moins opaque : rgba(15,23,42,**0.78**→**0.30**) 110deg (vs 0.92→0.45 135deg) — l'image background est maintenant visible
+- **Hero desc padding-right** réduit à 25% (vs 35%) pour ne plus écraser le texte
+- **Eyebrow** monté à 15px (vs 13px) + letter-spacing 4px (vs 3px) + prefixSpace 24-28 (vs 18) — plus présents
+- **FAQ** wrappée dans container max-width 62% (vs pleine largeur 1100px) avec margin auto pour readability standard 720-820px
+
+#### Stats v0.9.3
+
+- **13 styles inline injectés** comme workaround CSS Spectra dynamique manquant
+- **0 icône Font Awesome** (remplacées par numéros éditoriaux 01/02/03)
+- **3 mini-cards 3/2/5** au lieu de la liste à puces incompréhensible
+- **Guillemets 120px** orange display sur testimonials
+- **Accents 100 % corrects** via HTML entities maintenus
+- **8 screenshots v093-FINAL** dans `screenshots/loginarmor-dev-palette3/`
+
+#### Issues restantes documentées (à fixer v0.9.4+)
+
+- Hex hardcodés (#FD9800, #0F172A) au lieu de `var(--ast-global-color-X)` → revert à token-based + helper resolve_color pour palettes piégeuses
+- CSS Spectra dynamique non injecté → investigation pourquoi le hook ne s'attache pas
+- Page template avec post_title affiché au-dessus du hero → forcer template no-title via `_wp_page_template` post_meta
+- `references/spectra-icons-list.md` à créer (liste exhaustive icônes valides)
+- CTA banner final → padding-bottom orpheline (Astra `.entry-content` padding) → CSS rule à injecter via `apply-design-tokens.php`
+- Test régression cours-ndrc.fr → confirmer que temp-publish-trick génère bien `uag-css-{id}.css` sur disque (pas juste post_meta)
+
 ## [0.9.2-beta] — 2026-05-02 (13h)
 
 ### 🇫🇷 Accents français corrects + stats horizontales + avatars testimonials
