@@ -6,7 +6,7 @@
 [![WordPress 6.0+](https://img.shields.io/badge/WordPress-6.0+-21759b.svg)](https://wordpress.org/)
 [![Spectra Required](https://img.shields.io/badge/Spectra-Required-FF6B00.svg)](https://wpspectra.com/)
 [![Astra Optional](https://img.shields.io/badge/Astra-Optional-blue.svg)](https://wpastra.com/)
-[![Status: v1.0-rc2](https://img.shields.io/badge/Status-v1.0--rc2-orange.svg)](CHANGELOG.md)
+[![Status: v1.0-rc4](https://img.shields.io/badge/Status-v1.0--rc4-orange.svg)](CHANGELOG.md)
 
 ---
 
@@ -16,9 +16,10 @@ Un skill Claude Code, ce n'est pas un thème. Ce n'est pas un kit de templates. 
 
 Ce skill documente ce que personne d'autre n'a documenté pour Spectra :
 
-- **22 pièges** Spectra concrets identifiés en production avec Symptôme / Cause / Fix / Détection
+- **24 pièges** Spectra concrets identifiés en production avec Symptôme / Cause / Fix / Détection (dont 2 nouveaux en v1.0-rc4 : `wp_head` non-hook + double H1 sur block themes FSE)
 - **La technique `_uag_custom_page_level_css`** pour styler durablement (le seul moyen pour que le CSS survive aux éditions Gutenberg)
-- **Validateur pre-flight bloqueur** qui parcourt le markup généré et flag les 22 pièges + i18n + conventions AVANT POST
+- **Validateur pre-flight bloqueur** qui parcourt le markup généré et flag les 24 pièges + i18n + conventions AVANT POST
+- **Validateur post-render** qui fetch l'URL frontend après POST et vérifie que `<style id="uagb-style-frontend-X">` est bien injecté + pas de double H1
 - **35+ patterns** documentés au format « comment construire » (pas du copier-coller) — couvre les 49 blocs Spectra principaux
 - **8 templates** blueprints : compositions de patterns avec variables, schema SEO, configurations Astra
 - **14 scripts** PHP utilitaires (POST tag-aware, regen Spectra 4 stratégies, validate roundtrip, pre-flight, audit, resolve palette)
@@ -27,7 +28,7 @@ Ce skill documente ce que personne d'autre n'a documenté pour Spectra :
 - **Mécanique palette Astra** : slots GARANTIS vs VARIABLES (pour ne pas tomber sur color-7 = noir massif sur certaines palettes preset)
 - **Pièges hébergeurs mutualisés** (o2switch, OVH, Hostinger : auth strip, LiteSpeed cache)
 
-Quand une session Claude Code lit ce skill, elle sait pourquoi `headingFontSize:80` est ignoré sur `headingTag:p`, pourquoi 4 stats info-box s'empilent en colonne au lieu de row, pourquoi la FAQ affiche du Lorem Ipsum si tu mets `description` au lieu de `answer`, pourquoi `content: "\201C"` rend le texte littéral `201C` au lieu du caractère `“`. Elle évite les 22 pièges.
+Quand une session Claude Code lit ce skill, elle sait pourquoi `headingFontSize:80` est ignoré sur `headingTag:p`, pourquoi 4 stats info-box s'empilent en colonne au lieu de row, pourquoi la FAQ affiche du Lorem Ipsum si tu mets `description` au lieu de `answer`, pourquoi `content: "\201C"` rend le texte littéral `201C` au lieu du caractère `“`, pourquoi sur Twenty Twenty-Five le `<style id="uagb-style-frontend">` n'est jamais dans le `<head>`, pourquoi un block theme FSE injecte automatiquement un `wp-block-post-title` qui cause un double H1. Elle évite les 24 pièges.
 
 ---
 
@@ -79,12 +80,13 @@ Tu reçois une URL d'édition Gutenberg + screenshots des sections + URL fronten
 SKILL.md                            ← Entry point (workflow + qui lit quoi quand)
 
 references/                         ← Knowledge base critique (LIRE EN PREMIER)
-├── spectra-attributes-quirks.md    ← 22 pièges Spectra documentés (OBLIGATOIRE)
+├── spectra-attributes-quirks.md    ← 24 pièges Spectra documentés (OBLIGATOIRE)
 ├── i18n-rules.md                   ← FR : entities + nbsp typo + apostrophes typo vs ASCII
-├── persistent-css-overrides.md     ← _uag_custom_page_level_css (la SEULE technique fiable)
+├── persistent-css-overrides.md     ← _uag_custom_page_level_css + workaround Quirk #23
 ├── spectra-icons-list.md           ← whitelist icônes validées
 ├── gutenberg-core-blocks.md        ← 30+ blocs core/* curés
-├── astra-page-template-rules.md    ← anti double-H1, configurations Astra
+├── astra-page-template-rules.md    ← anti double-H1, configurations Astra (thèmes classiques)
+├── block-theme-fse-rules.md        ← ⭐ NOUVEAU v1.0-rc4 — Twenty Twenty-Five, Frost, Ollie, etc.
 ├── apache-mutu-pitfalls.md         ← o2switch / OVH / Hostinger : auth strip, LiteSpeed
 ├── images-ratios.md                ← ratio attendu par pattern
 ├── spectra-blocks-catalog.md       ← 49 blocs uagb avec attributs
@@ -133,8 +135,9 @@ workflows/                          ← Pipelines validés
 ├── visual-validation-loop.md       ← screenshot + audit + retry max 3
 └── deploy-template.md              ← workflow déploiement template
 
-scripts/                            ← 14 scripts PHP utilitaires
-├── pre-flight-check.php            ← VALIDATEUR BLOQUEUR (22 quirks + i18n + conventions)
+scripts/                            ← 15 scripts PHP utilitaires
+├── pre-flight-check.php            ← VALIDATEUR PRE-POST BLOQUEUR (24 quirks + i18n + conventions)
+├── post-render-check.php           ← ⭐ NOUVEAU v1.0-rc4 — validateur POST-render (fetch URL, check Quirks #23/#24)
 ├── post-page-via-rest.php          ← POST + temp-publish trick
 ├── update-page-meta-css.php        ← TAG-AWARE update CSS (préserve user)
 ├── regen-spectra.php               ← 4 stratégies cascadées
@@ -220,20 +223,20 @@ Détail complet : [INSTALL.md](INSTALL.md)
 
 ---
 
-## Status v1.0-rc2
+## Status v1.0-rc4
 
 ✅ **Ce qui est livré**
 
-- Knowledge base complète : 16 documents de référence (quirks, i18n, icons-list, core-blocks, astra-templates, apache-mutu, images-ratios, persistent-css-overrides, design-system-tokens, etc.)
-- **22 pièges Spectra documentés** (Symptôme / Cause / Fix / Détection chacun) — 19 en v1.0-rc1, +3 nouveaux en v1.0-rc2 (uag_enable_on_page_css_button toggle, CSS Unicode escapes strippés, conflit width px/% sur uagb/image)
+- Knowledge base complète : **17 documents de référence** (quirks, i18n, icons-list, core-blocks, astra-templates, **block-theme-fse-rules** ⭐ nouveau v1.0-rc4, apache-mutu, images-ratios, persistent-css-overrides, design-system-tokens, etc.)
+- **24 pièges Spectra documentés** (Symptôme / Cause / Fix / Détection chacun) — 19 en rc1, +3 en rc2, +2 en rc4 (`wp_head` non-hook = quirk #23, double H1 block theme FSE = quirk #24, détectés sur Twenty Twenty-Five + Spectra 2.19 le 02/05/2026)
 - **35+ patterns** documentés au format « comment construire » — couvre les 49 blocs Spectra principaux : hero, stats, features, about-story, team, testimonials, pricing, FAQ, CTA, tabs, slider, timeline, how-to, review, countdown, article-content, **google-maps, modal, marketing-buttons, table-of-contents, forms, post-display (grid/masonry/carousel/timeline), image-gallery, icon-list, inline-notice, social-share, price-list, popup-builder, lottie, star-rating**
 - 8 templates blueprints (page-accueil, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence)
-- **14 scripts PHP utilitaires**, dont `pre-flight-check.php` (validateur bloqueur 22 quirks + i18n, exit 1 si BLOCKED), `update-page-meta-css.php` (tag-aware), `regen-spectra.php` (4 stratégies cascadées)
+- **15 scripts PHP utilitaires**, dont `pre-flight-check.php` (validateur bloqueur 24 quirks + i18n, exit 1 si BLOCKED), **`post-render-check.php` ⭐ nouveau v1.0-rc4** (validateur post-POST qui fetch l'URL frontend et vérifie quirks #23 + #24), `update-page-meta-css.php` (tag-aware), `regen-spectra.php` (4 stratégies cascadées)
 - 4 workflows validés (new-page-from-brief avec pre-flight obligatoire, refonte-page-existante, visual-validation-loop, deploy-template)
-- Mu-plugin compagnon avec endpoints REST custom (setup, upload-image, regen-spectra, inspect-faq, cleanup, enable-on-page-css)
+- Mu-plugin compagnon avec endpoints REST custom (setup, upload-image, regen-spectra, inspect-faq, cleanup, enable-on-page-css) **+ 2 hooks workaround v1.0-rc4** (`wp_head` injection pour Quirk #23, `body_class` + CSS pour Quirk #24)
 - Validateur roundtrip parse/serialize anti-crash Gutenberg
 - Audit visuel 10 checks (block_id unique, WCAG walker contraste, hardcoded color avec whitelist contextuelle, alternance bg sections)
-- Baselines screenshots validées sur Astra 4.13.1 + Spectra 2.19.25 (palette par défaut + palette saturée chaude)
+- Baselines screenshots validées sur **3 stacks** : Astra 4.13.1 + Spectra 2.19.25 (palette par défaut + palette saturée chaude) + **Twenty Twenty-Five FSE block theme + Spectra 2.19** ⭐ nouveau v1.0-rc4
 
 🚧 **À venir (v1.0 stable)**
 

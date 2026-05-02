@@ -486,6 +486,123 @@ Au roundtrip `parse_blocks() → serialize_blocks()`, on a un `diff_size > 0` et
 
 ---
 
+## 23. Spectra v2.19 ne hook PAS `wp_head` → CSS jamais injecté dans le HTML rendu
+
+**Symptôme** : tu as fait tout ce qu'il faut. POST page OK. Meta `_uag_custom_page_level_css` bien sauvegardé. `regen-spectra` retourne `css_len: 255143`. Le post_meta `_uag_page_assets.css` contient bien tout ton CSS (vérifié via PHP one-shot). MAIS le HTML rendu du frontend n'a **AUCUN** `<style id="uagb-style-frontend-{post_id}">` dans le `<head>`. Tous tes overrides sont perdus silencieusement. Aucune erreur, aucun warning.
+
+C'est différent du quirk #6 (qui parlait du même bug en termes vagues). Ce quirk #23 documente le **mécanisme exact** et le **workaround robuste**.
+
+**Cause** : Spectra `class-uagb-post-assets.php` détermine au runtime s'il doit injecter le `<style>` via une combinaison de checks :
+
+1. `is_singular()` retourne true ?
+2. Le post_meta `_uag_page_assets` existe ?
+3. Le flag `uagb_flag` (dans `_uag_page_assets`) est `true` ?
+4. Les hooks `wp_head` sont bien attachés au moment du render frontend ?
+
+Sur certains setups (testé sur **Twenty Twenty-Five FSE block theme** + Spectra 2.19.x, et reproduit aussi sur **Astra 4.13.1** dans le quirk #6), le hook `wp_head` n'est pas appelé pour le bloc Spectra correspondant. Même avec `uagb_flag: true` forcé manuellement.
+
+L'explication probable : le timing d'enregistrement des hooks vs le contexte du render. Dans certains plugins / themes / configurations, le hook Spectra est enregistré **après** que `wp_head` ait fini de fire.
+
+**Fix** : workaround universel via mu-plugin compagnon. Ajouter un hook `wp_head` custom qui lit `_uag_page_assets.css` du post courant et l'injecte directement :
+
+```php
+// Dans scripts/mu-plugin-skill-test.php (ou un mu-plugin dédié)
+add_action('wp_head', function () {
+    if (!is_singular()) return;
+    $pid = get_queried_object_id();
+    if (!$pid) return;
+    $pa = get_post_meta($pid, '_uag_page_assets', true);
+    if (!is_array($pa)) return;
+    $css = $pa['css'] ?? '';
+    if (empty($css)) return;
+    echo "\n<style id=\"uagb-style-frontend-{$pid}\" data-skill-injection=\"workaround-quirk-23\">\n";
+    echo $css;
+    echo "\n</style>\n";
+}, 100);
+```
+
+Ce workaround est **safe à coexister** avec le hook Spectra natif : si Spectra réussit à hook, on aura 2 `<style>` identiques, ce qui est inoffensif. Si Spectra échoue à hook, on a au moins le nôtre.
+
+**Détection** :
+- Côté skill : après POST + regen, fetch l'URL frontend, grep `uagb-style-frontend-{post_id}`. Si retourne 0, quirk #23 actif → installer le workaround mu-plugin.
+- Pre-flight check post-render : `scripts/post-render-check.php` peut être appelé après POST + regen pour valider que le CSS est bien dans le HTML.
+
+**Stratégie skill** : depuis v1.0-rc4, le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` inclut **par défaut** ce hook `wp_head` workaround. Plus besoin d'investiguer si Spectra hook ou non — le mu-plugin garantit l'injection.
+
+**Confirmé sur** : loginarmor-dev.local + Twenty Twenty-Five (block theme FSE) + Spectra v2.19 — page 59 du test 02/05/2026.
+
+---
+
+## 24. Block theme FSE (Twenty Twenty-Five, Twenty Twenty-Four, etc.) → double H1 automatique
+
+**Symptôme** : tu génères un hero avec un H1 `uagb/info-box` propre. Au rendu, le HTML contient **2 `<h1>`** :
+
+```html
+<h1 class="wp-block-post-title">claude-skill-astra-spectra — knowledge base Spectra v1.0</h1>
+<h1 class="uagb-ifb-title">La knowledge base Spectra que personne n'a jamais écrite.</h1>
+```
+
+Le premier est généré automatiquement par le block theme à partir du post_title. Le second est ton hero. Résultat : SEO cassé (Google n'aime pas 2 H1, ignorera l'un des deux). UX cassée (deux titres visuels).
+
+**Cause** : les block themes FSE (Full Site Editing) WordPress 6.0+ utilisent des **templates HTML** dans `/wp-content/themes/{theme}/templates/` (e.g. `single.html`, `page.html`). Ces templates contiennent des blocs `wp:post-title` hardcodés :
+
+```html
+<!-- wp:post-title {"level":1} /-->
+```
+
+Ce bloc rend automatiquement le `<h1 class="wp-block-post-title">` à partir du post_title. **Tu ne peux pas le désactiver via post_meta** comme tu ferais avec Astra (`update_post_meta($pid, 'ast-title-bar-display', 'disabled')` ne fonctionne PAS sur les block themes).
+
+Différent du quirk #13 qui parle du cas Astra (page template + meta). Ici c'est un mécanisme FSE différent.
+
+**Fix** : 3 options selon la robustesse souhaitée.
+
+### Option A — CSS scope (plus simple, robuste, recommandé)
+
+Dans `_uag_custom_page_level_css`, ajouter un sélecteur scopé sur l'ID de la page :
+
+```css
+body.page-id-{ID} .wp-block-post-title,
+.page-id-{ID} main .wp-block-post-title {
+  display: none !important;
+}
+```
+
+WordPress génère automatiquement la classe `body.page-id-{ID}` sur les pages singulières. Le scope évite d'affecter les autres pages du site.
+
+**Avantage** : pas de modification de template, persistant à travers les éditions Gutenberg, fonctionne sur tout block theme.
+
+### Option B — Custom template via mu-plugin
+
+Filter `template_include` pour utiliser un template custom sans `wp:post-title` :
+
+```php
+add_filter('template_include', function ($template) {
+    if (is_singular('page') && get_post_meta(get_queried_object_id(), '_skill_no_title', true) === '1') {
+        $custom = WP_PLUGIN_DIR . '/skill-test/no-title-template.php';
+        if (file_exists($custom)) return $custom;
+    }
+    return $template;
+});
+```
+
+Plus invasif, demande un fichier template custom, casse si l'utilisateur change de thème.
+
+### Option C — Hook `block_core_post_title_render` (pas dispo en core, ignore)
+
+Pas de filtre core officiel pour disable wp:post-title à la pièce. Skip cette option.
+
+**Détection** : grep `<h1 class="wp-block-post-title">` dans le HTML rendu. Si présent ET ton hero contient déjà un H1 → quirk #24 actif.
+
+**Pre-flight check** : `pre-flight-check.php` détecte les block themes FSE via `wp_is_block_theme()` (côté détection environnement) et flag P1 si le user a un H1 dans son hero ET un block theme actif → recommande l'option A.
+
+**Stratégie skill** : depuis v1.0-rc4, le skill ajoute **automatiquement** la règle CSS option A dans `_uag_custom_page_level_css` quand il détecte :
+- Block theme actif (`wp_is_block_theme() === true`)
+- Au moins un H1 dans le markup généré
+
+Cas confirmé sur : loginarmor-dev.local + **Twenty Twenty-Five** (block theme FSE) + Spectra v2.19 — page 59 du test 02/05/2026. La règle CSS scope `body.page-id-59 .wp-block-post-title { display: none !important; }` masque correctement le double H1 sans affecter les autres pages.
+
+---
+
 ## Comment cette doc évolue
 
 À chaque nouveau piège détecté lors d'un test sur un nouveau site / nouvelle palette / nouvelle version Spectra, ajouter une entrée numérotée avec les 4 sections **Symptôme / Cause / Fix / Détection**.

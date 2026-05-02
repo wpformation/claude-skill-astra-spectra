@@ -2,7 +2,57 @@
 /**
  * Plugin Name: ZZZ Skill Setup (temporary)
  * Description: Endpoints for skill testing — DELETE AFTER USE
+ *
+ * Inclut le workaround Quirk #23 : injecte automatiquement le CSS du meta
+ * `_uag_page_assets.css` dans le <head> via wp_head, ce que Spectra v2.19
+ * ne fait pas toujours selon le thème / contexte.
  */
+
+// =============================================================================
+// Workaround Quirk #23 — Spectra v2.19 ne hook PAS wp_head dans certains contextes
+// =============================================================================
+// Symptôme : <style id="uagb-style-frontend-X"> jamais injecté → CSS perdu
+// Cause    : timing d'enregistrement des hooks vs render frontend
+// Fix      : on injecte nous-mêmes via wp_head, à partir de _uag_page_assets.css
+// Confirmé : Twenty Twenty-Five (FSE) + Spectra 2.19 (loginarmor-dev 02/05/2026)
+//            Astra 4.13.1 + Spectra 2.19 (cours-ndrc.fr 01/05/2026 — quirk #6)
+add_action('wp_head', function () {
+    if (!is_singular()) return;
+    $pid = get_queried_object_id();
+    if (!$pid) return;
+    $pa = get_post_meta($pid, '_uag_page_assets', true);
+    if (!is_array($pa)) return;
+    $css = $pa['css'] ?? '';
+    if (empty($css)) return;
+    // Coexiste safely avec le hook Spectra natif si Spectra réussit aussi à hook
+    // (2 <style> identiques = inoffensif, le navigateur applique les deux)
+    echo "\n<style id=\"uagb-style-frontend-{$pid}\" data-skill-injection=\"workaround-quirk-23\">\n";
+    echo $css;
+    echo "\n</style>\n";
+}, 100);
+
+// =============================================================================
+// Workaround Quirk #24 — Block theme FSE injecte automatiquement wp:post-title
+// =============================================================================
+// Symptôme : double H1 sur le rendu (wp-block-post-title du template + hero H1)
+// Cause    : block theme single.html / page.html contient <!-- wp:post-title /-->
+// Fix      : si post a meta `_skill_hide_post_title=1`, injecter CSS hide global
+//            (option : ajouter une classe body ciblée)
+add_filter('body_class', function ($classes) {
+    if (is_singular()) {
+        $pid = get_queried_object_id();
+        if ($pid && get_post_meta($pid, '_skill_hide_post_title', true) === '1') {
+            $classes[] = 'skill-hide-post-title';
+        }
+    }
+    return $classes;
+});
+
+add_action('wp_head', function () {
+    if (is_singular() && get_post_meta(get_queried_object_id(), '_skill_hide_post_title', true) === '1') {
+        echo "\n<style id=\"skill-hide-post-title-css\">.skill-hide-post-title .wp-block-post-title{display:none!important;}</style>\n";
+    }
+}, 99);
 
 add_action('rest_api_init', function () {
     // === Quirk #20 — uag_enable_on_page_css_button doit être 'yes' ===

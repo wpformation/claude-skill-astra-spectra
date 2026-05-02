@@ -181,9 +181,45 @@ Exemple complet : voir [`examples/landing-formation-complete-page-css.css`](../e
 
 5. **Cache LiteSpeed** : sur cours-ndrc.fr (LiteSpeed actif), purger les caches `wp litespeed-purge all` après update du meta. Sinon le CSS du meta est appliqué mais peut ne pas remonter dans le HTML cached.
 
-## TODO v1.0
+## Workaround Quirk #23 — `wp_head` non-hook
+
+Découvert 02/05/2026 sur loginarmor-dev (Twenty Twenty-Five FSE) + Spectra v2.19. Confirmé aussi sur Astra 4.13.1 + Spectra v2.19 (cf quirk #6 originel sur cours-ndrc.fr).
+
+**Symptôme** : tout est OK côté serveur (`_uag_page_assets.css` contient 250K+ chars, `uagb_flag: true`), mais le HTML rendu n'a **AUCUN** `<style id="uagb-style-frontend-{post_id}">`. Tous les overrides perdus silencieusement.
+
+**Diagnostic rapide** :
+
+```bash
+curl -s "{site}/{slug}/" | grep -c "uagb-style-frontend-{post_id}"
+# Attendu : 1
+# Si retourne 0 → quirk #23 actif → installer le workaround mu-plugin
+```
+
+**Fix universel** : ajouter dans le mu-plugin compagnon (`scripts/mu-plugin-skill-test.php`) un hook `wp_head` qui lit `_uag_page_assets.css` et l'injecte directement :
+
+```php
+add_action('wp_head', function () {
+    if (!is_singular()) return;
+    $pid = get_queried_object_id();
+    if (!$pid) return;
+    $pa = get_post_meta($pid, '_uag_page_assets', true);
+    if (!is_array($pa)) return;
+    $css = $pa['css'] ?? '';
+    if (empty($css)) return;
+    echo "\n<style id=\"uagb-style-frontend-{$pid}\" data-skill-injection=\"workaround-quirk-23\">\n";
+    echo $css;
+    echo "\n</style>\n";
+}, 100);
+```
+
+**Coexistence** avec le hook Spectra natif : si Spectra réussit à hook (sur d'autres pages, ou après une mise à jour Spectra qui fixerait le bug), on aura 2 `<style>` identiques dans `<head>`. C'est inoffensif (le navigateur applique les deux, le second écrase le premier sur conflits → idempotent).
+
+Depuis v1.0-rc4, ce workaround est **inclus par défaut** dans `scripts/mu-plugin-skill-test.php`. Aucune action utilisateur supplémentaire requise tant que le mu-plugin est déployé.
+
+## TODO v1.1+
 
 - [ ] Auto-générer le CSS depuis le markup template (parse `block_id` + lookup table de styles attendus)
-- [ ] Versionner le CSS avec un commentaire `/* skill-version: 0.9.4 */` pour identifier les overrides skill vs user-custom
-- [ ] Détecter les conflits entre CSS skill et CSS user existant
+- [ ] Détecter les conflits entre CSS skill et CSS user existant (autre que via balises tag-aware)
 - [ ] Documenter pour chaque pattern (`patterns/*.md`) le CSS overrides associé attendu
+- [ ] Endpoint REST pour valider post-render que le `<style id="uagb-style-frontend-X">` est bien dans le HTML
+- [ ] Si Spectra v2.20+ fixe le bug `wp_head`, marquer le workaround comme deprecated (mais le garder pour les sites non-upgradés)
