@@ -1,0 +1,181 @@
+{
+  "version": "0.6.0-alpha",
+  "description": "Suite d'évals automatisées pour le skill claude-skill-astra-spectra. Chaque eval teste un cas d'usage critique et vérifie des assertions précises.",
+  "evals": [
+    {
+      "id": "build-01-page-formation",
+      "category": "build",
+      "killer_feature": "generation-from-brief",
+      "prompt": "Crée une landing page formation WordPress avec hero, 3 features, pricing one-shot 297 EUR, FAQ et CTA. Palette orange + noir.",
+      "expected_blocks": [
+        { "name": "uagb/container", "min": 4, "max": 8 },
+        { "name": "uagb/advanced-heading", "min": 1, "max": 3 },
+        { "name": "uagb/info-box", "min": 3, "max": 4 },
+        { "name": "uagb/buttons", "min": 2, "max": 4 },
+        { "name": "uagb/faq", "min": 1, "max": 1 }
+      ],
+      "assertions": [
+        { "type": "block_count", "min": 12, "max": 20 },
+        { "type": "uagb_block_id_unique", "expect": true },
+        { "type": "css_var_count", "min": 30 },
+        { "type": "hex_hardcoded_count", "max": 0 },
+        { "type": "h1_count", "expected": 1 },
+        { "type": "roundtrip_real_diff", "expected": 0 }
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "build-02-landing-saas",
+      "category": "build",
+      "killer_feature": "generation-from-brief",
+      "prompt": "Landing page SaaS B2B avec hero, problème/solution en 3 colonnes, témoignages, pricing 3 tiers et CTA inscription.",
+      "expected_blocks": [
+        { "name": "uagb/container", "min": 5, "max": 10 },
+        { "name": "uagb/info-box", "min": 3, "max": 6 },
+        { "name": "uagb/testimonial", "min": 1, "max": 3 }
+      ],
+      "assertions": [
+        { "type": "block_count", "min": 18, "max": 30 },
+        { "type": "uagb_block_id_unique", "expect": true },
+        { "type": "h1_count", "expected": 1 }
+      ],
+      "timeout_seconds": 150
+    },
+    {
+      "id": "build-03-page-agence",
+      "category": "build",
+      "killer_feature": "generation-from-brief",
+      "prompt": "Site vitrine agence digitale avec hero impact, services en grille, équipe, projets, témoignages clients et formulaire contact.",
+      "expected_blocks": [
+        { "name": "uagb/container", "min": 6, "max": 12 },
+        { "name": "uagb/team", "min": 1, "max": 1 }
+      ],
+      "assertions": [
+        { "type": "block_count", "min": 20, "max": 35 },
+        { "type": "uagb_block_id_unique", "expect": true }
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "id": "build-04-article-editorial",
+      "category": "build",
+      "killer_feature": "generation-from-brief",
+      "prompt": "Article 2000 mots sur les 5 plugins SEO WordPress, avec sommaire, comparatif tableau, vidéo YouTube et FAQ.",
+      "expected_blocks": [
+        { "name": "uagb/table-of-contents", "min": 1, "max": 1 },
+        { "name": "core/embed", "min": 1, "max": 2 },
+        { "name": "uagb/faq", "min": 1, "max": 1 },
+        { "name": "core/paragraph", "min": 8, "max": 50 }
+      ],
+      "assertions": [
+        { "type": "block_count", "min": 25, "max": 80 },
+        { "type": "core_block_proportion", "min": 0.5, "comment": "article = majoritaire core" }
+      ],
+      "timeout_seconds": 240
+    },
+    {
+      "id": "build-05-effet-waouh",
+      "category": "build",
+      "killer_feature": "container-wow",
+      "prompt": "Crée un hero pleine page avec gradient mesh animé, glassmorphism sur la card CTA et divider diagonal vers la section suivante.",
+      "expected_blocks": [
+        { "name": "uagb/container", "min": 2, "max": 4 }
+      ],
+      "assertions": [
+        { "type": "background_type_gradient", "expect": true },
+        { "type": "has_dividers", "expect": true },
+        { "type": "has_overlay", "expect": true }
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "id": "refonte-01-page-existante",
+      "category": "refonte",
+      "killer_feature": "refonte-intelligente",
+      "setup": "Crée d'abord une page legacy avec wp:paragraph + wp:heading (pas de blocs Spectra)",
+      "prompt": "Modernise la page /a-propos/ en mode Spectra avec respect du contenu original.",
+      "assertions": [
+        { "type": "uagb_block_proportion", "min": 0.6 },
+        { "type": "content_preserved", "expect": true, "comment": "tous les paragraphes originaux doivent être présents" }
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "id": "template-01-deploy-formation",
+      "category": "template",
+      "killer_feature": "templates-clic-bouton",
+      "prompt": "Déploie le template page-formation avec : titre 'Formation Next.js 16', prix 1900 EUR HT, durée 35h, OPCO oui.",
+      "expected_template": "page-formation",
+      "assertions": [
+        { "type": "block_count", "min": 25, "max": 50 },
+        { "type": "contains_text", "value": "Formation Next.js 16" },
+        { "type": "contains_text", "value": "1900" },
+        { "type": "contains_text", "value": "35h" }
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "id": "validate-01-malformed-markup",
+      "category": "validation",
+      "killer_feature": null,
+      "prompt": "Valide ce markup volontairement cassé (block_id manquant + hex hardcodé + H1 multiple)",
+      "input_file": "fixtures/malformed-markup.html",
+      "assertions": [
+        { "type": "validator_status", "expected": "FAILED" },
+        { "type": "errors_contain", "value": "block_id" },
+        { "type": "warnings_contain", "value": "hex" }
+      ],
+      "timeout_seconds": 10
+    },
+    {
+      "id": "auto-fix-01-corrections",
+      "category": "validation",
+      "killer_feature": null,
+      "prompt": "Auto-fix le markup cassé de validate-01 et vérifie que toutes les corrections ont été appliquées.",
+      "input_file": "fixtures/malformed-markup.html",
+      "assertions": [
+        { "type": "fixes_count", "min": 3 },
+        { "type": "post_fix_validator_status", "expected": "OK" }
+      ],
+      "timeout_seconds": 15
+    },
+    {
+      "id": "astra-01-palette-update",
+      "category": "astra",
+      "killer_feature": null,
+      "prompt": "Applique une palette orange (#FF8C00) sur Astra et vérifie que les variables CSS frontend sont mises à jour.",
+      "patch_file": "fixtures/astra-palette-orange.json",
+      "assertions": [
+        { "type": "css_var_value", "var": "--ast-global-color-0", "expected": "#FF8C00" },
+        { "type": "css_var_count", "min": 9, "comment": "9 variables Astra définies" },
+        { "type": "no_other_keys_modified", "expect": true, "comment": "1942 keys préservées" }
+      ],
+      "timeout_seconds": 30
+    }
+  ],
+  "benchmarks": {
+    "build-page-formation": {
+      "target_seconds": 90,
+      "max_seconds": 180,
+      "current_p50": null,
+      "current_p95": null
+    },
+    "validate-markup-1500-blocks": {
+      "target_ms": 200,
+      "max_ms": 500,
+      "current_p50": null
+    },
+    "astra-palette-update": {
+      "target_seconds": 5,
+      "max_seconds": 15,
+      "current_p50": null
+    }
+  },
+  "success_thresholds": {
+    "build_first_pass_rate": 0.80,
+    "build_after_3_retries_rate": 0.95,
+    "manual_intervention_rate": 0.05,
+    "average_block_count_per_page": 18,
+    "average_css_var_per_page": 80
+  }
+}

@@ -4,15 +4,66 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 
 ## [Unreleased]
 
-### À venir (v1.0)
+### À venir (v1.0 finale)
 
+- Push & test du skill dans une autre session Claude Code
+- Compilation effective du PDF (Pandoc/Typst + 25 captures)
+- Déploiement de la page front + route API Vercel sur wpformation.com
 - 5+ patterns supplémentaires (timeline, contact-form, newsletter, 404, hero variants)
 - 5+ templates supplémentaires (blog-editorial, e-commerce-produit, page-tarifs, page-contact, page-a-propos, page-404, coming-soon)
-- Module Astra avec couverture exhaustive du Customizer (header builder, footer builder, typography)
-- Évals automatiques + benchmarks de performance
-- PDF guide premium 25-40 pages (lead magnet)
-- Infrastructure lead magnet (Vercel route + page front + Brevo)
 - Article WPFormation dédié
+- Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
+
+## [0.8.0-beta] — 2026-05-02
+
+### Itérations 4 à 8 — Préparation v1.0
+
+#### Ajouté
+
+##### Itération 4 — Validation visuelle automatique
+
+- `workflows/visual-validation-loop.md` : workflow avec retries intelligents max 3 tentatives, couplage `/impeccable` + `/screenshot-loop` ou checks intégrés (12 critères P0/P1/P2/P3)
+- `scripts/visual-audit.php` : 12 checks intégrés (hiérarchie titres, contraste, hex hardcodé, block_id, padding, alt images, container width, responsive, etc.)
+- `scripts/auto-fix-markup.php` : corrections automatiques (block_id régénérés UUID v4, hex → tokens Astra, H1 dupliqués dégradés en H2)
+
+##### Itération 5 — Module Astra Customizer complet
+
+- `modules/astra/customizer-map.md` : cartographie exhaustive `astra-settings` (palette, typo, layout, header builder, footer builder, sidebar, blog, perf, custom CSS) avec workflows palette + header
+- `scripts/astra-customizer.php` : pilote complet avec commandes `export` (snapshot config) et `apply` (patch JSON sécurisé qui préserve les 1942 keys)
+
+##### Itération 6 — Evals + benchmarks
+
+- `evals/evals.json` : 10 évals canoniques (build × 5, refonte × 1, template × 1, validation × 2, astra × 1) avec assertions précises (block_count, css_var_count, hex_hardcoded_count, etc.)
+- `evals/run-evals.php` : runner CLI avec filtrage `--category` et `--id`
+- `evals/fixtures/malformed-markup.html` : fixture markup volontairement cassé (H1 multiple, block_id dupliqué, hex hardcodé)
+- `evals/fixtures/astra-palette-orange.json` : fixture patch palette orange WPF
+- `evals/README.md` : doc évals + types d'assertions supportés
+
+##### Itération 7 — PDF premium (lead magnet)
+
+- `lead-magnet/pdf-source.md` : source markdown 32-44 pages (27 chapitres, 30 recettes, 12 effets WOW, 8 templates, 15 prompts, 10 anti-patterns, 10 troubleshooting, FAQ)
+- `lead-magnet/README.md` : workflow de production Pandoc/Typst + spécifications PDF + métriques cibles distribution
+
+##### Itération 8 — Infra Vercel (lead magnet)
+
+- `vercel-integration/api-route.ts` : route POST `/api/skill-astra-spectra/` clonée du pattern `/api/guide-ia/` (Brevo liste 5, Turnstile, rate limiter, email transactionnel HTML+text)
+- `vercel-integration/page.tsx` : page front `/skill-astra-spectra/` avec hero gradient mesh + 3 features + capture email + sommaire + CTA formation
+- `vercel-integration/README.md` : guide d'intégration au repo WPFORMATION (à déployer en session dédiée)
+
+#### Modifié
+
+- `scripts/validate-block-markup.php` : distingue désormais diff cosmétique whitespace (warning) vs vraie erreur (error)
+
+#### Métriques skill v0.8.0-beta
+
+- 30 → 45 fichiers
+- 4 332 → ~7 200 lignes
+- 4 → 7 scripts PHP
+- 4 → 5 références
+- 2 → 3 modules (ajout `astra/customizer-map.md`)
+- 0 → 10 évals
+- 0 → 32 pages markdown PDF source
+- 0 → 3 fichiers Vercel-ready
 
 ## [0.5.0-alpha] — 2026-05-02
 
