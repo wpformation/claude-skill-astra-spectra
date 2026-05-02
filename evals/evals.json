@@ -1,6 +1,6 @@
 {
-  "version": "0.6.0-alpha",
-  "description": "Suite d'évals automatisées pour le skill claude-skill-astra-spectra. Chaque eval teste un cas d'usage critique et vérifie des assertions précises.",
+  "version": "0.8.1-beta",
+  "description": "Suite d'évals automatisées pour le skill claude-skill-astra-spectra. Chaque eval teste un cas d'usage critique et vérifie des assertions précises. Les évals build/refonte/template/astra nécessitent une session live (LLM + WP cible) ; les évals validation/auto-fix sont 100% automatisées.",
   "evals": [
     {
       "id": "build-01-page-formation",
@@ -20,7 +20,10 @@
         { "type": "css_var_count", "min": 30 },
         { "type": "hex_hardcoded_count", "max": 0 },
         { "type": "h1_count", "expected": 1 },
-        { "type": "roundtrip_real_diff", "expected": 0 }
+        { "type": "must_validate_roundtrip", "expect": true },
+        { "type": "gutenberg_zero_warnings", "expect": true },
+        { "type": "frontend_min_bytes", "min": 5000 },
+        { "type": "rest_api_status", "expected": 201 }
       ],
       "timeout_seconds": 120
     },

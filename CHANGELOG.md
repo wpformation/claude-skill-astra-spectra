@@ -6,13 +6,48 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 
 ### À venir (v1.0 finale)
 
-- Push & test du skill dans une autre session Claude Code
 - Compilation effective du PDF (Pandoc/Typst + 25 captures)
 - Déploiement de la page front + route API Vercel sur wpformation.com
-- 5+ patterns supplémentaires (timeline, contact-form, newsletter, 404, hero variants)
-- 5+ templates supplémentaires (blog-editorial, e-commerce-produit, page-tarifs, page-contact, page-a-propos, page-404, coming-soon)
+- 6+ patterns supplémentaires (tabs-section, slider-carousel, timeline-vertical, how-to-steps, review-product, countdown-launch, contact-form-split, 404-page)
+- 5 templates supplémentaires (blog-editorial, e-commerce-produit, page-tarifs, page-contact, page-a-propos)
+- references/spectra-icons-list.md (liste exhaustive noms courts d'icônes)
+- references/gutenberg-core-blocks.md (30+ blocs core/* curés)
 - Article WPFormation dédié
 - Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
+
+## [0.8.1-beta] — 2026-05-02 (PM)
+
+### Correctifs post-test cours-ndrc.fr (rapport 19 issues)
+
+#### Corrigé — 3 BLOCKERS
+
+- **`scripts/validate-block-markup.php`** : faux positif sur l'échappement `--`. `serialize_blocks()` encode systématiquement `--` en `--` dans les attrs JSON (var(--ast-global-color-X) déclenche ce reformatage). Ajout d'une normalisation Unicode des deux côtés AVANT comparaison. Le validator rejetait à tort 100 % des markups produits par les patterns du skill.
+- **`patterns/features-3-cols.md`** : HTML `<i class="{{F1_ICON}}">` (style FontAwesome) incompatible avec rendu Spectra qui utilise des SVG inline. Ajout `source_type:"icon"`, `iconimgPosition:"above-title"`, structure `uagb-ifb-content` qui correspond au rendu réel. Documentation des noms courts d'icônes Spectra (rocket, lightbulb, chart-pie...).
+- **`scripts/post-page-via-rest.php` (nouveau)** : POST automatique vers `/wp-json/wp/v2/pages` avec auth Basic Auth (Application Password), gestion erreurs 401/403/404, support Yoast meta, retour edit_url. Comble le gap workflow étape 6 qui ne fournissait qu'un exemple curl à recomposer manuellement.
+
+#### Corrigé — 6 MAJEURS
+
+- **`SKILL.md`** : section « Structure du skill » alignée avec l'état réel du repo (45 fichiers v0.8). Suppression de 13 références à des fichiers inexistants (modules/spectra/blocks-catalog.md, modules/astra/settings-mapper.md, references/gutenberg-core-blocks.md, workflows/new-site-from-scratch.md, etc.). Ajout des fichiers présents non documentés (auto-fix-markup.php, astra-customizer.php, visual-audit.php, post-page-via-rest.php, lead-magnet/, vercel-integration/, evals/).
+- **`SKILL.md`** : promesses ajustées de « 8 templates / 15+ patterns » à « 3 templates v0.8 / 9 patterns v0.8 », avec liste explicite des items à venir en v1.0.
+- **`scripts/detect-environment.php`** : guard `php_sapi_name() !== 'cli' && !headers_sent()` autour du `header()` pour éviter le warning « Cannot modify header information » en mode WP-CLI.
+- **`scripts/detect-environment.php`** : initialisation `pro_active: false` et `palette_colors: []` dans le profil par défaut (avant ne se définissait que si Astra actif). Ajout détection des 9 couleurs RÉELLES depuis `astra-settings.global-color-palette.palette` (pilote frontend).
+- **`references/spectra-blocks-catalog.md`** : recompté à 48 blocs Gutenberg utilisables (`extensions` est un meta-bloc, pas dans le block inserter). Note d'explication ajoutée. SKILL.md description aligné « 48 blocs ».
+- **Documentation** : tous les scripts présents documentés dans la nouvelle section Structure de SKILL.md.
+
+#### Corrigé — 8 MINEURS
+
+- **`references/block-markup-syntax.md` règle 4** : reformulée pour distinguer ce qui est CRITIQUE (texte heading ≠ `headingTitle`, balise ≠ `headingTag`, `<i class="fa-...">` au lieu de SVG, `block_id` manquant) vs ce qui est COSMÉTIQUE (whitespace, ordre des classes, encodage `--` ↔ `--`). Pattern info-box corrigé en exemple.
+- **`references/block-markup-syntax.md` règle 5** : note explicite sur l'encodage des accents — UTF-8 OK dans HTML rendu, escapes Unicode recommandées dans attrs JSON pour éviter corruption charset PHP/MySQL.
+- **`references/intent-to-block-routing.md`** : remplacement du « score Spectra +10 / core +5 » (jamais implémenté) par une heuristique explicite à 4 règles que Claude Code applique en lisant la table.
+- **`workflows/new-page-from-brief.md`** : ajout étape 10 cleanup TEST/POC/DEMO/[skill] pages (proposer suppression à l'utilisateur après validation pour éviter accumulation de brouillons).
+- **`INSTALL.md` étape 3** : reformulation pour préciser qu'il faut **invoquer le skill explicitement** (pas un prompt langage naturel ambigu) et expliquer comment le script `detect-environment.php` est exécuté (WP-CLI / mu-plugin / hébergeur).
+- **`scripts/auto-fix-markup.php`** : `wpf_skill_nearest_token()` lit dynamiquement la palette ACTIVE depuis `get_option('astra-settings')` au lieu d'une palette hex codée en dur. Calcul nearest-color via distance euclidienne sur les 9 couleurs réelles → mapping correct sur n'importe quel `currentPalette`.
+- **`evals/evals.json`** : assertions techniques renforcées (`must_validate_roundtrip`, `gutenberg_zero_warnings`, `frontend_min_bytes`, `rest_api_status`) sur build-01-page-formation. Modèle à dupliquer sur les autres évals build.
+
+#### Issues notées pour v1.0
+
+- Mineur 17 : pattern Astra-Pro-only (header transparent overlay) non implémenté → reporté v1.0
+- Mineur 16 (partie 2) : adaptation des patterns à `palette_colors` détectée non implémentée côté patterns → reporté v1.0 (les patterns continuent d'utiliser les slots `--ast-global-color-X` ce qui marche déjà sur toutes les palettes par construction Astra)
 
 ## [0.8.0-beta] — 2026-05-02
 

@@ -31,29 +31,43 @@ function wpf_skill_uuid_v4() {
   return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
 }
 
+function wpf_skill_get_active_palette_colors() {
+  // Lire dynamiquement les couleurs RÉELLES de la palette Astra active
+  // (depuis astra-settings.global-color-palette.palette qui pilote le frontend).
+  // Fallback sur la palette default Astra si l'option n'est pas dispo.
+  $default = ['#0274be', '#3a3a3a', '#0a0a0a', '#0a0a0a', '#0274be', '#ffffff', '#f5f5f5', '#fafafa', '#e7e7e7'];
+
+  if (!function_exists('get_option')) return $default;
+
+  $astra_settings = get_option('astra-settings');
+  if (is_array($astra_settings) && isset($astra_settings['global-color-palette']['palette']) && is_array($astra_settings['global-color-palette']['palette'])) {
+    $palette = $astra_settings['global-color-palette']['palette'];
+    if (count($palette) === 9) return $palette;
+  }
+  return $default;
+}
+
+function wpf_skill_color_distance($hex1, $hex2) {
+  $r1 = hexdec(substr($hex1, 1, 2)); $g1 = hexdec(substr($hex1, 3, 2)); $b1 = hexdec(substr($hex1, 5, 2));
+  $r2 = hexdec(substr($hex2, 1, 2)); $g2 = hexdec(substr($hex2, 3, 2)); $b2 = hexdec(substr($hex2, 5, 2));
+  return sqrt(pow($r1 - $r2, 2) + pow($g1 - $g2, 2) + pow($b1 - $b2, 2));
+}
+
 function wpf_skill_nearest_token($hex) {
-  // Map approximatif hex → token Astra (palette par défaut)
-  $tokens = [
-    '#0274be' => 'var(--ast-global-color-0)', // primary
-    '#3a3a3a' => 'var(--ast-global-color-2)', // text
-    '#0a0a0a' => 'var(--ast-global-color-3)', // heading
-    '#ffffff' => 'var(--ast-global-color-5)', // body bg
-    '#f5f5f5' => 'var(--ast-global-color-7)', // off-white
-  ];
   $hex = strtolower($hex);
-  if (isset($tokens[$hex])) return $tokens[$hex];
+  // Récupère la palette ACTIVE (pas une palette hardcodée)
+  $palette = wpf_skill_get_active_palette_colors();
 
-  // Fallback : choisir token selon luminosité
-  $r = hexdec(substr($hex, 1, 2));
-  $g = hexdec(substr($hex, 3, 2));
-  $b = hexdec(substr($hex, 5, 2));
-  $lum = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
-
-  if ($lum > 0.9) return 'var(--ast-global-color-5)'; // très clair
-  if ($lum > 0.7) return 'var(--ast-global-color-7)'; // clair
-  if ($lum < 0.15) return 'var(--ast-global-color-3)'; // très foncé (heading)
-  if ($lum < 0.4) return 'var(--ast-global-color-2)'; // foncé (text)
-  return 'var(--ast-global-color-0)'; // primary par défaut
+  $best_idx = 0;
+  $best_dist = PHP_INT_MAX;
+  foreach ($palette as $idx => $palette_hex) {
+    $dist = wpf_skill_color_distance($hex, strtolower($palette_hex));
+    if ($dist < $best_dist) {
+      $best_dist = $dist;
+      $best_idx = $idx;
+    }
+  }
+  return "var(--ast-global-color-$best_idx)";
 }
 
 function wpf_skill_auto_fix(&$blocks, &$fixes_log, &$seen_ids, &$h1_seen, $context = 'page') {

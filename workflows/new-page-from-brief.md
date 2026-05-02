@@ -191,6 +191,27 @@ Vérifie que :
 
 Note : `/impeccable` est en **lecture seule** sur WPFormation (la palette orange #FF8C00 est verrouillée). Ici, sur un site client neutre, les commandes `colorize|bolder|typeset` peuvent être autorisées.
 
+### Étape 10 — Cleanup des pages de test
+
+Si le titre de la page commence par `TEST `, `POC `, `DEMO ` ou `[skill]`, **proposer la suppression à l'utilisateur** après validation visuelle :
+
+```
+🧹 Cette page est marquée comme test (titre : "{{TITLE}}").
+Veux-tu :
+  [1] La conserver (status: draft, manuel à publier ou supprimer)
+  [2] La supprimer maintenant (DELETE /wp-json/wp/v2/pages/{{PAGE_ID}}?force=true)
+```
+
+Si réponse 2, exécuter :
+
+```bash
+curl -X DELETE \
+  -u "{{USER}}:{{APP_PASSWORD}}" \
+  "https://{{SITE_URL}}/wp-json/wp/v2/pages/{{PAGE_ID}}?force=true"
+```
+
+Sinon, sur un site de prod testé itérativement, l'utilisateur se retrouve avec 5-10 brouillons « TEST skill astra-spectra » à nettoyer manuellement.
+
 ## Cas d'erreurs courants
 
 ### Erreur 1 — REST API 401 Unauthorized

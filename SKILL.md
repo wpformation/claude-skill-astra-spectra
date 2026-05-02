@@ -1,11 +1,11 @@
 ---
 name: astra-spectra
-description: Génère des pages WordPress complètes avec Spectra (49 blocs Gutenberg) + Gutenberg core, avec ou sans Astra. Utiliser quand l'utilisateur demande de créer/générer/construire/refondre une page WordPress, une landing page, un site WordPress, ou mentionne Spectra, Astra, Gutenberg blocks, page builder, ou un template de page WP. 3 killer features cumulatives — génération depuis un brief en langage naturel, refonte intelligente d'une page existante, déploiement de templates clic-bouton (landing SaaS, page formation, blog éditorial, e-commerce, page agence). Spectra obligatoire au runtime, n'importe quel thème WP accepté, Astra MCP optionnel. Toujours invoquer ce skill avant de générer du markup Gutenberg manuel.
+description: Génère des pages WordPress complètes avec Spectra (48 blocs Gutenberg) + Gutenberg core, avec ou sans Astra. Utiliser quand l'utilisateur demande de créer/générer/construire/refondre une page WordPress, une landing page, un site WordPress, ou mentionne Spectra, Astra, Gutenberg blocks, page builder, ou un template de page WP. 3 killer features cumulatives — génération depuis un brief en langage naturel, refonte intelligente d'une page existante, déploiement de templates clic-bouton (page-formation, landing-saas, page-agence). Spectra obligatoire au runtime, n'importe quel thème WP accepté, Astra optionnel. Toujours invoquer ce skill avant de générer du markup Gutenberg manuel.
 ---
 
 # Skill `claude-skill-astra-spectra`
 
-Skill Claude Code de génération de pages WordPress avec **Spectra (49 blocs Gutenberg)** + **Gutenberg core**, avec **Astra theme** en bonus si présent.
+Skill Claude Code de génération de pages WordPress avec **Spectra (48 blocs Gutenberg)** + **Gutenberg core**, avec **Astra theme** en bonus si présent.
 
 ## Promesse
 
@@ -15,7 +15,7 @@ Tu décris ce que tu veux en langage naturel, le skill génère le markup Gutenb
 
 1. **Génération depuis un brief** (`workflows/new-page-from-brief.md`) — « fais-moi une landing page formation avec hero, 3 features, pricing 3 tiers, FAQ et CTA YouTube » → page draft Spectra+core complète en moins de 2 minutes
 2. **Refonte intelligente** (`workflows/refonte-page-existante.md`) — « modernise /a-propos/ » → snapshot, analyse, reconstruction Spectra cohérente
-3. **Templates clic-bouton** (`workflows/deploy-template.md`) — 8 templates de pages complètes (landing-saas, page-formation, blog-editorial, e-commerce-produit, page-agence, page-contact, page-tarifs, page-a-propos)
+3. **Templates clic-bouton** (`workflows/deploy-template.md`) — 3 templates v0.8 (page-formation, landing-saas, page-agence). 5 templates supplémentaires (blog-editorial, e-commerce-produit, page-tarifs, page-contact, page-a-propos) prévus en v1.1
 
 ## Utilisation rapide
 
@@ -58,8 +58,7 @@ Le skill exécute :
 | « crée-moi une page X », « fais-moi une landing Y », « génère une page sur Z » | `workflows/new-page-from-brief.md` |
 | « modernise /url/ », « refonds /a-propos/ », « refresh la page X » | `workflows/refonte-page-existante.md` |
 | « déploie le template SaaS », « installe le template formation » | `workflows/deploy-template.md` |
-| « monte-moi un site complet », « génère N pages » | `workflows/new-site-from-scratch.md` ou `workflows/batch-pages-from-brief.md` |
-| « démontre-moi le skill », « effet waouh » | `workflows/effet-waouh-stagiaire.md` |
+| Validation visuelle après génération | `workflows/visual-validation-loop.md` |
 
 ## ⭐ `uagb/container` = bloc fondation pour les effets WOW
 
@@ -89,50 +88,76 @@ Cela permet la propagation automatique au changement de palette Astra (validée 
 
 **Hors-Astra** : si le site cible n'a pas Astra activé, le skill injecte automatiquement un `wpf-design-tokens.css` qui mappe `--ast-global-color-X` vers les couleurs choisies par l'utilisateur (5-6 tokens via une palette pré-construite ou custom).
 
-## Structure du skill
+## Structure du skill (v0.8.1 — état réel du repo)
 
 ```
 astra-spectra/
 ├── SKILL.md                              # ← ce fichier (routing principal)
 ├── README.md                             # pitch GitHub public
 ├── INSTALL.md                            # setup pas-à-pas
+├── LICENSE                               # MIT
+├── CHANGELOG.md                          # historique versions
 ├── modules/
-│   ├── spectra/                          # ⭐ GOLD WIN
-│   │   ├── blocks-catalog.md             # 49 blocs uagb/* avec attributs critiques
-│   │   ├── block-id-generator.md         # règle de génération block_id unique
-│   │   └── markup-recipes.md             # patterns markup éprouvés (container/buttons/faq)
-│   ├── astra/                            # bonus si Astra présent
-│   │   ├── settings-mapper.md            # update_option('astra-settings') patterns
-│   │   ├── palette-presets.md            # 11 presets natifs Astra
-│   │   └── customizer-controls.md        # header, footer, typography
-│   ├── core/                             # fallback Gutenberg core
-│   │   └── core-blocks-curated.md        # 30+ blocs core/* avec recettes
-│   └── design-tokens/
-│       ├── default-tokens.css            # fallback CSS si pas d'Astra
-│       └── token-mapper.md               # mapping Astra ↔ Spectra ↔ core
+│   ├── spectra/
+│   │   └── container-wow-recipes.md      # ⭐ GOLD : 12 recettes WOW uagb/container
+│   └── astra/
+│       └── customizer-map.md             # ⭐ pilotage exhaustif astra-settings
 ├── references/
-│   ├── intent-to-block-routing.md        # ⭐ table de décision intent → bloc (le cœur)
-│   ├── spectra-blocks-catalog.md         # 49 blocs uagb/* documentés
-│   ├── gutenberg-core-blocks.md          # 30+ blocs core/*
-│   ├── block-markup-syntax.md            # syntaxe Gutenberg comments + pièges
+│   ├── intent-to-block-routing.md        # ⭐ table de décision 45 entrées
+│   ├── spectra-blocks-catalog.md         # 48 blocs uagb/* documentés
+│   ├── block-markup-syntax.md            # syntaxe Gutenberg comments + 8 règles
 │   └── design-system-tokens.md           # palette Astra ↔ blocs
-├── patterns/                             # 15+ patterns hybrides production-ready
-├── templates/                            # 8+ templates de pages complètes
-├── workflows/                            # ⭐ 3 killer features + helpers
+├── patterns/                             # 9 patterns hybrides v0.8 (15+ cible v1.1)
+│   ├── hero-cta-split.md
+│   ├── features-3-cols.md
+│   ├── pricing-3-tiers.md
+│   ├── faq-accordion.md
+│   ├── cta-banner-fullwidth.md
+│   ├── testimonials-grid.md
+│   ├── team-grid.md
+│   ├── stats-counters.md
+│   └── article-content-rich.md
+├── templates/                            # 3 templates v0.8 (8 cible v1.1)
+│   ├── page-formation.md
+│   ├── landing-saas.md
+│   └── page-agence.md
+├── workflows/                            # ⭐ killer features + helpers
 │   ├── new-page-from-brief.md            # killer feature 1
 │   ├── refonte-page-existante.md         # killer feature 2
 │   ├── deploy-template.md                # killer feature 3
-│   ├── new-site-from-scratch.md
-│   ├── batch-pages-from-brief.md
-│   └── effet-waouh-stagiaire.md
+│   └── visual-validation-loop.md         # boucle audit + retries (max 3)
 ├── scripts/
-│   ├── detect-environment.php            # check Spectra/Astra/thème/WP version
+│   ├── detect-environment.php            # profil site (Spectra/Astra/thème/palette)
 │   ├── apply-design-tokens.php           # inject palette Astra ou fallback CSS
-│   ├── validate-block-markup.php         # roundtrip parse_blocks/serialize
-│   └── snapshot-page.php                 # dump page existante (refonte)
-└── evals/
-    └── evals.json                        # prompts test
+│   ├── astra-customizer.php              # export/apply astra-settings (préserve 1942 keys)
+│   ├── validate-block-markup.php         # roundtrip parse/serialize (normalise --)
+│   ├── visual-audit.php                  # 12 checks intégrés P0-P3
+│   ├── auto-fix-markup.php               # corrections auto block_id/hex/H1
+│   ├── snapshot-page.php                 # dump page existante (refonte)
+│   └── post-page-via-rest.php            # POST automatique vers WP REST API
+├── evals/
+│   ├── evals.json                        # 10 évals canoniques
+│   ├── run-evals.php                     # runner CLI
+│   ├── README.md
+│   └── fixtures/
+│       ├── malformed-markup.html
+│       └── astra-palette-orange.json
+├── lead-magnet/
+│   ├── pdf-source.md                     # source PDF 32 pages
+│   └── README.md                         # workflow Pandoc/Typst
+└── vercel-integration/                   # à intégrer côté wpformation.com
+    ├── api-route.ts                      # route /api/skill-astra-spectra/
+    ├── page.tsx                          # page front /skill-astra-spectra/
+    └── README.md
 ```
+
+### Promesses v1.0 (à venir)
+
+- 6+ patterns supplémentaires : `tabs-section`, `slider-carousel`, `timeline-vertical`, `how-to-steps`, `review-product`, `countdown-launch`, `contact-form-split`, `404-page`
+- 5 templates supplémentaires : `blog-editorial`, `e-commerce-produit`, `page-tarifs`, `page-contact`, `page-a-propos`
+- Workflow `new-site-from-scratch.md` (multi-pages depuis 1 brief global)
+- `references/spectra-icons-list.md` : liste exhaustive des noms courts d'icônes Spectra utilisables
+- `references/gutenberg-core-blocks.md` : doc curée des 30+ blocs `core/*`
 
 ## Workflow d'invocation typique
 
@@ -174,6 +199,6 @@ Le skill comble ce trou : il route intelligemment chaque intention vers le bon b
 ## Sources et crédits
 
 - POC validé le 02/05/2026 sur WordPress Playground (rapport : `claude-memory/poc-skill-astra-spectra-2026-05-02.md` du repo wpformation)
-- Inventaire Spectra : repo officiel `brainstormforce/wp-spectra` (49 blocs)
+- Inventaire Spectra : repo officiel `brainstormforce/wp-spectra` (48 blocs)
 - Doc Astra MCP officielle : https://wpastra.com/docs/astra-mcp/
 - Author : Fabrice Ducarme — WPFormation.com (8 plugins WordPress.org, 2.1M+ téléchargements, speaker WordCamp Paris/Lyon/Marseille)

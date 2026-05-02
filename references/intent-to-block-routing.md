@@ -158,12 +158,17 @@
 
 Quand l'utilisateur exprime une intention en langage naturel, suivre ces étapes :
 
+> **Heuristique pour Claude Code (pas de script automatique)** : la sélection est faite par le LLM en s'appuyant sur ces règles. Il n'y a pas de scripts/route-intent.php : Claude Code lit la table ci-dessus et la sélection ci-dessous, et choisit.
+
 1. **Tokenize** la phrase pour identifier les mots-clés (« hero », « pricing », « FAQ », « grille », « timeline », « contact », etc.)
 2. **Match** chaque mot-clé contre la table de routing ci-dessus
-3. **Score** chaque match : Spectra +10 si présent, core +5 si fallback
-4. **Sélectionne** le bloc avec le score le plus élevé
-5. **Ajoute** un wrapper `uagb/container` si la composition contient 2+ blocs
-6. **Génère** un `block_id` unique pour chaque bloc Spectra (pattern : `<context>-<type>-<index>`)
+3. **Priorise** dans cet ordre :
+   - **Spectra** si le bloc apporte un gain visuel/UX significatif (`uagb/info-box`, `uagb/testimonial`, `uagb/team`, `uagb/timeline`)
+   - **Spectra** si le bloc embarque du schema SEO automatique (`uagb/faq` → FAQPage, `uagb/how-to` → HowTo, `uagb/review` → Review)
+   - **Spectra** s'il n'y a pas d'équivalent core (`uagb/countdown`, `uagb/modal`, `uagb/tabs`, `uagb/slider`)
+   - **Core** pour les blocs atomiques simples (`core/paragraph`, `core/heading` H3+, `core/list`, `core/image` isolée, `core/embed`)
+4. **Wrappe** systématiquement les compositions multi-blocs dans un `uagb/container` (jamais `core/group`, `core/columns` ou `core/cover` quand on veut un effet design)
+5. **Génère** un `block_id` unique pour chaque bloc Spectra (pattern : `<context>-<type>-<index>`, ex `hero-cta-1`, `pricing-tier-3`, `faq-q5`)
 7. **Applique** les couleurs via `var(--ast-global-color-X)` depuis la palette active
 
 ## Exemples concrets

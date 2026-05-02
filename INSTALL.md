@@ -66,11 +66,14 @@ L'Application Password permet au skill de communiquer avec ton site sans utilise
 
 ## Étape 3 — Tester la connexion (30 secondes)
 
-Lance Claude Code et teste :
+Lance Claude Code et invoque le skill avec ces 3 paramètres :
 
 ```
-> Détecte mon site https://monsite.com avec ce password : abcd 1234 efgh 5678
+> Invoque le skill astra-spectra : détecte mon site https://monsite.com,
+> user admin, app password "abcd 1234 efgh 5678".
 ```
+
+Sous le capot, Claude Code lance `scripts/detect-environment.php` (via `wp eval-file` si tu as WP-CLI local, ou via un endpoint REST si tu as installé le mu-plugin compagnon, ou en téléchargeant le script et en l'exécutant côté hébergeur).
 
 Le skill devrait répondre avec :
 

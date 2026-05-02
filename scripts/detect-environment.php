@@ -53,7 +53,13 @@ $profile = [
   'php_version' => phpversion(),
   'rest_api_accessible' => true,
   'spectra' => ['active' => false, 'version' => null],
-  'astra' => ['active' => false, 'version' => null, 'current_palette' => null],
+  'astra' => [
+    'active' => false,
+    'version' => null,
+    'current_palette' => null,
+    'pro_active' => false,
+    'palette_colors' => [],
+  ],
   'theme' => [],
   'permalinks' => [],
   'verdict' => 'UNKNOWN',
@@ -87,17 +93,21 @@ if ($profile['theme']['slug'] === 'astra') {
   $profile['astra']['active'] = true;
   $profile['astra']['version'] = $profile['theme']['version'];
 
-  // Detect current palette
+  // Detect current palette name (depuis astra-color-palettes pour l'UI Customizer)
   $color_palettes = get_option('astra-color-palettes');
   if (is_array($color_palettes) && isset($color_palettes['currentPalette'])) {
     $profile['astra']['current_palette'] = $color_palettes['currentPalette'];
   }
 
+  // Détecter les couleurs RÉELLES de la palette active (depuis astra-settings, pilote frontend)
+  $astra_settings = get_option('astra-settings');
+  if (is_array($astra_settings) && isset($astra_settings['global-color-palette']['palette'])) {
+    $profile['astra']['palette_colors'] = $astra_settings['global-color-palette']['palette'];
+  }
+
   // Check Astra Pro
   if (in_array('astra-addon/astra-addon.php', $active_plugins)) {
     $profile['astra']['pro_active'] = true;
-  } else {
-    $profile['astra']['pro_active'] = false;
   }
 } else {
   $profile['warnings'][] = "Astra theme not active. The Astra Customizer module will be disabled. Spectra-only mode (still functional). Current theme: " . $profile['theme']['name'];
@@ -136,5 +146,9 @@ if (!empty($profile['blockers'])) {
 }
 
 // === 9. Output ===
-header('Content-Type: application/json; charset=utf-8');
+// Guard headers_sent() pour éviter le warning "Cannot modify header information"
+// quand le script est exécuté via wp eval-file (mode CLI : pas de headers HTTP).
+if (php_sapi_name() !== 'cli' && !headers_sent()) {
+  header('Content-Type: application/json; charset=utf-8');
+}
 echo json_encode($profile, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

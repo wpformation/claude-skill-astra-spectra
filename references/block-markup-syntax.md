@@ -85,31 +85,52 @@ Le contenu d'un post WordPress (`post_content`) n'est pas du HTML, c'est du **bl
 - Pas d'attrs dans le commentaire de fermeture
 - Auto-fermant : `/-->` à la fin du commentaire d'ouverture, pas de fermeture séparée
 
-### 4. HTML rendu fidèle
+### 4. HTML rendu : ce qui doit matcher, ce qui peut diverger
 
-Le HTML entre `<!-- wp:* -->` et `<!-- /wp:* -->` doit être **exactement** ce que le bloc serait rendu côté frontend. Si tu changes manuellement le HTML rendu, Gutenberg détecte la différence et affiche un warning « invalid content ».
+Le HTML entre `<!-- wp:* -->` et `<!-- /wp:* -->` est compilé au moment du POST. Spectra **recalcule** ce HTML à chaque ouverture du bloc dans Gutenberg à partir des attrs JSON. Le validateur Spectra tolère des divergences cosmétiques mais sanctionne les divergences sémantiques.
 
-Pour Spectra (`uagb/*`), il y a une particularité : le HTML rendu inclut souvent une `<div class="wp-block-uagb-{block_name} uagb-block-{block_id}">` avec le block_id en classe.
+#### Ce qui est CRITIQUE (provoque « invalid content ») :
+
+| Élément | Pourquoi |
+|---------|----------|
+| Texte du heading dans HTML ≠ `headingTitle` dans JSON | Spectra reconstruit le `<h?>` depuis l'attr |
+| Balise du heading (`<h1>` vs `<h2>`) ≠ `headingTag` dans JSON | Mismatch sémantique |
+| Description ≠ `headingDesc` dans JSON | Idem |
+| Présence d'un `<i class="fa-...">` (FontAwesome) là où Spectra rend un SVG inline | Pas la même structure DOM |
+| Absence de la classe `uagb-block-{block_id}` sur le wrapper | Spectra utilise cette classe pour scoper les styles |
+| Block_id manquant dans les attrs | Gutenberg recompute depuis 0 (perte de styles) |
+
+#### Ce qui est COSMÉTIQUE (toléré, juste reformatté à l'ouverture) :
+
+- Whitespace entre balises (Spectra normalise)
+- Ordre des classes CSS (`class="a b"` vs `class="b a"`)
+- Attributs `data-*` extra (ignorés)
+- Encodage `--` ↔ `--` dans les attrs JSON (normalisation systématique de `serialize_blocks`)
+
+#### Pattern recommandé pour info-box (corrigé 02/05/2026)
 
 ✅ **Bon** :
 ```
-<!-- wp:uagb/info-box {"block_id":"feat-1","headingTitle":"Feature 1","headingDesc":"Desc","headingTag":"h3"} -->
-<div class="wp-block-uagb-info-box uagb-block-feat-1"><h3 class="uagb-ifb-title">Feature 1</h3><p class="uagb-ifb-desc">Desc</p></div>
+<!-- wp:uagb/info-box {"block_id":"feat-1","headingTitle":"Feature 1","headingDesc":"Desc","headingTag":"h3","source_type":"icon","icon":"rocket"} -->
+<div class="wp-block-uagb-info-box uagb-block-feat-1"><div class="uagb-ifb-content"><div class="uagb-ifb-title-wrap"><h3 class="uagb-ifb-title">Feature 1</h3></div><p class="uagb-ifb-desc">Desc</p></div></div>
 <!-- /wp:uagb/info-box -->
 ```
 
 ❌ **Mauvais** :
 ```
-<!-- wp:uagb/info-box {"block_id":"feat-1","headingTitle":"Feature 1"} -->
-<h3>Mon titre custom</h3>   <!-- HTML divergent des attrs -->
+<!-- wp:uagb/info-box {"block_id":"feat-1","headingTitle":"Feature 1","icon":"rocket"} -->
+<div><div class="uagb-ifb-icon-wrap"><i class="fa-rocket"></i></div><h3>Mon titre custom</h3></div>
 <!-- /wp:uagb/info-box -->
 ```
 
+Mauvais pour 3 raisons : (a) titre HTML ≠ JSON, (b) `<i class="fa-...">` au lieu de la structure SVG Spectra, (c) classe `uagb-block-feat-1` absente du wrapper.
+
 ### 5. Encodage des caractères spéciaux
 
-- **Apostrophes typographiques** dans les contenus : utiliser `&apos;` ou `&#8217;` au lieu de `'` directement (sinon JSON cassé)
+- **Dans le HTML rendu** : UTF-8 direct OK pour les accents (`é`, `à`, `ç`...). Les caractères Unicode passent dans `wp_kses_post()` sans modification.
+- **Dans les attrs JSON** : préférer les entités HTML pour les apostrophes typographiques (`&apos;` ou `&#8217;`) parce qu'un `'` mal échappé dans le JSON peut casser le parsing. Pour les accents, certaines configs PHP/MySQL transforment les caractères selon les charsets de la BDD : si tu rencontres des caractères corrompus après POST, soit utiliser les escapes Unicode (`é` pour `é`), soit retirer les accents du JSON et les laisser uniquement dans le HTML rendu.
 - **Guillemets typographiques** : `«&nbsp;` et `&nbsp;»` (ou `&laquo;`, `&raquo;`)
-- **Tirets** : pas de tirets cadratin `—`. Utiliser `-` simple. Voir aussi la règle `feedback-no-emdash.md` du repo WPF.
+- **Tirets** : pas de tirets cadratin `—`. Utiliser `-` simple. Voir aussi `rules-never.md` du repo WPF.
 - **Émojis** : OK dans le HTML rendu (UTF-8), à éviter dans les attrs JSON
 
 ### 6. Block_id unique (Spectra obligatoire)

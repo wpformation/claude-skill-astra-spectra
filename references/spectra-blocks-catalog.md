@@ -1,15 +1,15 @@
-# Spectra Blocks Catalog (49 blocs)
+# Spectra Blocks Catalog (48 blocs Gutenberg)
 
 > **Source** : repo officiel `brainstormforce/wp-spectra` (`/src/blocks/`), inspecté le 02/05/2026.
 > **Namespace** : `uagb/*` (legacy Ultimate Addons for Gutenberg, stable depuis 2019).
 > **Règle commune** : tous les blocs nécessitent un attr `block_id` unique (alphanumérique + tirets).
 
-## 49 blocs disponibles
+## 48 blocs Gutenberg disponibles
 
 ```
 advanced-heading, blockquote, buttons, buttons-child, call-to-action,
 cf7-designer, column, columns, container, countdown, counter,
-extensions, faq, faq-child, forms, gf-designer, google-map, how-to,
+faq, faq-child, forms, gf-designer, google-map, how-to,
 icon, icon-list, icon-list-child, image, image-gallery, info-box,
 inline-notice, lottie, marketing-button, modal, popup-builder, post,
 price-list, price-list-child, promote-cross-products, review, section,
@@ -17,6 +17,8 @@ separator, slider, slider-child, social-share, social-share-child,
 star-rating, table-of-contents, tabs, tabs-child, taxonomy-list,
 team, testimonial, timeline, wp-search
 ```
+
+> **Note sur `extensions`** : présent dans `/src/blocks/` du repo brainstormforce/wp-spectra, mais ce n'est PAS un bloc Gutenberg utilisable (pas d'item dans le block inserter). C'est un meta-bloc qui héberge les extensions (animations, motion effects, scroll reveal, etc.) appliquées aux autres blocs uagb. Il n'apparaît donc pas dans cette liste utilisable. Pour cette raison la documentation parle de **48 blocs**, pas 49.
 
 ## Catégories
 

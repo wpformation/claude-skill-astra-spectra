@@ -51,18 +51,31 @@ function wpf_skill_validate_markup($content) {
   // === Roundtrip parse → serialize ===
   $blocks = parse_blocks($content);
   $reserialized = serialize_blocks($blocks);
-  $result['diff_size'] = abs(strlen($content) - strlen($reserialized));
 
-  // Diff > 0 n'est pas forcément une erreur : serialize_blocks() peut ajouter
-  // ou normaliser des whitespaces sans casser le markup. Pour distinguer les vraies
-  // erreurs des diffs cosmétiques, on compare ligne à ligne (en ignorant les whitespaces).
+  // Normalisation : serialize_blocks() encode systématiquement "--" en "--"
+  // dans les attributs JSON pour éviter qu'un "-->" accidentel ferme prématurément
+  // le commentaire HTML <!-- wp:* -->. C'est une normalisation cosmétique attendue,
+  // pas une erreur de markup. var(--ast-global-color-X) déclenche systématiquement
+  // ce reformatage. On normalise les deux côtés AVANT de comparer.
+  $normalize = function ($s) {
+    return preg_replace_callback(
+      '/\\\\u([0-9a-fA-F]{4})/',
+      function ($m) { return mb_chr(hexdec($m[1]), 'UTF-8'); },
+      $s
+    );
+  };
+  $content_norm = $normalize($content);
+  $reserialized_norm = $normalize($reserialized);
+  $result['diff_size'] = abs(strlen($content_norm) - strlen($reserialized_norm));
+
+  // Diff > 0 après normalisation : c'est soit du whitespace cosmétique, soit une vraie
+  // erreur. On compare ligne à ligne en ignorant les whitespaces de bout.
   if ($result['diff_size'] > 0) {
-    $orig_lines = preg_split('/\r?\n/', $content);
-    $reser_lines = preg_split('/\r?\n/', $reserialized);
+    $orig_lines = preg_split('/\r?\n/', $content_norm);
+    $reser_lines = preg_split('/\r?\n/', $reserialized_norm);
     $line_count_orig = count($orig_lines);
     $line_count_reser = count($reser_lines);
 
-    // Compare les lignes en ignorant les whitespaces de bout
     $real_diff_found = false;
     $min = min($line_count_orig, $line_count_reser);
     for ($i = 0; $i < $min; $i++) {
@@ -74,13 +87,11 @@ function wpf_skill_validate_markup($content) {
     }
 
     if (!$real_diff_found) {
-      // Diff cosmétique uniquement (whitespace) : on note un warning, pas une erreur
       $result['warnings'][] = "Roundtrip cosmetic diff: " . $result['diff_size'] . " chars (whitespace only, markup is valid).";
     } else {
       $result['errors'][] = "Roundtrip real diff: " . $result['diff_size'] . " chars. Markup contains a malformed block, broken JSON attrs, or unclosed comment.";
     }
 
-    // Si counts de lignes différents = vraie problème
     if ($line_count_orig !== $line_count_reser) {
       $result['errors'][] = "Line count mismatch: original $line_count_orig vs reserialized $line_count_reser. Likely a missing or extra block opening/closing comment.";
     }
