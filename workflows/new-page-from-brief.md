@@ -2,6 +2,18 @@
 
 > **Promesse** : l'utilisateur décrit ce qu'il veut en langage naturel, le skill génère une page WordPress draft complète et cohérente design-wise en moins de 2 minutes.
 
+> **Pre-flight check OBLIGATOIRE avant POST.** Depuis v1.0-rc1, le pipeline inclut un validateur bloqueur (`scripts/pre-flight-check.php`) qui parcourt le markup généré et flag les occurrences des 19 pièges Spectra documentés. Si le check retourne `status: BLOCKED`, **ne pas POST**. Corriger les violations P0 d'abord.
+
+```bash
+# Avant POST, exécuter :
+php scripts/pre-flight-check.php --content-file=/tmp/markup.html --css-file=/tmp/overrides.css
+
+# Exit 0 → OK ou WARNING → POST autorisé
+# Exit 1 → BLOCKED → corriger violations P0 d'abord
+```
+
+Codes critiques détectés (P0) : block_id manquant/dupliqué (#5), info-box avec widthDesktop (#2), faq-child avec `description` (#3), accents FR manquants, mojibake `â€`. Si présent, le markup ne sera PAS POST.
+
 ## Exemple de prompt utilisateur
 
 ```

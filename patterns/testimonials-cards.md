@@ -1,6 +1,6 @@
 # Pattern : Testimonials Cards (avec grands guillemets et avatars)
 
-> **Use case** : section témoignages clients/étudiants avec 3 cards en row. Grand guillemet display 120px orange en haut + citation italique + avatar circulaire 56px + nom + sub-info. Pattern pour landings, page à propos, page formation.
+> **Use case** : section témoignages clients/étudiants avec 3 cards en row. 5 étoiles + grand guillemet display 120px orange + citation italique + avatar circulaire 64px + nom + sub-info. Pattern pour landings, page à propos, page formation.
 
 > **Origine** : v0.9.0/0.9.1/0.9.2 produisaient des testimonials catastrophiques (guillemet 36px ridicule, sub-card boxée moche). Refonte v0.9.3 valide. Persistance via `_uag_custom_page_level_css` (cf piège #4 et #6).
 
@@ -49,7 +49,7 @@ uagb/container#testimonials (root, alignfull, bg #fafafa, padding 140px)
     <div class="wp-block-uagb-container uagb-block-{slug}-testi-row">
 
       <!-- Card 1 -->
-      <!-- wp:uagb/container {"block_id":"{slug}-testi-1","backgroundColor":"#ffffff","topPaddingDesktop":56,"bottomPaddingDesktop":56,"leftPaddingDesktop":48,"rightPaddingDesktop":48,"variationSelected":true,"rowGapDesktop":28,"containerBorderTopLeftRadius":24,"containerBorderTopRightRadius":24,"containerBorderBottomLeftRadius":24,"containerBorderBottomRightRadius":24,"boxShadowColor":"rgba(15,23,42,0.10)","boxShadowVOffset":8,"boxShadowBlur":40,"widthDesktop":31.5,"widthTypeDesktop":"%","widthTablet":100,"widthTypeTablet":"%","widthMobile":100,"widthTypeMobile":"%"} -->
+      <!-- wp:uagb/container {"block_id":"{slug}-testi-1","backgroundColor":"#ffffff","topPaddingDesktop":56,"bottomPaddingDesktop":56,"leftPaddingDesktop":48,"rightPaddingDesktop":48,"variationSelected":true,"rowGapDesktop":28,"containerBorderTopLeftRadius":24,"containerBorderTopRightRadius":24,"containerBorderBottomLeftRadius":24,"containerBorderBottomRightRadius":24,"boxShadowColor":"rgba(15,23,42,0.12)","boxShadowVOffset":12,"boxShadowBlur":48,"widthDesktop":31.5,"widthTypeDesktop":"%","widthTablet":100,"widthTypeTablet":"%","widthMobile":100,"widthTypeMobile":"%"} -->
       <div class="wp-block-uagb-container uagb-block-{slug}-testi-1">
 
         <!-- Quote « + texte -->
@@ -67,10 +67,10 @@ uagb/container#testimonials (root, alignfull, bg #fafafa, padding 140px)
         <div class="wp-block-uagb-container uagb-block-{slug}-testi-1-author">
 
           <!-- Avatar circulaire 56x56 -->
-          <!-- wp:uagb/image {"block_id":"{slug}-testi-1-avatar","url":"{{TESTI_1_AVATAR_URL}}","id":{{TESTI_1_AVATAR_ID}},"width":56,"height":56,"sizeSlug":"custom","objectFit":"cover","customHeightSetDesktop":true,"imageBorderTopLeftRadius":50,"imageBorderTopRightRadius":50,"imageBorderBottomLeftRadius":50,"imageBorderBottomRightRadius":50,"imageBorderRadiusUnit":"%"} -->
+          <!-- wp:uagb/image {"block_id":"{slug}-testi-1-avatar","url":"{{TESTI_1_AVATAR_URL}}","id":{{TESTI_1_AVATAR_ID}},"width":64,"height":64,"sizeSlug":"custom","objectFit":"cover","customHeightSetDesktop":true,"imageBorderTopLeftRadius":50,"imageBorderTopRightRadius":50,"imageBorderBottomLeftRadius":50,"imageBorderBottomRightRadius":50,"imageBorderRadiusUnit":"%"} -->
           <div class="wp-block-uagb-image uagb-block-{slug}-testi-1-avatar wp-block-uagb-image--layout-default wp-block-uagb-image--effect-static">
             <figure class="wp-block-uagb-image__figure">
-              <img src="{{TESTI_1_AVATAR_URL}}" alt="{{TESTI_1_NAME}}, {{TESTI_1_META}}" width="56" height="56" loading="eager" role="img"/>
+              <img src="{{TESTI_1_AVATAR_URL}}" alt="{{TESTI_1_NAME}}, {{TESTI_1_META}}" width="64" height="64" loading="eager" role="img"/>
             </figure>
           </div>
           <!-- /wp:uagb/image -->
@@ -171,19 +171,79 @@ uagb/container#testimonials (root, alignfull, bg #fafafa, padding 140px)
 
 ## Variantes
 
-### Variante 1 — Avec note 5 étoiles
+### Variante 1 — Avec note 5 étoiles (RECOMMANDÉE pour testimonials)
 
-Ajouter au-dessus du quote, un `uagb/icon-list` avec 5 icônes star jaunes :
+Renforce la crédibilité visuelle. Ajouter au-dessus du quote, un `uagb/icon-list` horizontal avec 5 icônes star jaunes (FA `star` est dans la whitelist `references/spectra-icons-list.md`) :
 
 ```html
-<!-- wp:uagb/icon-list {"block_id":"{slug}-testi-1-stars","icon_color":"#FBBF24","size":18,"gap":4} -->
-<div class="wp-block-uagb-icon-list ... uagb-icon-list__layout-horizontal">
+<!-- wp:uagb/icon-list {"block_id":"{slug}-testi-1-stars","icon_color":"#FBBF24","size":18,"sizeUnit":"px","gap":3,"layout":"horizontal","label-display":"none"} -->
+<div class="wp-block-uagb-icon-list uagb-block-{slug}-testi-1-stars uagb-icon-list__layout-horizontal">
   <ul class="uagb-icon-list__wrap">
-    <!-- 5 × wp:uagb/icon-list-child {"icon":"star","label":""} -->
+    <li class="uagb-icon-list-repeater"><a class="uagb-icon-list__source-wrap"><span class="uagb-icon-list__source-icon"><i class="fas fa-star"></i></span></a></li>
+    <li class="uagb-icon-list-repeater"><a class="uagb-icon-list__source-wrap"><span class="uagb-icon-list__source-icon"><i class="fas fa-star"></i></span></a></li>
+    <li class="uagb-icon-list-repeater"><a class="uagb-icon-list__source-wrap"><span class="uagb-icon-list__source-icon"><i class="fas fa-star"></i></span></a></li>
+    <li class="uagb-icon-list-repeater"><a class="uagb-icon-list__source-wrap"><span class="uagb-icon-list__source-icon"><i class="fas fa-star"></i></span></a></li>
+    <li class="uagb-icon-list-repeater"><a class="uagb-icon-list__source-wrap"><span class="uagb-icon-list__source-icon"><i class="fas fa-star"></i></span></a></li>
   </ul>
 </div>
 <!-- /wp:uagb/icon-list -->
 ```
+
+CSS overrides associé :
+
+```css
+.uagb-block-{slug}-testi-1-stars,
+.uagb-block-{slug}-testi-2-stars,
+.uagb-block-{slug}-testi-3-stars {
+  margin-bottom: 16px !important;
+}
+.uagb-block-{slug}-testi-1-stars i,
+.uagb-block-{slug}-testi-2-stars i,
+.uagb-block-{slug}-testi-3-stars i {
+  color: #FBBF24 !important;
+  font-size: 18px !important;
+}
+```
+
+Pour 4.5 ⭐, remplacer la dernière icône par `fa-star-half-alt`.
+
+### Variante 1.b — Watermark guillemet en background
+
+Au lieu d'un guillemet display 120px en haut de card, mettre un guillemet ÉNORME (180px) en watermark transparent en arrière-plan de la card. Plus subtil, plus éditorial.
+
+CSS overrides :
+
+```css
+.uagb-block-{slug}-testi-1,
+.uagb-block-{slug}-testi-2,
+.uagb-block-{slug}-testi-3 {
+  position: relative;
+  overflow: hidden;
+}
+.uagb-block-{slug}-testi-1::before,
+.uagb-block-{slug}-testi-2::before,
+.uagb-block-{slug}-testi-3::before {
+  content: "\201C"; /* &ldquo; */
+  position: absolute;
+  top: -40px;
+  right: -10px;
+  font-size: 240px;
+  font-weight: 800;
+  line-height: 1;
+  color: #f1f5f9; /* slate-100, très clair */
+  font-family: Georgia, serif;
+  pointer-events: none;
+  z-index: 0;
+}
+.uagb-block-{slug}-testi-1 > *,
+.uagb-block-{slug}-testi-2 > *,
+.uagb-block-{slug}-testi-3 > * {
+  position: relative;
+  z-index: 1;
+}
+```
+
+Permet de retirer le `uagb/info-box quote` titre `&ldquo;` et garder seulement la citation desc + auteur. Plus minimaliste.
 
 ### Variante 2 — Avec logo de l'entreprise (B2B)
 

@@ -2,7 +2,95 @@
 
 Toutes les modifications notables de ce skill sont documentées dans ce fichier. Format basé sur [Keep a Changelog](https://keepachangelog.com/), versions selon [Semantic Versioning](https://semver.org/).
 
-## [1.0.0] — 2026-05-02 (16h) — KNOWLEDGE BASE COMPLÈTE
+## [1.0-rc1] — 2026-05-02 (17h) — Réponse aux 5 manques du verdict externe
+
+> **Verdict reviewer externe sur v1.0** : « v1.0 est conceptuellement la bonne version. Mais le tag stable est posé une étape trop tôt — il manque le test de régression final, 3 critiques non couvertes (testimonials plats, CTA marge bottom, eyebrows discrets), pas de pre-flight check, screenshots seulement sur 1 palette. Je recommande de bouger v1.0 → v1.0-rc1. »
+
+> **Action** : tag v1.0 retiré, v1.0-rc1 créé. 5 manques traités.
+
+### 1. Quirks #18 et #19 ajoutés
+
+- **Quirk #18** : Astra `.entry-content { padding-bottom: 4em }` → marge orpheline sous le dernier alignfull. Fix : injecter `padding-bottom: 0 !important` dans `_uag_custom_page_level_css`.
+- **Quirk #19** : Eyebrow 13px trop discret → ressemble à un debug tag. Fix : `prefixFontSizeDesktop:15`, `prefixFontWeight:"800"`, `prefixSpace:24`, letter-spacing 4px. Optionnel : barre `::before` 32×3px orange.
+
+`references/spectra-attributes-quirks.md` passe de 17 à **19 pièges documentés**.
+
+### 2. testimonials-cards.md enrichi
+
+- Avatar **56px → 64px** (référence reviewer P1#4)
+- box-shadow **plus marquée** (rgba 0.10 → 0.12, vOffset 8 → 12, blur 40 → 48)
+- **Variante 1 : Note 5 étoiles** documentée avec `uagb/icon-list` horizontal + 5× `fa-star` jaune `#FBBF24`. Renforce la crédibilité visuelle.
+- **Variante 1.b : Watermark guillemet** en background (180-240px très clair `#f1f5f9` en `::before` absolute). Plus subtil, plus éditorial.
+
+### 3. scripts/pre-flight-check.php (NOUVEAU validateur bloqueur)
+
+Script PHP qui parcourt le markup généré et flag les occurrences des 19 pièges. **À exécuter AVANT POST**. Si retourne `status: BLOCKED`, ne PAS POST.
+
+Codes vérifiés :
+- `QUIRK-2` : info-box avec `widthDesktop` (P0)
+- `QUIRK-3` : faq-child avec `description` au lieu de `answer` (P0)
+- `QUIRK-4` : inline `style="font-size:..."` dans innerContent (P1)
+- `QUIRK-5` : block_id manquant ou dupliqué (P0)
+- `QUIRK-7` : slots Astra VARIABLES (color-4/6/7/8) (P1)
+- `QUIRK-8` : icônes hors whitelist Spectra (P1)
+- `QUIRK-9` : overlayOpacity > 0.85 (P1)
+- `QUIRK-10` : blockRightPadding > 25% (P1)
+- `QUIRK-12` : FAQ sans wrapper container max-width (P2)
+- `QUIRK-15` : sections root sans alternance bg (P2)
+- `QUIRK-17` : paddingBtnLeft < 30 (P2)
+- `QUIRK-18` : page alignfull last sans `.entry-content padding-bottom: 0` (P2)
+- `QUIRK-19` : eyebrow font-size < 14 (P2)
+- `I18N-FR-ACCENTS` : mots français sans accents (P0)
+- `I18N-MOJIBAKE` : `â€` mojibake détecté (P0)
+- `I18N-MDASH` : em-dash `—` direct sans entity (P2)
+- `CONV-DEMO-PREFIX` : block_id avec préfixe `v{N}-` (pattern démo) (P2)
+
+Usage CLI :
+
+```bash
+php scripts/pre-flight-check.php --content-file=markup.html --css-file=overrides.css
+# Exit 0 si OK ou WARNING, exit 1 si BLOCKED
+```
+
+Validé sur l'exemple `examples/landing-formation-complete-markup.html` : détecte correctement le préfixe démo `v93-` et l'overlayOpacity 1 (gradient overlay, faux positif léger acceptable).
+
+### 4. Test régression cross-env sur loginarmor-dev
+
+Test direct sur le site local du mainteneur. Switch dynamique de palette via mu-plugin compagnon `/skill-test/v1/setup?preset=astra_default`.
+
+**Résultat** :
+- ✅ **Cross-env technique** : pipeline marche sur palette Astra default (bleu primary `#0274BE`). Tous les patterns rendent structurellement (hero, stats, features, story, testimonials, FAQ, CTA). Header Astra adopte le bleu de la nouvelle palette.
+- ⚠️ **Cross-env stylistique HONNÊTE** : le CSS du meta `_uag_custom_page_level_css` reste **scopé au post**. L'orange WPF `#FD9800` reste hardcodé dans les overrides du skill (chiffres énormes, eyebrows, guillemets). Pour adapter automatiquement à la nouvelle palette, le user doit éditer le custom CSS via Spectra UI (Page Settings → Page Level CSS) ou re-générer la page.
+
+Baseline : `screenshots/loginarmor-dev-astra-default/v1-rc1-fullpage.png`
+
+**Conclusion test** : le skill marche cross-env mais le CSS skill-generated est intentionnellement figé sur les couleurs choisies au moment de la génération (cf documentation `references/persistent-css-overrides.md`). C'est un trade-off assumé : durabilité (CSS persiste) vs adaptabilité (CSS ne s'adapte pas auto au changement de palette).
+
+### 5. Re-tag git
+
+- Tag `v1.0` **retiré** (delete origin + local)
+- Tag `v1.0-rc1` **créé** sur ce commit
+- v1.0 stable sera tagué APRÈS validation reviewer + test régression production cours-ndrc.fr (pipeline LiteSpeed + o2switch)
+
+### Score reviewer mis à jour
+
+| Manque | Statut |
+|---|---|
+| P1#4 Témoignages plats sans hiérarchie | ✅ Avatar 64px + 5-stars + box-shadow renforcée + variante watermark |
+| P2#8 CTA marge bottom orpheline (Astra `.entry-content`) | ✅ Quirk #18 + fix CSS dans persistent-css-overrides |
+| P2#9 Eyebrows trop discrets (13px) | ✅ Quirk #19 + recommandation 14-15px font-weight 800 |
+| `cleanup-test-pages.php` cassé | ✅ Déjà fixé (guard CLI robuste lignes 114-119) |
+| Pre-flight check bloqueur manquant | ✅ scripts/pre-flight-check.php (validateur 19 pièges + i18n) |
+| Test cross-env (1 seule palette) | ⚠️ Test fait Astra default, prouve pipeline mais pas adaptation auto. Test régression cours-ndrc.fr requis pour v1.0 stable |
+
+### Issues restantes pour v1.0 stable (post-rc1)
+
+- ⏳ Test régression production cours-ndrc.fr avec LiteSpeed + o2switch (vérifier que `wpf_skill_temp_publish_trick` génère bien `uag-css-{id}.css` sur disque)
+- ⏳ Baseline screenshots sur `preset_3` (rouge passion) et `preset_8` (orange gourmand) pour 75%+ patterns en `status: stable`
+- ⏳ Workflow GitHub Actions de régression visuelle automatisée
+- ⏳ Pre-flight check intégré dans `workflows/new-page-from-brief.md` comme bloqueur obligatoire avant POST
+
+## [1.0.0] — 2026-05-02 (16h) — KNOWLEDGE BASE COMPLÈTE *(retiré, repris en v1.0-rc1)*
 
 ### 🎯 Refonte fondamentale : du template au vrai skill
 

@@ -288,6 +288,62 @@ Voir `references/images-ratios.md`.
 
 ---
 
+---
+
+## 18. Astra `.entry-content { padding-bottom: 4em }` → marge orpheline sous le dernier alignfull
+
+**Symptôme** : ton dernier bloc CTA banner alignfull est suivi d'un espace blanc orphelin de ~80-120px avant le footer. Ça casse le rendu pleine page éditorial.
+
+**Cause** : Astra applique `padding-bottom: 4em` sur `.entry-content` par défaut (≈ 80px à 16px font-size). Pour les pages classiques (article blog), c'est OK. Pour une landing avec dernier bloc alignfull (CTA banner image+overlay), la marge est orpheline.
+
+**Fix** : injecter dans `_uag_custom_page_level_css` :
+
+```css
+.entry-content { padding-bottom: 0 !important; }
+.entry-content > .alignfull:last-child { margin-bottom: 0 !important; }
+```
+
+**Détection** : screenshot la page en bas. Si tu vois 60-100px de blanc entre le dernier bloc et le footer, c'est ce piège.
+
+---
+
+## 19. Eyebrow 13px trop discret → ressemble à un tag de debug
+
+**Symptôme** : tu mets un eyebrow `prefixFontSizeDesktop:13` orange, font-weight 700, letter-spacing 3px, uppercase. Au rendu, il ressemble à un debug CSS tag écrasé sous le H2, pas à un kicker éditorial.
+
+**Cause** : 13px desktop est trop petit pour la sémantique « eyebrow important ». 14-15px avec letter-spacing 3-4px et font-weight 800 (vs 700) donne le bon impact visuel. Le `prefixSpace:14-18` est aussi trop serré (espacement entre eyebrow et heading).
+
+**Fix** : conventions eyebrow optimales :
+
+```json
+{
+  "prefixFontSizeDesktop": 15,
+  "prefixFontWeight": "800",
+  "prefixSpace": 24,
+  "prefixColor": "{{ACCENT_COLOR}}"
+}
+```
+
+Avec `style="letter-spacing:4px;text-transform:uppercase"` dans le `<p class="uagb-ifb-title-prefix">`.
+
+Pour vraiment renforcer, ajouter une **barre 32×3px orange** avant le texte (via CSS `::before`) :
+
+```css
+.uagb-ifb-title-prefix::before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 3px;
+  background-color: {{ACCENT_COLOR}};
+  margin-right: 12px;
+  vertical-align: middle;
+}
+```
+
+**Détection** : compare visuellement l'eyebrow à un sub-heading 13px gris classique. Si l'eyebrow ne se distingue pas immédiatement comme un kicker éditorial (impact + impulsion vers le H2), c'est ce piège.
+
+---
+
 ## Comment cette doc évolue
 
 À chaque nouveau piège détecté lors d'un test sur un nouveau site / nouvelle palette / nouvelle version Spectra, ajouter une entrée numérotée avec les 4 sections **Symptôme / Cause / Fix / Détection**.
