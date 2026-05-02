@@ -136,7 +136,15 @@ function run_single_eval($eval) {
   return $r;
 }
 
-if (php_sapi_name() === 'cli') {
+// Bloc CLI : ne s'exécute QUE si le script est lancé en ligne de commande directe.
+if (
+  php_sapi_name() === 'cli'
+  && isset($GLOBALS['argv'])
+  && is_array($GLOBALS['argv'])
+  && !empty($GLOBALS['argv'][0])
+  && basename($GLOBALS['argv'][0]) === basename(__FILE__)
+) {
+  $argv = $GLOBALS['argv'];
   $args = [];
   foreach ($argv as $arg) {
     if (preg_match('/^--(\w+)=(.+)$/', $arg, $m)) $args[$m[1]] = $m[2];

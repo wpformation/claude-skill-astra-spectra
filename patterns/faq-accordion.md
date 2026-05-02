@@ -13,7 +13,7 @@
 ## Block markup (5 questions exemple)
 
 ```html
-<!-- wp:uagb/container {"block_id":"faq-section","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":900,"directionDesktop":"column","alignItemsDesktop":"stretch","rowGapDesktop":40,"topPaddingDesktop":80,"bottomPaddingDesktop":80,"backgroundType":"color","backgroundColor":"var(--ast-global-color-4)"} -->
+<!-- wp:uagb/container {"block_id":"faq-section","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":900,"directionDesktop":"column","alignItemsDesktop":"stretch","rowGapDesktop":40,"topPaddingDesktop":80,"bottomPaddingDesktop":80,"topPaddingTablet":60,"bottomPaddingTablet":60,"topPaddingMobile":48,"bottomPaddingMobile":48,"leftPaddingTablet":24,"rightPaddingTablet":24,"leftPaddingMobile":16,"rightPaddingMobile":16,"backgroundType":"color","backgroundColor":"var(--ast-global-color-5)"} -->
 <div class="wp-block-uagb-container alignwide uagb-block-faq-section"><!-- wp:uagb/advanced-heading {"block_id":"faq-heading","headingTag":"h2","headingTitle":"{{SECTION_HEADLINE}}","headingColor":"var(--ast-global-color-2)","headingAlign":"center","headingFontWeight":700,"headingFontSizeDesktop":36} -->
 <div class="wp-block-uagb-advanced-heading uagb-block-faq-heading"><h2 class="uagb-heading-text">{{SECTION_HEADLINE}}</h2></div>
 <!-- /wp:uagb/advanced-heading -->

@@ -151,7 +151,7 @@
       "assertions": [
         { "type": "css_var_value", "var": "--ast-global-color-0", "expected": "#FF8C00" },
         { "type": "css_var_count", "min": 9, "comment": "9 variables Astra définies" },
-        { "type": "no_other_keys_modified", "expect": true, "comment": "1942 keys préservées" }
+        { "type": "no_other_keys_modified", "expect": true, "comment": "200+ top-level keys + toutes les leaves préservées" }
       ],
       "timeout_seconds": 30
     }

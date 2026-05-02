@@ -108,7 +108,17 @@ function wpf_skill_snapshot_page($post_id) {
   ];
 }
 
-if (php_sapi_name() === 'cli' && isset($argv[1])) {
-  $r = wpf_skill_snapshot_page((int)$argv[1]);
-  echo json_encode($r, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+// Bloc CLI : ne s'exécute QUE si le script est lancé en ligne de commande directe.
+if (
+  php_sapi_name() === 'cli'
+  && isset($GLOBALS['argv'])
+  && is_array($GLOBALS['argv'])
+  && !empty($GLOBALS['argv'][0])
+  && basename($GLOBALS['argv'][0]) === basename(__FILE__)
+) {
+  $argv = $GLOBALS['argv'];
+  if (isset($argv[1])) {
+    $r = wpf_skill_snapshot_page((int)$argv[1]);
+    echo json_encode($r, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+  }
 }

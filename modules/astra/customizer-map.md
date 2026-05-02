@@ -260,7 +260,7 @@ astra_clear_all_assets_cache();
 
 ## Anti-patterns
 
-- ❌ `update_option('astra-settings', ['global-color-palette' => [...]])` — écrase les 1942 autres keys
+- ❌ `update_option('astra-settings', ['global-color-palette' => [...]])` — écrase les centaines de keys de l'option (200+ top-level, 800-2000+ leaves selon ta config Astra Pro)
 - ❌ Modifier `astra-color-palettes` au lieu de `astra-settings.global-color-palette` — la 1re option pilote l'UI Customizer, la 2e pilote le **frontend**
 - ❌ Oublier d'invalider les caches → CSS périmé pendant 12h
 - ❌ Toucher à `astra_addons_options` (Astra Pro) sans connaître la clé exacte

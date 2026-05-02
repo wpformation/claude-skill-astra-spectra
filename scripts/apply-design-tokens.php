@@ -143,18 +143,27 @@ function wpf_skill_apply_preset(string $preset_name) {
   return wpf_skill_apply_palette($presets[$preset_name]);
 }
 
-// === CLI usage ===
-if (php_sapi_name() === 'cli' && isset($argv[1])) {
-  if (strpos($argv[1], 'preset_') === 0) {
-    $r = wpf_skill_apply_preset($argv[1]);
-  } else {
-    // JSON array of 9 hex
-    $palette = json_decode($argv[1], true);
-    if (!is_array($palette)) {
-      echo json_encode(['error' => 'Invalid palette JSON. Provide an array of 9 hex colors.']);
-      exit(1);
+// Bloc CLI : ne s'exécute QUE si le script est lancé en ligne de commande directe.
+if (
+  php_sapi_name() === 'cli'
+  && isset($GLOBALS['argv'])
+  && is_array($GLOBALS['argv'])
+  && !empty($GLOBALS['argv'][0])
+  && basename($GLOBALS['argv'][0]) === basename(__FILE__)
+) {
+  $argv = $GLOBALS['argv'];
+  if (isset($argv[1])) {
+    if (strpos($argv[1], 'preset_') === 0) {
+      $r = wpf_skill_apply_preset($argv[1]);
+    } else {
+      // JSON array of 9 hex
+      $palette = json_decode($argv[1], true);
+      if (!is_array($palette)) {
+        echo json_encode(['error' => 'Invalid palette JSON. Provide an array of 9 hex colors.']);
+        exit(1);
+      }
+      $r = wpf_skill_apply_palette($palette);
     }
-    $r = wpf_skill_apply_palette($palette);
+    echo json_encode($r, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
   }
-  echo json_encode($r, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 }

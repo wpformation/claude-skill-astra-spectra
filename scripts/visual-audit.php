@@ -191,10 +191,10 @@ function wpf_skill_visual_audit($content) {
     $report['p1'][] = "No H1 detected. Page should have exactly one H1.";
   }
 
-  // Check 7 : CTA visible
+  // Check 7 : CTA visible (compté au niveau de la page entière, pas par section)
   $cta_count = preg_match_all('/uagb\\/buttons|core\\/buttons/', $content);
   if ($cta_count === 0) {
-    $report['p1'][] = "No CTA button block found. Pages should have at least one clear CTA.";
+    $report['p1'][] = "No CTA button block found in the entire page. A landing page should have at least one clear CTA (uagb/buttons or core/buttons).";
   }
 
   // Verdict global
@@ -209,8 +209,15 @@ function wpf_skill_visual_audit($content) {
   return $report;
 }
 
-// CLI usage
-if (php_sapi_name() === 'cli') {
+// Bloc CLI : ne s'exécute QUE si le script est lancé en ligne de commande directe.
+if (
+  php_sapi_name() === 'cli'
+  && isset($GLOBALS['argv'])
+  && is_array($GLOBALS['argv'])
+  && !empty($GLOBALS['argv'][0])
+  && basename($GLOBALS['argv'][0]) === basename(__FILE__)
+) {
+  $argv = $GLOBALS['argv'];
   $input = '';
   if (isset($argv[1])) {
     if (is_numeric($argv[1])) {

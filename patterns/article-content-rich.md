@@ -28,7 +28,7 @@
 ## Block markup (squelette adaptable)
 
 ```html
-<!-- wp:uagb/container {"block_id":"article-wrapper","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":800,"directionDesktop":"column","alignItemsDesktop":"stretch","rowGapDesktop":24,"topPaddingDesktop":40,"bottomPaddingDesktop":80} -->
+<!-- wp:uagb/container {"block_id":"article-wrapper","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":800,"directionDesktop":"column","alignItemsDesktop":"stretch","rowGapDesktop":24,"topPaddingDesktop":40,"bottomPaddingDesktop":80,"topPaddingTablet":32,"bottomPaddingTablet":60,"topPaddingMobile":24,"bottomPaddingMobile":48,"leftPaddingTablet":24,"rightPaddingTablet":24,"leftPaddingMobile":16,"rightPaddingMobile":16} -->
 <div class="wp-block-uagb-container alignwide uagb-block-article-wrapper">
 
 <!-- wp:heading {"level":1} -->

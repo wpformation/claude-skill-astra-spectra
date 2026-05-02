@@ -192,6 +192,13 @@ function main() {
   exit(0);
 }
 
-if (php_sapi_name() === 'cli') {
+// Bloc CLI : ne s'exécute QUE si le script est lancé en ligne de commande directe.
+if (
+  php_sapi_name() === 'cli'
+  && isset($GLOBALS['argv'])
+  && is_array($GLOBALS['argv'])
+  && !empty($GLOBALS['argv'][0])
+  && basename($GLOBALS['argv'][0]) === basename(__FILE__)
+) {
   main();
 }

@@ -15,6 +15,67 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 - Article WPFormation dédié
 - Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
 
+## [0.8.3-beta] — 2026-05-02 (nuit)
+
+### 3e re-test cours-ndrc.fr : 17/17 fixes confirmés + 1 BLOCKER + 3 mineurs corrigés
+
+#### Corrigé — BLOCKER B7
+
+- **`scripts/cleanup-test-pages.php`** : crash `count(null)` quand `$argv` est null (cas `wp eval-file` qui n'expose pas `$argv` dans le scope du script). Garde robuste ajoutée : `php_sapi_name() === 'cli' && isset($GLOBALS['argv']) && is_array($GLOBALS['argv']) && !empty($GLOBALS['argv'][0]) && basename($GLOBALS['argv'][0]) === basename(__FILE__)`. Le bloc CLI ne s'exécute donc QUE si :
+  1. PHP est en mode CLI
+  2. `$argv` existe et est un array
+  3. Le script appelé est bien ce fichier (pas un `require_once` depuis ailleurs)
+- **`scripts/cleanup-test-pages.php`** : nouvel argument `--wp-path=/path/to/wp` pour pointer manuellement vers `wp-load.php` quand le script est exécuté hors du dossier WP. Documentation des 4 modes d'usage dans le header (CLI direct depuis WP root, CLI avec `--wp-path`, `wp eval-file`, `require_once` pour réutiliser les fonctions).
+
+#### Corrigé — m8 : garde CLI uniforme sur 8 scripts
+
+Le même garde robuste appliqué à tous les scripts pour éviter les sorties parasites lors d'un `require_once` :
+
+- `scripts/auto-fix-markup.php`
+- `scripts/visual-audit.php`
+- `scripts/astra-customizer.php`
+- `scripts/validate-block-markup.php`
+- `scripts/snapshot-page.php`
+- `scripts/post-page-via-rest.php`
+- `scripts/apply-design-tokens.php`
+- `evals/run-evals.php`
+
+Avant : `require_once 'auto-fix-markup.php'` → écrivait `FIXES APPLIED: 0` sur stderr. Après : silence total tant que le script n'est pas appelé directement.
+
+#### Corrigé — m9 : padding mobile + horizontal sur tous les root containers
+
+Patterns avec root container ayant `topPaddingDesktop` se voient ajouter :
+- `topPaddingMobile`, `bottomPaddingMobile` (cohérence avec tablet)
+- `leftPaddingTablet`, `rightPaddingTablet` (24px)
+- `leftPaddingMobile`, `rightPaddingMobile` (16px)
+
+Patterns concernés :
+- `patterns/testimonials-grid.md`
+- `patterns/team-grid.md`
+- `patterns/pricing-3-tiers.md`
+- `patterns/faq-accordion.md`
+- `patterns/stats-counters.md`
+- `patterns/article-content-rich.md`
+
+Élimine les warnings P1 « Root container has desktop padding but missing tablet/mobile breakpoints » du `visual-audit.php`.
+
+Bonus : changement `faq-accordion.md` background de `--ast-global-color-4` (accent) → `--ast-global-color-5` (body bg) pour cohérence avec les autres patterns standards.
+
+#### Corrigé — M-latent : promesse 1942 keys → plage réaliste
+
+- `modules/astra/customizer-map.md` : « 1942 autres keys » → « 200+ top-level, 800-2000+ leaves selon la config Astra Pro »
+- `scripts/astra-customizer.php` (header) : description alignée
+- `scripts/astra-customizer.php` (commentaire count_leaves) : « 1942 réels » → « 851 leaves réelles sur Astra Pro 4.13 mesuré sur prod (cours-ndrc.fr) »
+- `evals/evals.json` : commentaire de l'eval astra-01 reformulé
+
+Mesures réelles documentées : Astra defaults ~150-220 top-level keys / ~30 KB · Astra Pro avec config moyenne ~216 top-level / 851 leaves / 31.6 KB · Astra Pro avec configs avancées (header builder, footer builder, mega menu, WC) → peut atteindre plusieurs milliers de leaves et 200+ KB.
+
+#### Corrigé — m10 : wording « No CTA »
+
+- `scripts/visual-audit.php` : message « No CTA button block found. Pages should have at least one clear CTA. » → « No CTA button block found in the entire page. A landing page should have at least one clear CTA (uagb/buttons or core/buttons). »
+
+Précise que le check est appliqué au niveau page, pas par section. Évite la confusion sur les sections de contenu pur (FAQ, testimonials) qui n'ont pas de CTA propre.
+
 ## [0.8.2-beta] — 2026-05-02 (soir)
 
 ### Re-test cours-ndrc.fr : 4 BLOCKERS + 6 MAJEURS + 7 MINEURS + 3 comportements corrigés

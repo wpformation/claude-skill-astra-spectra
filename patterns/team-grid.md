@@ -21,7 +21,7 @@ Pour les **photos d'équipe** (qui nécessitent un upload media library) et les 
 ## Block markup
 
 ```html
-<!-- wp:uagb/container {"block_id":"team-section","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":1280,"directionDesktop":"column","alignItemsDesktop":"center","rowGapDesktop":48,"topPaddingDesktop":100,"bottomPaddingDesktop":100,"topPaddingTablet":60,"bottomPaddingTablet":60,"backgroundType":"color","backgroundColor":"var(--ast-global-color-5)"} -->
+<!-- wp:uagb/container {"block_id":"team-section","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":1280,"directionDesktop":"column","alignItemsDesktop":"center","rowGapDesktop":48,"topPaddingDesktop":100,"bottomPaddingDesktop":100,"topPaddingTablet":60,"bottomPaddingTablet":60,"topPaddingMobile":48,"bottomPaddingMobile":48,"leftPaddingTablet":24,"rightPaddingTablet":24,"leftPaddingMobile":16,"rightPaddingMobile":16,"backgroundType":"color","backgroundColor":"var(--ast-global-color-5)"} -->
 <div class="wp-block-uagb-container alignwide uagb-block-team-section"><!-- wp:uagb/advanced-heading {"block_id":"team-heading","headingTag":"h2","headingTitle":"{{SECTION_HEADLINE}}","headingDesc":"{{SECTION_SUBLINE}}","headingColor":"var(--ast-global-color-2)","subHeadingColor":"var(--ast-global-color-3)","headingAlign":"center","headingFontWeight":700,"headingFontSizeDesktop":40,"headingFontSizeTablet":32,"headingFontSizeMobile":28,"subHeadingFontSizeDesktop":18,"separatorWidth":0,"subHeadingTopMarginDesktop":16} -->
 <div class="wp-block-uagb-advanced-heading uagb-block-team-heading"><h2 class="uagb-heading-text">{{SECTION_HEADLINE}}</h2><p class="uagb-desc-text">{{SECTION_SUBLINE}}</p></div>
 <!-- /wp:uagb/advanced-heading -->

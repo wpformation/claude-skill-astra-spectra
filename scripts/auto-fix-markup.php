@@ -208,7 +208,16 @@ function wpf_skill_apply_fixes($content) {
   ];
 }
 
-if (php_sapi_name() === 'cli') {
+// Bloc CLI : ne s'exécute QUE si le script est lancé en ligne de commande directe
+// (pas en require_once depuis un autre script, pas via wp eval-file).
+if (
+  php_sapi_name() === 'cli'
+  && isset($GLOBALS['argv'])
+  && is_array($GLOBALS['argv'])
+  && !empty($GLOBALS['argv'][0])
+  && basename($GLOBALS['argv'][0]) === basename(__FILE__)
+) {
+  $argv = $GLOBALS['argv'];
   $input = '';
   if (isset($argv[1])) {
     if (is_numeric($argv[1])) {

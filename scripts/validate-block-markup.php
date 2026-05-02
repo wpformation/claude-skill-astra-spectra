@@ -142,9 +142,19 @@ function wpf_skill_validate_markup($content) {
   return $result;
 }
 
-// === CLI usage : pipe markup as stdin or pass as argument ===
-if (php_sapi_name() === 'cli' && isset($argv[1])) {
-  $input = file_exists($argv[1]) ? file_get_contents($argv[1]) : $argv[1];
-  $r = wpf_skill_validate_markup($input);
-  echo json_encode($r, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+// Bloc CLI : ne s'exécute QUE si le script est lancé en ligne de commande directe
+// (pas en require_once depuis un autre script, pas via wp eval-file).
+if (
+  php_sapi_name() === 'cli'
+  && isset($GLOBALS['argv'])
+  && is_array($GLOBALS['argv'])
+  && !empty($GLOBALS['argv'][0])
+  && basename($GLOBALS['argv'][0]) === basename(__FILE__)
+) {
+  $argv = $GLOBALS['argv'];
+  if (isset($argv[1])) {
+    $input = file_exists($argv[1]) ? file_get_contents($argv[1]) : $argv[1];
+    $r = wpf_skill_validate_markup($input);
+    echo json_encode($r, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+  }
 }

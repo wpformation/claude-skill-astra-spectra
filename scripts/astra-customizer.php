@@ -3,7 +3,8 @@
  * astra-customizer.php
  *
  * Pilote intégral du Customizer Astra : palette, typographie, header builder, footer builder, layout.
- * Lit + modifie + écrit `astra-settings` sans écraser les 1942 autres keys.
+ * Lit + modifie + écrit `astra-settings` sans écraser les centaines d'autres keys
+ * (200+ top-level, 800-2000+ leaves selon la config Astra Pro).
  *
  * Usage CLI :
  *   php astra-customizer.php apply config.json
@@ -31,7 +32,7 @@ if (!defined('ABSPATH')) {
 
 // Compte récursif de toutes les leaves (valeurs scalaires) d'un array imbriqué.
 // Astra stocke beaucoup de configs en arrays imbriqués → un count() top-level
-// sous-évalue massivement (ex: 216 vs 1942 réels).
+// sous-évalue massivement (ex: 216 top-level vs 851 leaves réelles sur Astra Pro 4.13 mesuré sur prod).
 function wpf_skill_count_leaves($arr) {
   if (!is_array($arr)) return 1;
   $n = 0;
@@ -230,7 +231,15 @@ function wpf_skill_astra_apply($patch) {
   ];
 }
 
-if (php_sapi_name() === 'cli') {
+// Bloc CLI : ne s'exécute QUE si le script est lancé en ligne de commande directe.
+if (
+  php_sapi_name() === 'cli'
+  && isset($GLOBALS['argv'])
+  && is_array($GLOBALS['argv'])
+  && !empty($GLOBALS['argv'][0])
+  && basename($GLOBALS['argv'][0]) === basename(__FILE__)
+) {
+  $argv = $GLOBALS['argv'];
   $cmd = $argv[1] ?? 'help';
 
   if ($cmd === 'export') {
