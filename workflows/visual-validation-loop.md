@@ -44,7 +44,7 @@ Sinon Playwright :
   → npx playwright screenshot <draft_url> /tmp/screenshot-1.png
 ```
 
-Sauvegarder le screenshot dans un répertoire temporaire numéroté (`/tmp/wpf-skill-validate-<id>/screenshot-N.png`).
+Sauvegarder le screenshot dans un répertoire temporaire numéroté (`/tmp/astra-spectra-skill-validate-<id>/screenshot-N.png`).
 
 ### 2. Audit `/impeccable` (ou fallback design system)
 

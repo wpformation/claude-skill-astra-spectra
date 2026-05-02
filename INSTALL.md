@@ -155,7 +155,7 @@ Composition : 12 blocs (8 uagb + 4 core), 0 erreur de parsing.
 
 ### Cohérence design absente (couleurs hardcoded)
 
-- Si tu n'as pas Astra activé, le skill injecte un CSS fallback. Vérifie qu'il est bien chargé (`wp-head` doit contenir `wpf-skill-design-tokens`)
+- Si tu n'as pas Astra activé, le skill injecte un CSS fallback. Vérifie qu'il est bien chargé (`wp-head` doit contenir `astra-spectra-skill-design-tokens`)
 - Si Astra activé, vérifie que la palette est bien appliquée : `astra-color-palettes` option en BDD doit avoir ta palette
 
 ### Performance lente (génération > 3 min)

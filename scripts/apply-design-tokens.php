@@ -111,9 +111,9 @@ function wpf_skill_apply_palette(array $palette) {
 function wpf_skill_enqueue_design_tokens() {
   $css = get_option('wpf_skill_design_tokens_css', '');
   if ($css) {
-    wp_register_style('wpf-skill-design-tokens', false);
-    wp_enqueue_style('wpf-skill-design-tokens');
-    wp_add_inline_style('wpf-skill-design-tokens', $css);
+    wp_register_style('astra-spectra-skill-design-tokens', false);
+    wp_enqueue_style('astra-spectra-skill-design-tokens');
+    wp_add_inline_style('astra-spectra-skill-design-tokens', $css);
   }
 }
 

@@ -142,13 +142,9 @@ astra-spectra/
 │   └── fixtures/
 │       ├── malformed-markup.html
 │       └── astra-palette-orange.json
-├── lead-magnet/
-│   ├── pdf-source.md                     # source PDF 32 pages
-│   └── README.md                         # workflow Pandoc/Typst
-└── vercel-integration/                   # à intégrer côté wpformation.com
-    ├── api-route.ts                      # route /api/skill-astra-spectra/
-    ├── page.tsx                          # page front /skill-astra-spectra/
-    └── README.md
+└── lead-magnet/
+    ├── pdf-source.md                     # source PDF 32 pages
+    └── README.md                         # workflow Pandoc/Typst
 ```
 
 ### Promesses v1.0 (à venir)

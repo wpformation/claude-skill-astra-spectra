@@ -6,7 +6,7 @@
  * Retourne un JSON avec le profil environnement nécessaire au skill claude-skill-astra-spectra.
  *
  * Usage 1 — Appel HTTP REST (recommandé) :
- *   POST /wp-json/wpf-skill/v1/detect (si tu as un mu-plugin qui expose ce endpoint)
+ *   POST /wp-json/astra-spectra/v1/detect (si tu as un mu-plugin qui expose ce endpoint)
  *
  * Usage 2 — Exécution directe via WP-CLI :
  *   wp eval-file detect-environment.php

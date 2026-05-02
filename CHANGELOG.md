@@ -27,7 +27,7 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 
 #### Corrigé — 6 MAJEURS
 
-- **`SKILL.md`** : section « Structure du skill » alignée avec l'état réel du repo (45 fichiers v0.8). Suppression de 13 références à des fichiers inexistants (modules/spectra/blocks-catalog.md, modules/astra/settings-mapper.md, references/gutenberg-core-blocks.md, workflows/new-site-from-scratch.md, etc.). Ajout des fichiers présents non documentés (auto-fix-markup.php, astra-customizer.php, visual-audit.php, post-page-via-rest.php, lead-magnet/, vercel-integration/, evals/).
+- **`SKILL.md`** : section « Structure du skill » alignée avec l'état réel du repo. Suppression de 13 références à des fichiers inexistants (modules/spectra/blocks-catalog.md, modules/astra/settings-mapper.md, references/gutenberg-core-blocks.md, workflows/new-site-from-scratch.md, etc.). Ajout des fichiers présents non documentés (auto-fix-markup.php, astra-customizer.php, visual-audit.php, post-page-via-rest.php, lead-magnet/, evals/).
 - **`SKILL.md`** : promesses ajustées de « 8 templates / 15+ patterns » à « 3 templates v0.8 / 9 patterns v0.8 », avec liste explicite des items à venir en v1.0.
 - **`scripts/detect-environment.php`** : guard `php_sapi_name() !== 'cli' && !headers_sent()` autour du `header()` pour éviter le warning « Cannot modify header information » en mode WP-CLI.
 - **`scripts/detect-environment.php`** : initialisation `pro_active: false` et `palette_colors: []` dans le profil par défaut (avant ne se définissait que si Astra actif). Ajout détection des 9 couleurs RÉELLES depuis `astra-settings.global-color-palette.palette` (pilote frontend).
@@ -79,11 +79,9 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 - `lead-magnet/pdf-source.md` : source markdown 32-44 pages (27 chapitres, 30 recettes, 12 effets WOW, 8 templates, 15 prompts, 10 anti-patterns, 10 troubleshooting, FAQ)
 - `lead-magnet/README.md` : workflow de production Pandoc/Typst + spécifications PDF + métriques cibles distribution
 
-##### Itération 8 — Infra Vercel (lead magnet)
+##### Itération 8 — Distribution lead magnet
 
-- `vercel-integration/api-route.ts` : route POST `/api/skill-astra-spectra/` clonée du pattern `/api/guide-ia/` (Brevo liste 5, Turnstile, rate limiter, email transactionnel HTML+text)
-- `vercel-integration/page.tsx` : page front `/skill-astra-spectra/` avec hero gradient mesh + 3 features + capture email + sommaire + CTA formation
-- `vercel-integration/README.md` : guide d'intégration au repo WPFORMATION (à déployer en session dédiée)
+Itération réservée à la distribution côté WPFormation (page de capture + email transactionnel + suivi GA4). Tout le code de l'intégration côté front est maintenu hors de ce repo public pour ne pas exposer de détails d'infrastructure.
 
 #### Modifié
 

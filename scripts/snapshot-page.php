@@ -12,7 +12,7 @@
  *   wp eval-file snapshot-page.php 123
  *
  * Usage REST API :
- *   GET /wp-json/wpf-skill/v1/snapshot/123 (si tu exposes ce endpoint via mu-plugin)
+ *   GET /wp-json/astra-spectra/v1/snapshot/123 (si tu exposes ce endpoint via mu-plugin)
  *
  * Output :
  *   {

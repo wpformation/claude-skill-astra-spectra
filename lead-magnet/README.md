@@ -20,11 +20,9 @@ Alternative plus simple : Typst (single binary, syntaxe lisible, pas de LaTeX).
 
 ## Distribution
 
-Le PDF est distribué via :
+Le PDF peut être distribué via le canal de ton choix : page front statique, capture email via le service email transactionnel que tu utilises déjà, ou simple lien direct sur ton site.
 
-1. **Page front** `/skill-astra-spectra/` (à créer en itération 8)
-2. **Route API** `/api/skill-astra-spectra/` qui demande email → Brevo SMTP transactional → envoi PDF
-3. **Pattern existant** : cloner `/api/guide-ia/` qui fait déjà cette fonction pour le guide IA
+Côté WPFormation, l'intégration côté front (page de capture + route API) est gérée hors de ce repo public.
 
 ## Mise à jour
 

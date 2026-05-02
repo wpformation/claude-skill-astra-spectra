@@ -24,7 +24,7 @@ Application Password : xxxx xxxx xxxx xxxx
 Exécuter `scripts/detect-environment.php` sur le site cible (via REST API ou one-shot PHP) :
 
 ```bash
-curl -X POST 'https://{{SITE_URL}}/wp-json/wpf-skill/v1/detect' \
+curl -X POST 'https://{{SITE_URL}}/wp-json/astra-spectra/v1/detect' \
   -u 'admin:{{APP_PASSWORD}}'
 
 # Ou via execute_php si Playground :

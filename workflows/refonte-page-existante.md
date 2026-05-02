@@ -23,7 +23,7 @@ Exécuter `scripts/snapshot-page.php` avec l'URL ou l'ID :
 
 ```bash
 # Par ID
-curl 'https://{{SITE_URL}}/wp-json/wpf-skill/v1/snapshot/123' \
+curl 'https://{{SITE_URL}}/wp-json/astra-spectra/v1/snapshot/123' \
   -u 'admin:{{APP_PASSWORD}}'
 
 # Par slug → résolution ID via REST API standard

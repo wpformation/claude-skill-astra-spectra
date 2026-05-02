@@ -162,8 +162,7 @@ claude-skill-astra-spectra/
 │   ├── apply-design-tokens.php           # injection palette ou fallback CSS
 │   └── snapshot-page.php                 # dump page existante (refonte)
 ├── evals/                                # 10 évals canoniques + runner
-├── lead-magnet/                          # source PDF 32 pages
-└── vercel-integration/                   # route API + page front lead magnet
+└── lead-magnet/                          # source PDF 32 pages
 ```
 
 ---
