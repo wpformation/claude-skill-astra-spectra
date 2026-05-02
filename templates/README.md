@@ -13,32 +13,29 @@ Le workflow [`deploy-template.md`](../workflows/deploy-template.md) lit le bluep
 3. **Variables centrées** : un template = une liste de variables minimales (titre, prix, sections), pas 50 variables éparpillées dans du markup pré-écrit.
 4. **Compatibilité Spectra évolutif** : si Spectra change la structure de `uagb/info-box` en v3.0, on met à jour 1 pattern, pas 8 templates.
 
-## Templates v0.8 disponibles
+## Templates disponibles (8)
 
-| Template | Status | Patterns assemblés |
+| Template | Use case | Patterns assemblés |
 |----------|--------|-------------------|
-| [page-formation.md](page-formation.md) | ✅ Complet | hero-cta-split + features-3-cols + 1 section pricing custom + faq-accordion + cta-banner-fullwidth |
-| [landing-saas.md](landing-saas.md) | ✅ Blueprint | hero-cta-split + features-3-cols (×2 → 4-cols variante) + testimonials-grid + pricing-3-tiers + faq-accordion + cta-banner-fullwidth |
-| [page-agence.md](page-agence.md) | ✅ Blueprint | hero-cta-split + features-3-cols + team-grid + stats-counters + testimonials-grid + cta-banner-fullwidth |
-
-## Templates prévus en v1.0
-
-- `blog-editorial.md` : article éditorial mix core + Spectra (TOC + content + FAQ + author bio)
-- `e-commerce-produit.md` : page produit avec galerie + reviews + pricing + FAQ
-- `page-tarifs.md` : page tarifs dédiée avec pricing + comparateur tableau + FAQ
-- `page-contact.md` : page contact avec formulaire + map + horaires + équipe
-- `page-a-propos.md` : page about avec timeline + équipe + valeurs + témoignages
+| [page-accueil.md](page-accueil.md) | Page d'accueil universelle (e-commerce, restaurant, agence, formation, etc. — variantes par secteur) | hero-cta-split + stats-bar-editorial + features-3-cols + about-story-split + testimonials-cards + cta-banner-fullwidth + faq-accordion + cta final |
+| [landing-saas.md](landing-saas.md) | Landing page SaaS (acquisition payante) | hero-cta-split + features-3-cols (×2 → 4-cols) + testimonials-grid + pricing-3-tiers + faq-accordion + cta-banner-fullwidth |
+| [page-agence.md](page-agence.md) | Page d'accueil agence créative ou tech | hero-cta-split + features-3-cols + team-grid + stats-counters + testimonials-grid + cta-banner-fullwidth |
+| [page-tarifs.md](page-tarifs.md) | Page tarifs dédiée avec comparateur | hero + pricing-3-tiers + comparateur tableau + faq-accordion + cta |
+| [page-contact.md](page-contact.md) | Page contact avec formulaire + map | hero + forms + google-maps + horaires + team-grid + cta |
+| [page-a-propos.md](page-a-propos.md) | Page « à propos » avec timeline + équipe | hero + about-story-split + timeline-vertical + team-grid + testimonials + cta |
+| [blog-editorial.md](blog-editorial.md) | Article éditorial long mix core + Spectra | core/heading + table-of-contents + article-content-rich + uagb/inline-notice + uagb/faq + author-bio + cta |
+| [e-commerce-produit.md](e-commerce-produit.md) | Page produit e-commerce | hero produit + image-gallery + uagb/review + price-list + faq + cta |
 
 ## Comment utiliser un template
 
 ### Via le workflow `deploy-template`
 
 ```
-> /astra-spectra deploy template=page-formation \
-    titre="Formation Next.js 16" prix=1900 duree=35h opco=true
+> /astra-spectra deploy template=page-accueil \
+    brand="Atelier Lumen" tagline="Le café de spécialité torréfié à Marseille" cta_url="/boutique/"
 ```
 
-Le workflow lit `templates/page-formation.md`, mappe les variables, assemble les patterns, valide le markup roundtrip, POST en draft via REST API, retourne l'URL d'édition.
+Le workflow lit `templates/page-accueil.md`, mappe les variables, assemble les patterns, valide le markup roundtrip, exécute le pre-flight check, POST en draft via REST API, retourne l'URL d'édition.
 
 ### Manuellement (si tu veux contrôler)
 

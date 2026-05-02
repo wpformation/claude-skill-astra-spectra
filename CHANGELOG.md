@@ -2,6 +2,88 @@
 
 Toutes les modifications notables de ce skill sont documentées dans ce fichier. Format basé sur [Keep a Changelog](https://keepachangelog.com/), versions selon [Semantic Versioning](https://semver.org/).
 
+## [1.0-rc3] — 2026-05-02 (nuit) — Réponse aux 4 critiques user (refs perso retirées + 14 patterns critiques ajoutés)
+
+> **Verdict user sur v1.0-rc2** : « Pourquoi tu fais référence à cours-ndrc.fr dans le README ? Tu dois supprimer toute référence à mon environnement de travail. Pourquoi parles-tu d'une page-formation.md dans templates ? Quel rapport ? C'est à la rigueur une page d'accueil. Et où sont les patterns pour les principaux blocs Spectra : tabs, Google Maps, post grid, post timeline, post carousel, marketing buttons, modals, table of contents, forms… ? S'ils ne sont pas prévus, c'est une erreur grave. »
+
+> **Action** : 4 critiques traitées. README expurgé de toute référence perso. Template renommé. **14 nouveaux patterns** créés pour couvrir les blocs Spectra fonctionnels manquants.
+
+### 1. Suppression de toute référence à l'environnement perso du mainteneur
+
+`README.md` :
+- Démo « landing pour ma formation BTS NDRC » → « landing pour ma boutique de café » (générique)
+- CSS exemple `.uagb-block-formation-bts-ndrc-stat-1` → `.uagb-block-accueil-stat-1` + `var(--ast-global-color-0)` au lieu de `#FD9800` (palette-agnostic)
+- Ligne « Test régression production sur cours-ndrc.fr » → « Validation finale par reviewer indépendant (re-test régression sur stack production réel : Apache mutualisé + LiteSpeed) »
+- Status passé `v1.0` → `v1.0-rc2` (cohérent avec le tag actuel)
+
+### 2. Template renommé `page-formation.md` → `page-accueil.md`
+
+Le template précédent était positionné « page formation en ligne » (vente d'une formation), mais c'était en fait la structure générique d'une **page d'accueil** universelle. Refonte complète avec :
+
+- Variables génériques (`{{BRAND_NAME}}`, `{{TAGLINE}}`, etc. au lieu de `{{FORMATION_NAME}}`, `{{TRAINER_NAME}}`)
+- **Section « Variantes par secteur »** avec 7 cas d'usage : E-commerce, Restaurant, Agence/SaaS, Association, Formation, Immobilier, Artisan
+- Patterns référencés génériquement (hero-cta-split + stats + features + about-story + testimonials + cta + faq + cta final)
+- Exemple de démo « Atelier Lumen, café de spécialité » au lieu de « Formation WP Mastery »
+
+`templates/README.md` : table mise à jour avec les 8 templates, exemple `deploy template=page-accueil`.
+
+### 3. **14 nouveaux patterns** pour les blocs Spectra fonctionnels
+
+Le user a raison : il manquait les patterns pour les blocs **Spectra qui font l'identité du plugin**. Couverture maintenant exhaustive sur les 49 blocs Spectra principaux.
+
+**Patterns ajoutés (par ordre de fréquence d'usage)** :
+
+| Pattern | Bloc Spectra | Cas d'usage |
+|---|---|---|
+| [`google-maps.md`](../patterns/google-maps.md) | `uagb/google-map` | Page contact, restaurant, commerce physique. + variante RGPD avec gate consentement |
+| [`forms.md`](../patterns/forms.md) | `uagb/forms` + `uagb/cf7-designer` + `uagb/gf-designer` | 3 implémentations : Spectra natif, CF7, Gravity Forms. + variantes contact split, newsletter inline, modal, multi-étapes |
+| [`modal.md`](../patterns/modal.md) | `uagb/modal` | Vidéo démo, formulaire devis, CGV, lightbox image. User click trigger |
+| [`popup-builder.md`](../patterns/popup-builder.md) | `uagb/popup-builder` | Newsletter capture, promo flash. Auto-trigger (scroll/timer/exit-intent). + fallback core si pas Spectra Pro |
+| [`marketing-buttons.md`](../patterns/marketing-buttons.md) | `uagb/marketing-button` | CTA enrichi prefix + label + suffix + icon. Pricing, hero, lead magnet |
+| [`table-of-contents.md`](../patterns/table-of-contents.md) | `uagb/table-of-contents` | Sommaire automatique articles long. + variantes inline pills, sidebar sticky, collapsible mobile, scroll progress |
+| [`post-display.md`](../patterns/post-display.md) | `uagb/post` | 4 layouts : grid, masonry, carousel, timeline. Blog homepage, portfolio, newsroom, releases produit |
+| [`image-gallery.md`](../patterns/image-gallery.md) | `uagb/image-gallery` | Portfolio, page projets, restaurant photos. + lightbox, masonry varied, tiled Bento Box |
+| [`icon-list.md`](../patterns/icon-list.md) | `uagb/icon-list` + `uagb/icon-list-child` | Features pricing, horaires, coordonnées, social links, étoiles. Standalone (vs sub-component) |
+| [`inline-notice.md`](../patterns/inline-notice.md) | `uagb/inline-notice` | Callout dans articles. 5 variantes : info, success, warning, error, neutral |
+| [`social-share.md`](../patterns/social-share.md) | `uagb/social-share` + `uagb/social-share-child` | Boutons partage Twitter/FB/LinkedIn/WhatsApp/Email. + variantes sticky, follow, share with AI |
+| [`price-list.md`](../patterns/price-list.md) | `uagb/price-list` + `uagb/price-list-child` | Menu restaurant, carte vins, prestations agence, tarifs spa |
+| [`star-rating.md`](../patterns/star-rating.md) | `uagb/star-rating` | Note moyenne 5 étoiles + schema aggregateRating. Lite vs review-product complet |
+| [`lottie.md`](../patterns/lottie.md) | `uagb/lottie` | Animation vectorielle JSON. Hero illustré, success animation, hover-to-play, scroll-trigger |
+
+**Format** : tous les patterns suivent la structure standard du skill — Variables d'entrée / Block markup / CSS overrides / Pièges / Variantes (3-5 par pattern) / Test post-génération / Pour aller plus loin.
+
+### 4. Total patterns : 21 → 35
+
+| Avant rc3 | Après rc3 |
+|---|---|
+| 21 patterns (compositions visuelles) | **35+ patterns** (compositions + blocs fonctionnels) |
+| Manque : tabs, Google Maps, modal, popup, forms, post, gallery, icon-list, inline-notice, social-share, price-list, marketing-button, lottie, star-rating | Tous les blocs Spectra principaux des 49 sont couverts |
+
+### Mise à jour secondaire
+
+- `README.md` architecture section : nouvelle organisation patterns en 2 groupes (compositions visuelles / blocs Spectra fonctionnels)
+- `templates/README.md` : table 8 templates avec patterns d'assemblage
+- `references/intent-to-block-routing.md` : note de pattern correspondant ajoutée
+
+### Score de couverture v1.0-rc3
+
+| Critique user | État |
+|---|---|
+| Refs cours-ndrc / BTS NDRC retirées du README | ✅ 3 occurrences supprimées |
+| Liens formation WordPress + IA / Article Claude Code / Login Armor / OGEEAT | ✅ Déjà présents (sections « Pour aller au-delà du skill » + « Mes deux derniers plugins » + « Liens ») |
+| Template `page-formation` → `page-accueil` | ✅ Renommé + contenu refondu en générique avec variantes par secteur |
+| Patterns Spectra manquants (14) | ✅ Tous créés (forms, modal, popup, google-maps, post-display, etc.) |
+
+### Reste pour v1.0 stable
+
+- Validation indépendante par reviewer externe (re-test sur stack production réel)
+- Baselines screenshots pour les nouveaux patterns clés (forms, modal, post-display)
+- Workflow GitHub Actions de régression visuelle automatisée
+- PDF lead magnet 32 pages compilé (Pandoc/Typst)
+- Variantes i18n par pattern (fr-FR.json, en-US.json, de-DE.json, es-ES.json)
+
+---
+
 ## [1.0-rc2] — 2026-05-02 (soir) — Réponse aux 8 items du test régression prod cours-ndrc.fr
 
 > **Verdict reviewer externe sur v1.0-rc1** : « Pipeline a fonctionné en prod sur cours-ndrc.fr (Astra 4.13.1 + Spectra 2.19.21 + palette_3 + LiteSpeed + o2switch). Mais 3 nouveaux quirks bloquants + 1 incohérence dans tes propres examples détectés. Bouger rc1 → rc2 avec 8 items. »

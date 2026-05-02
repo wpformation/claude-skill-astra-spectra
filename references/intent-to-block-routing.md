@@ -1,6 +1,8 @@
 # Intent → Block Routing
 
 > **Rôle** : table de décision principale du skill. Pour chaque intention éditoriale exprimée en langage naturel, indique quel bloc utiliser (Spectra `uagb/*` ou Gutenberg core `core/*`) avec un fallback secondaire.
+>
+> **Pattern associé** : pour chaque bloc Spectra, le skill dispose d'un pattern documenté dans `patterns/<nom>.md` qui explique « comment construire » (variables, markup, CSS overrides, pièges, variantes). Liste complète : voir l'index `patterns/` dans le README.
 
 ## Règle de priorisation
 
