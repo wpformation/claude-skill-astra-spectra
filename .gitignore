@@ -1,0 +1,34 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local config
+.env
+.env.local
+*.local
+
+# Test artifacts
+/tmp/
+/test-output/
+*.log
+
+# Backups
+*.bak
+*.backup
+
+# Compiled
+*.zip
+dist/
+build/
+
+# Secrets — JAMAIS commit
+credentials.json
+application-passwords.txt
+*.key
+*.pem
