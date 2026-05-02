@@ -15,6 +15,61 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 - Article WPFormation dédié
 - Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
 
+## [0.9.2-beta] — 2026-05-02 (13h)
+
+### 🇫🇷 Accents français corrects + stats horizontales + avatars testimonials
+
+> **Verdict utilisateur sur v0.9.1** : « Si l'utilisateur est français, il manque tous les accents. Je vois de nombreux ratés (mojibake `â€"` partout, stats empilées verticalement). Pas du tout époustouflant, niveau débutant. »
+
+#### 3 défauts critiques corrigés
+
+**1. Accents français manquants** — Le markup v0.9.1 utilisait du français sans accents (« Reussir », « rediges », « exercices types epreuve »). Faute lourde vs CLAUDE.md règle prioritaire « français avec accents ».
+
+Fix : passage à **HTML entities** (`&eacute;` `&egrave;` `&agrave;` `&ccedil;` `&ecirc;` `&ocirc;` `&rsquo;` `&laquo;` `&raquo;` `&middot;` `&mdash;` `&hellip;` `&nbsp;`) pour tous les contenus textuels. Les entities passent UTF-8 safe à travers MySQL/JSON/REST sans risque de mojibake.
+
+Validé sur le rendu : « Réussir », « rédigés », « expérimentés », « épreuve », « DERNIÈRES PLACES », « DÉCROCHÉ », « INTELLIGEMMENT » s'affichent correctement.
+
+**2. Tirets cadratins en mojibake** — Les `—` (em-dash UTF-8 byte E2 80 94) directs étaient affichés comme `â€"` (mojibake Latin-1).
+
+Fix : tous les `—` remplacés par `&mdash;` HTML entity. Idem pour `«`/`»` (`&laquo;`/`&raquo;`), `…` (`&hellip;`), `'` apostrophe typo (`&rsquo;`).
+
+**3. Stats empilées verticalement au lieu d'horizontales** — Les 4 info-box stats étaient en colonne malgré le container parent `directionDesktop:"row"`. Cause : Spectra info-box ne supporte pas l'attribut `widthDesktop` directement (c'est un attribut container).
+
+Fix : **wrapper chaque stat dans un container width 22 %** (`v92-stat-1-w` à `v92-stat-4-w`). Container parent en `direction:row` + `wrapDesktop:wrap` + `justifyContent:space-between`. Rendu : 4 stats sur une ligne en desktop, 2×2 en tablet, 1×4 en mobile.
+
+#### Améliorations visuelles
+
+- **Hero** : H1 augmenté à 72 px desktop (vs 62 px), letter-spacing -1.5 px (typo plus tight), gradient overlay angle 120deg (vs 135deg) pour mieux exposer l'image en bas-droite
+- **Image hero changée** : étudiants en révision (cohérent BTS NDRC) au lieu de la forêt+lac aérienne (déconnecté du sujet)
+- **Image about-story changée** : étudiantes sur ordinateur (au lieu de l'étalement de fruits/légumes qui n'avait aucun sens)
+- **3 bullets icon-list** ajoutés sous le heading about-story : « 3 idées clés au début de chaque cours », « 2 exemples concrets de cas réels d'examen », « 5 erreurs à éviter le jour J »
+- **Avatars circulaires** dans testimonials : 3 photos uploadées, 52×52 px, border-radius 50% — chaque card a maintenant Léa/Karim/Inès avec photo
+- **Apostrophe typo** : `&rsquo;` (’) partout au lieu de `'` straight, pour un rendu typographique professionnel
+- **Espace insécable français** `&nbsp;` avant `?` `!` `:` `%` (e.g. « gratuit&nbsp;? », « 87&thinsp;% »)
+- **Tracking +letter-spacing -1.5px** sur les headings massifs (typo display tightened)
+- **CTA banner final** : gradient overlay rgba(15,23,42,0.95) → rgba(253,152,0,0.55) (orange WPF en bas-droite pour signature couleur), padding 160px desktop (vs 140), heading H2 60px (vs 50)
+
+#### Stats v0.9.2
+
+- **7 nouvelles images uploadées** : hero étudiants, story étudiantes, 3 avatars portraits, CTA banner, image secondaire (~1 MB total)
+- **51 KB markup** template (vs 41 KB v0.9.1) — +10 KB pour bullets, avatars, entities, padding
+- **Stats horizontales 4-cols** validé visuellement (`v092-zoom-v92-stats.png`)
+- **0 occurrence de `â€` mojibake** dans le HTML rendu (vs 12+ en v0.9.1)
+- **Tous les accents** validés via screenshot zoom : RÉUSSIR, COURS RÉDIGÉS, RÉUSSITE, NOTRE APPROCHE, ILS ONT DÉCROCHÉ LEUR BTS, QUESTIONS FRÉQUENTES, PRÊT À RÉVISER
+
+#### Baseline v0.9.2 dans `screenshots/loginarmor-dev-palette3/`
+
+```
+v092-iter1-fullpage.png       ← page complète corrigée
+v092-zoom-v92-hero.png        ← hero avec image étudiants
+v092-zoom-v92-stats.png       ← 4 stats HORIZONTALES avec accents
+v092-zoom-v92-features.png    ← 3 features cards (héritées v091)
+v092-zoom-v92-story.png       ← about-story avec image étudiantes + bullets
+v092-zoom-v92-testimonials.png← 3 cards avec avatars + accents
+v092-zoom-v92-faq-section.png ← FAQ accordéon avec accents
+v092-zoom-v92-cta-final.png   ← CTA banner gradient orange
+```
+
 ## [0.9.1-beta] — 2026-05-02 (12h)
 
 ### 🎯 Boucle de validation visuelle FERMÉE — première baseline screenshot prouvée
