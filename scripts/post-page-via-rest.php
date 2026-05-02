@@ -64,6 +64,54 @@ function http_request($method, $url, $headers, $body = null) {
   return ['error' => null, 'code' => $http_code, 'body' => $response];
 }
 
+/**
+ * Déclenche la régénération CSS Spectra pour un post donné.
+ *
+ * Spectra peut stocker son CSS dynamique en mode 'file' (dans
+ * /wp-content/uploads/uag-plugin/assets/uag-css-{post_id}.css). Quand un post est
+ * créé via l'API REST publique, le hook save_post peut ne pas exécuter la
+ * génération. Sans CSS, la page apparaît sans styles (pas de flex-grid, pas
+ * de box-shadow, layout cassé).
+ *
+ * Cette fonction tente 3 approches dans l'ordre :
+ *   1. POST /wp-json/astra-spectra/v1/regen-assets/{id} (endpoint mu-plugin compagnon)
+ *   2. GET sur la page draft avec ?_uagb-regen=1 query param (déclenche le hook
+ *      sur certaines configs Spectra qui écoutent template_redirect)
+ *   3. Fallback : informe l'utilisateur que la régénération est manuelle
+ *
+ * Retourne un dict avec le statut de la tentative.
+ */
+function wpf_skill_trigger_spectra_assets_regen($site_url, $auth, $post_id) {
+  $headers = [
+    'Authorization: Basic ' . $auth,
+    'Accept: application/json',
+    'User-Agent: claude-skill-astra-spectra/0.9.0',
+  ];
+
+  // Tentative 1 : endpoint mu-plugin compagnon (si installé)
+  $endpoint = "$site_url/wp-json/astra-spectra/v1/regen-assets/$post_id";
+  $r = http_request('POST', $endpoint, $headers, json_encode(['post_id' => $post_id]));
+  if ($r['code'] === 200) {
+    return ['method' => 'mu-plugin-endpoint', 'status' => 'ok', 'http' => 200];
+  }
+
+  // Tentative 2 : trigger via GET sur la page draft authentifiée
+  // (sur certaines configs, Spectra régénère au premier load)
+  $preview_url = "$site_url/?p=$post_id&preview=true&_uagb_regen=1";
+  $r2 = http_request('GET', $preview_url, $headers);
+  $triggered = ($r2['code'] === 200 || $r2['code'] === 301 || $r2['code'] === 302);
+
+  // Tentative 3 : suggérer la régénération manuelle
+  return [
+    'method' => 'best_effort',
+    'status' => $triggered ? 'preview_loaded' : 'manual_required',
+    'preview_http_code' => $r2['code'],
+    'manual_command_wp_cli' => "wp eval 'if (class_exists(\"UAGB_Post_Assets\")) { (new UAGB_Post_Assets($post_id))->generate_assets(); }'",
+    'manual_command_admin' => "Ouvrir la page dans Gutenberg (l'edit_url ci-dessus) et la sauvegarder une fois → Spectra régénère le CSS.",
+    'note' => 'Si la preview frontend apparaît sans styles (flex-grid cassé, pas de border-radius), exécuter une des manual_command_* ci-dessus. Pour automatiser, déployer le mu-plugin compagnon décrit dans references/mu-plugin-companion.md.',
+  ];
+}
+
 function main() {
   global $argv;
   $args = parse_args($argv);
@@ -178,6 +226,20 @@ function main() {
     fail("Invalid response from server.", ['raw' => $response['body']]);
   }
 
+  // === Régénération CSS Spectra ===
+  // Spectra a 2 modes pour générer le CSS :
+  //   - inline : CSS dans <head>
+  //   - file   : CSS dans /uploads/uag-plugin/assets/uag-css-{post_id}.css
+  // Sur certains sites (mode file actif), wp_insert_post via REST ne déclenche
+  // PAS automatiquement la génération. Résultat : la preview frontend affiche
+  // le HTML brut sans le CSS dynamique → pas de border-radius, pas de
+  // box-shadow, pas de flex-grid. La page paraît cassée.
+  //
+  // On déclenche la régénération en POST sur un endpoint custom (à exposer
+  // côté serveur via mu-plugin compagnon) OU on signale à l'utilisateur que
+  // la régénération doit être déclenchée manuellement.
+  $assets_regen = wpf_skill_trigger_spectra_assets_regen($site_url, $auth, $data['id']);
+
   // Output succès
   $result = [
     'success' => true,
@@ -187,6 +249,7 @@ function main() {
     'status' => $data['status'] ?? null,
     'edit_url' => "$site_url/wp-admin/post.php?post={$data['id']}&action=edit",
     'preview_url' => $data['link'] ?? null,
+    'spectra_assets_regen' => $assets_regen,
   ];
   echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
   exit(0);

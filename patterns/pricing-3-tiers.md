@@ -32,7 +32,7 @@ Le pattern par défaut ci-dessous fournit 3 features par tier. Pour en ajouter, 
 ## Block markup (3 features par tier)
 
 ```html
-<!-- wp:uagb/container {"block_id":"pricing-section","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":1280,"directionDesktop":"column","alignItemsDesktop":"center","rowGapDesktop":56,"topPaddingDesktop":100,"bottomPaddingDesktop":100,"topPaddingTablet":60,"bottomPaddingTablet":60,"topPaddingMobile":48,"bottomPaddingMobile":48,"leftPaddingTablet":24,"rightPaddingTablet":24,"leftPaddingMobile":16,"rightPaddingMobile":16,"backgroundType":"color","backgroundColor":"var(--ast-global-color-7)"} -->
+<!-- wp:uagb/container {"block_id":"pricing-section","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":1280,"directionDesktop":"column","alignItemsDesktop":"center","rowGapDesktop":56,"topPaddingDesktop":100,"bottomPaddingDesktop":100,"topPaddingTablet":60,"bottomPaddingTablet":60,"topPaddingMobile":48,"bottomPaddingMobile":48,"leftPaddingTablet":24,"rightPaddingTablet":24,"leftPaddingMobile":16,"rightPaddingMobile":16,"backgroundType":"color","backgroundColor":"#fafafa"} -->
 <div class="wp-block-uagb-container alignwide uagb-block-pricing-section"><!-- wp:uagb/advanced-heading {"block_id":"pricing-heading","headingTag":"h2","headingTitle":"{{SECTION_HEADLINE}}","headingColor":"var(--ast-global-color-2)","headingAlign":"center","headingFontWeight":700,"headingFontSizeDesktop":40,"headingFontSizeTablet":32,"headingFontSizeMobile":28,"headingLineHeightDesktop":1.2,"separatorWidth":0} -->
 <div class="wp-block-uagb-advanced-heading uagb-block-pricing-heading"><h2 class="uagb-heading-text">{{SECTION_HEADLINE}}</h2></div>
 <!-- /wp:uagb/advanced-heading -->

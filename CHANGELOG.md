@@ -15,6 +15,76 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 - Article WPFormation dédié
 - Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
 
+## [0.9.0-beta] — 2026-05-02 (tard)
+
+### 🔥 Refonte structurelle après rapport visuel cours-ndrc.fr
+
+> **Verdict utilisateur sur v0.8.2** : « C'est juste laid, catastrophique et totalement raté. » 17 fixes techniques validés mais rendu inutilisable en production sur palette Astra non-default. Cette version refonde la couche couleur + valide le rendu visuel.
+
+#### BLOCKER 1 — Slots Astra arbitraires selon palette
+
+Cause : `var(--ast-global-color-7)` valait `#fafafa` sur palette default mais `#141006` (presque noir) sur palette_3. Tous les patterns qui utilisaient `color-7` comme bg light → sections noires.
+
+**Solution** :
+
+- **`scripts/resolve-palette.php` (nouveau)** : utilitaire de résolution sémantique. Lit la palette active, calcule luminance + saturation, mappe vers 16 rôles sémantiques (`bg_page`, `bg_section_alt`, `bg_card`, `text_heading`, `accent_primary`, `border_subtle`, etc.). Stratégie hybride : slots Astra GARANTIS pour les rôles bien couverts (color-0/1/2/3/5), hex neutres robustes pour les rôles variables (color-4/6/7/8). API : `wpf_skill_resolve_color($role, $palette)`. CLI : `php resolve-palette.php list|get|transpile|contrast`.
+- **`references/semantic-color-roles.md` (nouveau)** : convention complète. Slots GARANTIS vs VARIABLES. Table de mesure sur 11 presets Astra + palette_3. Tradeoffs assumés.
+- **9 patterns réécrits** (hero-cta-split, features-3-cols, pricing-3-tiers, faq-accordion, cta-banner-fullwidth, testimonials-grid, team-grid, stats-counters, article-content-rich) : remplacement des slots variables par hex neutres garantis (`#fafafa`, `#ffffff`, `#e5e7eb`) ou par les slots GARANTIS Astra. 0 occurrence de `color-{4,6,7,8}` dans le markup actif.
+
+#### BLOCKER 2 — Pas de respiration entre sections
+
+Cause : sections enchaînées sans variation de bg, `alignwide` accolés sans transition.
+
+**Solution** :
+
+- **`references/section-rhythm.md` (nouveau)** : convention alternance bg (white ↔ off-white). Pas de margin externe sur `alignfull` (casse l'alignment). La respiration vient de l'alternance + du padding interne généreux.
+- **Check 10 ajouté à `visual-audit.php`** : flag P2 si 2 sections root consécutives ont le même `backgroundColor` résolu.
+
+#### BLOCKER 3 — Patterns écrits sans validation visuelle
+
+Cause : la suite v0.8.x a fixé des bugs détectés par grep mais aucun screenshot n'avait été produit. Nouveaux bugs (testimonials placeholder, team-grid placeholder, page-formation 6× SVG vides) découverts uniquement par re-test live.
+
+**Solution** :
+
+- **`screenshots/README.md` (nouveau)** : process obligatoire avant tag v1.0. 3 palettes de test minimum (astra-default, preset_3, preset_8). Convention `tested-on-palettes` dans le frontmatter de chaque pattern. Workflow GitHub Actions de régression visuelle proposé.
+- **TODO v1.0** : 27 screenshots patterns × 3 palettes + 9 screenshots templates × 3 palettes + fixtures `_palettes/*.json` + workflow CI.
+
+#### BLOCKER 4 — visual-audit ne détectait rien de visuel
+
+Cause : checks structurels (block_id unique, hex hardcoded grep) ne détectent pas « texte noir sur fond noir » qui dépend de la résolution palette.
+
+**Solution** :
+
+- **Check 9 WCAG AA ajouté à `visual-audit.php`** : pour chaque paire (text, bg) sur le même bloc, résout les `var(--ast-global-color-X)` vers les hex réels de la palette active, calcule le ratio WCAG (formule officielle W3C avec linéarisation gamma sRGB). Flag P0 si ratio < 1.5 (texte invisible), P1 si < 4.5 (sous AA). Output `wcag_violations[]` détaillé avec ratios.
+- **Check 10 alternance bg** : voir BLOCKER 2.
+
+#### BLOCKER 5 — Spectra UAGB_Post_Assets non régénéré post-POST
+
+Cause : Spectra peut stocker son CSS en mode `file` (`/uploads/uag-plugin/assets/uag-css-{post_id}.css`). Sans hook save_post déclenché, la preview frontend apparaît sans flex-grid, sans box-shadow, sans border-radius.
+
+**Solution** :
+
+- **`scripts/post-page-via-rest.php`** : nouvelle fonction `wpf_skill_trigger_spectra_assets_regen()` appelée après chaque POST. 3 stratégies en cascade : (1) endpoint mu-plugin compagnon `/wp-json/astra-spectra/v1/regen-assets/{id}`, (2) GET sur preview URL avec query `_uagb_regen=1` qui déclenche le hook sur certaines configs, (3) fallback : suggérer commande WP-CLI manuelle dans le retour. Output ajouté `spectra_assets_regen` détaillé.
+
+### Bonus utilisateur — Inspiration démo officiel Spectra Natures
+
+Sur demande explicite « Pourquoi ne t'inspires-tu pas de ce que propose Spectra par défaut ? », analyse de 4 pages réelles importées du démo officiel **Spectra Natures** (Homepage, Services, Contact, About) :
+
+- **`references/spectra-demo-reference.md` (nouveau)** : analyse des 10 techniques visuelles clés du démo (image bg + overlay, eyebrow prefix kicker, equalHeight cards, gradient split 50/50, contact info numérotée, stats card unifiée, etc.). Avec attention aux pièges de palette (color-4 = crème sur Natures vs primary sur defaults).
+- **`patterns/hero-image-overlay.md` (nouveau)** : hero pleine page avec image background + overlay color 70 % + heading H1 + 2 CTAs. Utilise hex neutres (`#ffffff` pour texte) pour marcher sur toutes palettes. 5 variantes documentées (gradient overlay, hero court, eyebrow, single CTA, sans image).
+- **`patterns/about-story-split.md` (nouveau)** : section « Notre histoire » avec image éditoriale 1200×350 + layout 2-cols heading/desc. 4 variantes documentées.
+
+#### Templates blueprints à venir en v0.9.1
+
+Pour ne pas livrer un v0.9 douteux, les templates complets inspirés du démo Natures sont reportés à v0.9.1 :
+
+- `templates/spectra-homepage-natures.md`
+- `templates/spectra-contact-page.md`
+- `templates/spectra-about-page.md`
+- `templates/spectra-services-page.md`
+
+Et 5 patterns supplémentaires inspirés (services-cards-with-images, contact-info-grid, why-choose-3-numbered, stats-card-unified, gradient-split-50-50).
+
 ## [0.8.3-beta] — 2026-05-02 (nuit)
 
 ### 3e re-test cours-ndrc.fr : 17/17 fixes confirmés + 1 BLOCKER + 3 mineurs corrigés

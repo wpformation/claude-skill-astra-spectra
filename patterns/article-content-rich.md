@@ -83,7 +83,7 @@
 <h2 class="wp-block-heading">Questions fréquentes</h2>
 <!-- /wp:heading -->
 
-<!-- wp:uagb/faq {"block_id":"article-faq","layout":"accordion","expandFirstItem":false,"inactiveOtherItems":true,"iconActiveColor":"var(--ast-global-color-0)","iconColor":"var(--ast-global-color-3)","headingColor":"var(--ast-global-color-2)","answerColor":"var(--ast-global-color-3)","headingFontSize":17,"answerFontSize":15,"questionBgColor":"var(--ast-global-color-5)","borderStyle":"solid","borderWidth":1,"borderColor":"var(--ast-global-color-7)","borderRadius":8,"questionPaddingDesktop":18,"answerPaddingDesktop":18,"rowGap":12,"enableSchemaSupport":true} -->
+<!-- wp:uagb/faq {"block_id":"article-faq","layout":"accordion","expandFirstItem":false,"inactiveOtherItems":true,"iconActiveColor":"var(--ast-global-color-0)","iconColor":"var(--ast-global-color-3)","headingColor":"var(--ast-global-color-2)","answerColor":"var(--ast-global-color-3)","headingFontSize":17,"answerFontSize":15,"questionBgColor":"var(--ast-global-color-5)","borderStyle":"solid","borderWidth":1,"borderColor":"#e5e7eb","borderRadius":8,"questionPaddingDesktop":18,"answerPaddingDesktop":18,"rowGap":12,"enableSchemaSupport":true} -->
 <div class="wp-block-uagb-faq uagb-block-article-faq"><!-- wp:uagb/faq-child {"block_id":"art-faq-1","question":"{{FAQ_Q1}}","answer":"{{FAQ_A1}}"} -->
 <div class="wp-block-uagb-faq-child uagb-block-art-faq-1"><h3 class="uagb-question">{{FAQ_Q1}}</h3><div class="uagb-faq-content"><p>{{FAQ_A1}}</p></div></div>
 <!-- /wp:uagb/faq-child -->
