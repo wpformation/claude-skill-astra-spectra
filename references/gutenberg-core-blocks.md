@@ -250,6 +250,8 @@
 <!-- /wp:html -->
 ```
 
+> ⚠️ **Piège kses (découvert POC `claude-skill-gutenberg-core` 02/05/2026)** : si tu insères un `<style>` ou `<script>` à l'intérieur d'un `core/html` via `wp_insert_post` / `wp_update_post` / REST API et que l'auteur du POST n'a PAS la capability `unfiltered_html`, WordPress strip silencieusement les balises `<style>`/`<script>` via `wp_filter_post_kses`. Le marker de bloc `<!-- wp:html -->` est conservé mais son contenu est sanitizé. Vérifier en lisant `post_content` après update : si tes balises ont disparu, c'est ce piège. Sur **single-site**, seuls les administrators ont `unfiltered_html`. Sur **multisite**, **personne** ne l'a par défaut (même les super-admins). Solutions : (a) POST en tant qu'admin via Application Password, (b) bypass temporaire via `kses_remove_filters()` autour de `wp_update_post` puis `kses_init_filters()`, (c) utiliser `_uag_custom_page_level_css` (meta natif Spectra) pour le CSS — c'est ce que fait le skill par défaut, donc ce piège ne te concerne que si tu sors du flux standard pour insérer du `<style>` custom.
+
 #### `core/shortcode`
 - **Usage** : exécuter un shortcode WordPress legacy (`[contact-form-7 id="123"]`, `[woocommerce_cart]`)
 - **Attributs critiques** : `text` (le shortcode)

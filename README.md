@@ -6,7 +6,7 @@
 [![WordPress 6.0+](https://img.shields.io/badge/WordPress-6.0+-21759b.svg)](https://wordpress.org/)
 [![Spectra Required](https://img.shields.io/badge/Spectra-Required-FF6B00.svg)](https://wpspectra.com/)
 [![Astra Optional](https://img.shields.io/badge/Astra-Optional-blue.svg)](https://wpastra.com/)
-[![Status: v1.0-rc5](https://img.shields.io/badge/Status-v1.0--rc5-orange.svg)](CHANGELOG.md)
+[![Status: v1.0-rc6](https://img.shields.io/badge/Status-v1.0--rc6-orange.svg)](CHANGELOG.md)
 
 ---
 
@@ -232,11 +232,12 @@ Détail complet : [INSTALL.md](INSTALL.md)
 
 ---
 
-## Status v1.0-rc5
+## Status v1.0-rc6
 
 ✅ **Ce qui est livré**
 
-- **🔴 Guardrails anti-désastre** ⭐ nouveau v1.0-rc5 — règles non-négociables dans `SKILL.md` qui empêchent les claims sans screenshot, l'invention de design hors baselines, l'empilage de 8 sections d'un coup. Avec 6 anti-patterns ❌ et 6 patterns ✅ explicites.
+- **⭐ NOUVEAU v1.0-rc6 — Quirk #25 OPcache PHP-FPM** : si tu installes le mu-plugin compagnon dans la même session puis enchaînes immédiatement sur un POST + screenshot, OPcache PHP-FPM (revalidate_freq 2-3s) sert l'ancienne version du fichier et les workarounds Quirks #23/#24 ne s'activent pas → faux négatif silencieux. Documenté + 3 stratégies de fix cumulables (auto-invalidation dans le mu-plugin, invalidation explicite après pose, sleep de sécurité). Découvert pendant le POC `claude-skill-gutenberg-core` 02/05/2026, rétro-porté sur ce skill car concerne tout pipeline qui pose un mu-plugin pendant la session.
+- **🔴 Guardrails anti-désastre** v1.0-rc5 — règles non-négociables dans `SKILL.md` qui empêchent les claims sans screenshot, l'invention de design hors baselines, l'empilage de 8 sections d'un coup. Avec 6 anti-patterns ❌ et 6 patterns ✅ explicites.
 - **20 documents de référence** ⭐ +3 v1.0-rc5 (`design-baselines.md` rulers concrets, `visual-pitfalls.md` 13 moves qui foirent, `impeccable-bridge.md` mapping principes → patterns)
 - **5 workflows validés** ⭐ +1 v1.0-rc5 (`screenshot-options.md` 5 options concrètes)
 - Knowledge base complète : **20 documents de référence** (quirks, i18n, icons-list, core-blocks, astra-templates, block-theme-fse-rules, apache-mutu, images-ratios, persistent-css-overrides, design-system-tokens, **design-baselines** ⭐, **visual-pitfalls** ⭐, **impeccable-bridge** ⭐, etc.)

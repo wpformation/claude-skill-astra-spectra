@@ -106,6 +106,9 @@ Pour chaque section, remplir le pattern avec le contenu original :
 
 ⚠️ **NE JAMAIS écraser** la page originale. Toujours créer un clone draft :
 
+> ⚠️ **Pré-requis Quirk #25 — OPcache PHP-FPM** : si le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` vient d'être posé dans cette session, attendre 3-5s ou appeler `opcache_invalidate($mu_path, true)` avant POST + screenshot, sinon les workarounds Quirks #23/#24 ne s'activent pas. Cf `references/spectra-attributes-quirks.md` Quirk #25.
+
+
 ```bash
 curl -X POST 'https://{{SITE_URL}}/wp-json/wp/v2/pages' \
   -u 'admin:{{APP_PASSWORD}}' \

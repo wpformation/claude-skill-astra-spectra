@@ -132,6 +132,8 @@ Re-itérer jusqu'à validation 100 %.
 
 ### Étape 6 — POST sur l'API REST (5-10s)
 
+> ⚠️ **Pré-requis Quirk #25 — OPcache PHP-FPM** : si tu viens d'installer le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` dans cette session (via `file_put_contents` ou copie filesystem), **attends 3-5 secondes ou appelle `opcache_invalidate($mu_path, true)`** AVANT de POST + screenshot. Sinon, OPcache PHP-FPM (revalidate_freq 2-3s par défaut) sert l'ancienne version du fichier (souvent inexistante) et les workarounds Quirks #23 (CSS Spectra dans `<head>`) et #24 (hide double H1) ne s'activent pas. Symptôme : screenshot post-POST sans CSS Spectra ni hide H1, alors que le mu-plugin existe sur le disque. Cf `references/spectra-attributes-quirks.md` Quirk #25 pour les 3 stratégies de fix cumulables. Le mu-plugin v1.0-rc6+ s'auto-invalide à la pose, mais un sleep de sécurité reste recommandé.
+
 ```bash
 curl -X POST 'https://{{SITE_URL}}/wp-json/wp/v2/pages' \
   -u 'admin:{{APP_PASSWORD}}' \

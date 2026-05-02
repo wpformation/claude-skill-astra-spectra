@@ -251,3 +251,16 @@ add_action('rest_api_init', function () {
         },
     ]);
 });
+
+// =============================================================================
+// Workaround Quirk #25 — auto-invalidation OPcache PHP-FPM
+// =============================================================================
+// Quand ce mu-plugin est nouvellement écrit puis inclus pour la première fois,
+// auto-invalider l'entrée OPcache pour que la PROCHAINE requête HTTP recharge
+// le fichier depuis le disque (et applique les hooks wp_head des Quirks #23/#24).
+// Sans ça, PHP-FPM peut servir l'ancienne version (souvent inexistante = aucun
+// hook chargé) pendant 2-3s = faux négatif lors du screenshot post-POST.
+// Détecté pendant POC claude-skill-gutenberg-core le 02/05/2026.
+if (function_exists('opcache_invalidate')) {
+    @opcache_invalidate(__FILE__, true);
+}

@@ -603,6 +603,55 @@ Cas confirmé sur : loginarmor-dev.local + **Twenty Twenty-Five** (block theme F
 
 ---
 
+## 25. Mu-plugin compagnon nouvellement écrit pas chargé au prochain HTTP — OPcache PHP-FPM
+
+**Symptôme** : la session Claude exécute `scripts/mu-plugin-skill-test.php` (auto-installation du mu-plugin compagnon) puis enchaîne **immédiatement** sur :
+- POST de la page draft via `scripts/post-page-via-rest.php`
+- Récupération du frontend via `wp_remote_get` ou `playground_request`
+- Validation visuelle via screenshot
+
+Au moment du fetch HTTP, le HTML rendu **ne contient pas** `<style id="uagb-style-frontend-X" data-skill-injection="workaround-quirk-23">` ni le hide CSS Quirk #24. La session Claude conclut **à tort** que les workarounds Quirks #23 et #24 ne fonctionnent pas, et passe 30-60 min à debugger un faux négatif.
+
+**Cause** : OPcache PHP-FPM (sur Local by Flywheel, o2switch LiteSpeed PHP-FPM, OVH mutu, etc.) a `opcache.revalidate_freq` à 2-3 secondes par défaut. Quand le mu-plugin est écrit sur disque via `file_put_contents()`, PHP-FPM continue à servir l'ancienne version du fichier (souvent inexistant = aucun hook chargé) jusqu'à la prochaine revalidation (~2-3s).
+
+Détecté pendant le POC du skill `claude-skill-gutenberg-core` le 02/05/2026 sur loginarmor-dev.local : un mu-plugin POC fraîchement écrit n'a pas été chargé au premier `wp_remote_get`, le hook `wp_head` n'a pas été appelé. Sleep de 5s + invalidation explicite ont résolu.
+
+**Fix (3 stratégies cumulatives, à appliquer toutes les 3 pour robustesse maximale)** :
+
+1. **Auto-invalidation à la pose** (intégré au mu-plugin lui-même) :
+   ```php
+   // À la fin de scripts/mu-plugin-skill-test.php
+   if (function_exists('opcache_invalidate')) {
+       @opcache_invalidate(__FILE__, true);
+   }
+   ```
+   Le fichier s'auto-invalide quand il est inclus la première fois → la prochaine requête le rechargera depuis le disque.
+
+2. **Invalidation explicite après pose** (côté script qui écrit le mu-plugin) :
+   ```php
+   $mu_path = WPMU_PLUGIN_DIR . '/zzz-skill-setup.php';
+   file_put_contents($mu_path, $mu_code);
+   if (function_exists('opcache_invalidate')) {
+       @opcache_invalidate($mu_path, true);
+   }
+   clearstatcache(true, $mu_path);
+   ```
+
+3. **Sleep de sécurité avant le 1er HTTP fetch** (dans le workflow `new-page-from-brief.md`, étape 8 et 9) :
+   ```bash
+   sleep 5  # ou 3 minimum, après écriture du mu-plugin
+   curl -sSL "https://site.tld/?p=$post_id"
+   ```
+
+**Détection** : si le HTML rendu d'une page Spectra fraîchement publiée n'a PAS `<style id="uagb-style-frontend-X" data-skill-injection="workaround-quirk-23">` alors que :
+- `_uag_page_assets.css` est non-vide en BDD (vérifier via `regen-spectra` endpoint)
+- Le mu-plugin existe sur le disque (`file_exists($mu_path)`)
+→ c'est probablement Quirk #25. Sleep 5s + re-fetch.
+
+**Workaround alternatif (si pas d'accès filesystem)** : poser le mu-plugin **avant** la session de génération, pas pendant. Le user le copie une seule fois, ensuite la session Claude POST des pages sans devoir réinstaller à chaque fois.
+
+---
+
 ## Comment cette doc évolue
 
 À chaque nouveau piège détecté lors d'un test sur un nouveau site / nouvelle palette / nouvelle version Spectra, ajouter une entrée numérotée avec les 4 sections **Symptôme / Cause / Fix / Détection**.

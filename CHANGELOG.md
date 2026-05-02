@@ -2,6 +2,51 @@
 
 Toutes les modifications notables de ce skill sont documentées dans ce fichier. Format basé sur [Keep a Changelog](https://keepachangelog.com/), versions selon [Semantic Versioning](https://semver.org/).
 
+## [1.0-rc6] — 2026-05-02 — Quirk #25 OPcache PHP-FPM (rétro-portage POC skill #2)
+
+> **Origine** : POC du skill complémentaire `claude-skill-gutenberg-core` réalisé le 02/05/2026 sur loginarmor-dev.local. Pendant le test de validation des 4 stratégies de styling persistant, découverte d'un quirk universel qui concerne aussi astra-spectra : OPcache PHP-FPM `revalidate_freq=2-3s` sert l'ancienne version d'un mu-plugin nouvellement écrit pendant 2-3s, ce qui désactive silencieusement les workarounds Quirks #23 (CSS Spectra dans `<head>`) et #24 (hide double H1 FSE) si la session Claude enchaîne immédiatement sur POST + screenshot.
+
+> **Action** : 4 fichiers modifiés pour intégrer le fix dans le pipeline standard du skill. Mineur en lignes de code, MAJEUR en évitement de faux négatifs lors des sessions futures.
+
+### 1. `references/spectra-attributes-quirks.md` — Quirk #25 ajouté
+
+Nouveau piège #25 documenté entre quirk #24 (block theme FSE double H1) et la section « Comment cette doc évolue ». Format identique aux 24 autres : Symptôme / Cause / Fix / Détection / Workaround alternatif. 3 stratégies de fix cumulables :
+
+1. **Auto-invalidation à la pose** : `if (function_exists('opcache_invalidate')) @opcache_invalidate(__FILE__, true);` à la fin du mu-plugin → s'auto-invalide à la première inclusion
+2. **Invalidation explicite après pose** : appeler `opcache_invalidate($mu_path, true)` + `clearstatcache(true, $mu_path)` côté script qui écrit le fichier
+3. **Sleep de sécurité** : `sleep 5` avant le 1er HTTP fetch après pose mu-plugin
+
+### 2. `scripts/mu-plugin-skill-test.php` — auto-invalidation OPcache
+
+Ajout d'un bloc final qui appelle `@opcache_invalidate(__FILE__, true)` si la fonction est disponible. Le mu-plugin s'auto-invalide quand il est inclus la première fois → la prochaine requête HTTP recharge le fichier depuis le disque. Défense en profondeur même si le script qui pose le fichier oublie d'invalider explicitement.
+
+### 3. `workflows/new-page-from-brief.md` — pré-requis Quirk #25 dans étape 6
+
+Note d'avertissement insérée juste avant le bloc curl POST de l'étape 6, avec lien vers Quirk #25 et rappel des 3 stratégies cumulables. Mention explicite que le mu-plugin v1.0-rc6+ s'auto-invalide à la pose mais qu'un sleep de sécurité reste recommandé.
+
+### 4. `workflows/refonte-page-existante.md` — même note dans étape 6
+
+Note d'avertissement plus courte (le workflow refonte est moins détaillé que new-page) avec renvoi à Quirk #25.
+
+### 5. `references/gutenberg-core-blocks.md` — mention #3 kses (POC découverte connexe)
+
+Encadré ajouté sous le bloc `core/html` documentant le piège kses : si l'utilisateur insère un `<style>` ou `<script>` dans un `core/html` via REST API et que l'auteur n'a pas `unfiltered_html`, WP strip silencieusement. Solutions : (a) admin via App Password, (b) `kses_remove_filters()` temporaire, (c) utiliser `_uag_custom_page_level_css` (flux standard du skill — donc piège ne concerne que les sorties du flux standard).
+
+### Impact pour les sessions Claude existantes
+
+- Aucune régression : tous les changements sont additifs
+- Sessions qui posent le mu-plugin compagnon en début de session puis POST immédiatement après auront moins de faux négatifs (si Quirk #23 ou #24 ne s'active pas en apparence, la session sait maintenant qu'OPcache peut être en cause)
+- Le mu-plugin compagnon s'auto-invalide → robustesse améliorée même sans changer le workflow
+
+### Pas de changement dans
+
+- Les 35+ patterns
+- Les 8 templates
+- Les 14 autres scripts PHP
+- Les autres références (`design-baselines`, `visual-pitfalls`, `impeccable-bridge`, etc.)
+
+---
+
 ## [1.0-rc5] — 2026-05-02 (fin de nuit) — Guardrails anti-désastre cross-instance Claude
 
 > **Origine** : retour reviewer 02/05/2026 après 3 pages contact pour cours-ndrc.fr toutes qualifiées « moches, niveau débutant qui n'a jamais touché WordPress » par le user, supprimées. Comparaison directe : la page `loginarmor-dev.local/claude-skill-astra-spectra/` produite par le mainteneur est jugée « très belle, tient la route ». Le reviewer a noté : « le skill v1.0-rc4 est excellent comme knowledge base, mais il assume implicitement que l'instance Claude qui l'utilise a déjà du goût design + discipline visuelle + maîtrise Spectra par expérience. Ces 3 conditions sont VRAIES pour le mainteneur, PAS pour 80% des instances Claude qui vont l'utiliser en prod. »
