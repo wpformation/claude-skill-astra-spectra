@@ -1,24 +1,32 @@
 # claude-skill-astra-spectra
 
-> **Le premier skill Claude Code qui transforme un brief en langage naturel en page WordPress complète. Spectra (48 blocs Gutenberg) + Astra + Gutenberg core. En moins de 2 minutes. Open source MIT.**
+> **Le premier skill Claude Code qui transforme un brief en langage naturel en page WordPress complète. Pas un template à copier-coller : une base de connaissance opérationnelle qui apprend à la session Claude Code suivante comment Spectra fonctionne réellement.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![WordPress 6.0+](https://img.shields.io/badge/WordPress-6.0+-21759b.svg)](https://wordpress.org/)
 [![Spectra Required](https://img.shields.io/badge/Spectra-Required-FF6B00.svg)](https://wpspectra.com/)
 [![Astra Optional](https://img.shields.io/badge/Astra-Optional-blue.svg)](https://wpastra.com/)
-[![Status: Beta](https://img.shields.io/badge/Status-v0.8.1--beta-orange.svg)](CHANGELOG.md)
+[![Status: v1.0](https://img.shields.io/badge/Status-v1.0-success.svg)](CHANGELOG.md)
 
 ---
 
-## L'intuition
+## Ce qui rend ce skill différent
 
-Tu connais ce moment où ton client te demande une nouvelle landing page « comme l'autre fois mais avec un hero plus impactant, 3 features, une grille de témoignages et un pricing 3 tiers » ?
+Un skill Claude Code, ce n'est pas un thème. Ce n'est pas un kit de templates. C'est de la connaissance opérationnelle structurée que la session Claude Code suivante peut lire pour générer des pages WordPress correctes du premier coup.
 
-Tu sais d'avance ce qui t'attend : 4 heures de Gutenberg, 200 clics, ajuster les paddings sur 3 breakpoints, replacer les `block_id`, déboguer pourquoi telle classe CSS ne s'applique pas.
+Ce skill documente ce que personne d'autre n'a documenté pour Spectra :
 
-Avec ce skill, tu dictes ce paragraphe à Claude Code. **90 secondes plus tard, la page draft est dans Gutenberg, validée, prête à publier.** Tu ouvres juste l'URL d'édition et tu vérifies.
+- **17 pièges** Spectra concrets identifiés en production avec Symptôme / Cause / Fix / Détection
+- **La technique `_uag_custom_page_level_css`** pour styler durablement (le seul moyen pour que le CSS survive aux éditions Gutenberg)
+- **20 patterns** documentés au format « comment construire » (pas du copier-coller)
+- **8 templates** blueprints : compositions de patterns avec variables, schema SEO, configurations Astra
+- **13 scripts** PHP utilitaires (POST tag-aware, regen Spectra 4 stratégies, validate roundtrip, audit, resolve palette)
+- **Whitelist d'icônes** Font Awesome 5 Free validées (anti-piège fallback identique sur 3 cards)
+- **Règles i18n FR** strictes (HTML entities, espaces insécables typo, em-dash, apostrophe typographique)
+- **Mécanique palette Astra** : slots GARANTIS vs VARIABLES (pour ne pas tomber sur color-7 = noir massif sur palette_3)
+- **Pièges hébergeurs mutualisés** (o2switch, OVH, Hostinger : auth strip, LiteSpeed cache)
 
-C'est ça la promesse. Et ça marche déjà.
+Quand une session Claude Code lit ce skill, elle sait pourquoi `headingFontSize:80` est ignoré sur `headingTag:p`, pourquoi 4 stats info-box s'empilent en colonne au lieu de row, pourquoi la FAQ affiche du Lorem Ipsum si tu mets `description` au lieu de `answer`. Elle évite mes 17 erreurs.
 
 ---
 
@@ -36,37 +44,105 @@ Spectra est utilisé par 700 000 sites WordPress et personne ne l'a encore branc
 
 ---
 
-## Démo en 30 secondes
+## Démo
 
-```bash
+```
 > /astra-spectra
 ```
 
 ```
-> Crée-moi une landing page pour ma formation Claude Code avec :
-> - Hero impactant avec gradient mesh + 2 CTAs
-> - 3 features (rapidité, qualité, support)
-> - Pricing one-shot 297 EUR avec garantie 30 jours
-> - Témoignages 3 clients
-> - FAQ 5 questions
-> - CTA final inscription
+> Crée-moi une landing pour ma formation BTS NDRC avec hero + 3 piliers
+> + stats + about-story + 3 testimonials + FAQ + CTA final
 ```
 
+Le skill, en 10 étapes :
+
+1. **Lit la knowledge base critique** (17 pièges + i18n + technique CSS persistante)
+2. **Détecte l'environnement** (Spectra version, Astra version, palette active, hébergeur)
+3. **Choisit les patterns** : `hero-image-overlay`, `features-numbered`, `stats-bar-editorial`, `about-story-split`, `testimonials-cards`, `faq-accordion`, `cta-banner-fullwidth`
+4. **Demande les variables** (titre, sous-titre, images, contenu, ratios attendus)
+5. **Génère le markup** Gutenberg avec HTML entities FR + conventions block_id `{slug}-{section}-{element}`
+6. **Génère le CSS overrides** ciblé sur les classes du slug, encapsulé entre balises `/* === skill-generated v1.0 START/END === */`
+7. **Valide le markup** (roundtrip parse/serialize, block_id uniques)
+8. **POST page** + meta `_uag_custom_page_level_css` (tag-aware, préserve CSS user)
+9. **Force regen Spectra** (4 stratégies cascadées : mu-plugin → endpoint native → temp-publish trick → manual)
+10. **Validation visuelle** via screenshot agent-browser, retry si défaut détecté
+
+Tu reçois une URL d'édition Gutenberg + screenshots des sections + URL frontend. Tu vérifies, tu modifies via Gutenberg admin (le CSS persiste car dans le meta natif Spectra, pas inline), tu publies.
+
+---
+
+## Architecture
+
 ```
-✅ Page créée en 1 min 47s
+SKILL.md                            ← Entry point (workflow + qui lit quoi quand)
 
-📊 Composition
-   • 23 blocs (15 uagb + 8 core)
-   • 9 variables Astra utilisées (--ast-global-color-0..8)
-   • Schema FAQPage activé
-   • 0 hex hardcodé
-   • 0 warning Gutenberg
+references/                         ← Knowledge base critique (LIRE EN PREMIER)
+├── spectra-attributes-quirks.md    ← 17 pièges Spectra documentés (OBLIGATOIRE)
+├── i18n-rules.md                   ← FR : entities + nbsp typo (OBLIGATOIRE FR)
+├── persistent-css-overrides.md     ← _uag_custom_page_level_css (la SEULE technique fiable)
+├── spectra-icons-list.md           ← whitelist icônes validées
+├── gutenberg-core-blocks.md        ← 30+ blocs core/* curés
+├── astra-page-template-rules.md    ← anti double-H1, configurations Astra
+├── apache-mutu-pitfalls.md         ← o2switch / OVH : auth strip, LiteSpeed
+├── images-ratios.md                ← ratio attendu par pattern
+├── spectra-blocks-catalog.md       ← 49 blocs uagb avec attributs
+├── intent-to-block-routing.md      ← table de décision intent → bloc
+├── section-rhythm.md               ← convention alternance bg
+├── semantic-color-roles.md         ← slots GARANTIS vs VARIABLES
+├── design-system-tokens.md         ← convention tokens
+├── block-markup-syntax.md          ← syntaxe Gutenberg comments
+├── mu-plugin-companion.md          ← installer le mu-plugin compagnon
+└── spectra-demo-reference.md       ← analyse design Spectra Natures
 
-🔗 URL d'édition  : https://monsite.com/wp-admin/post.php?post=42&action=edit
-🔗 Aperçu draft   : https://monsite.com/?page_id=42&preview=true
+patterns/                           ← Comment construire (PAS du copier-coller) — 20 patterns
+├── hero-image-overlay.md            hero-cta-split.md
+├── stats-bar-editorial.md           stats-counters.md
+├── features-numbered.md             features-3-cols.md
+├── about-story-split.md             team-grid.md
+├── testimonials-cards.md            testimonials-grid.md
+├── pricing-3-tiers.md               faq-accordion.md
+├── cta-banner-fullwidth.md          tabs-section.md
+├── slider-carousel.md               timeline-vertical.md
+├── how-to-steps.md                  review-product.md
+├── countdown-launch.md              article-content-rich.md
+
+templates/                          ← Blueprints (composition de patterns) — 8 templates
+├── page-formation.md                page-tarifs.md
+├── page-contact.md                  page-a-propos.md
+├── blog-editorial.md                e-commerce-produit.md
+├── landing-saas.md                  page-agence.md
+└── README.md
+
+workflows/                          ← Pipelines validés
+├── new-page-from-brief.md          ← 10 étapes from brief
+├── refonte-page-existante.md       ← snapshot → analyse → reconstruction
+├── visual-validation-loop.md       ← screenshot + audit + retry max 3
+└── deploy-template.md              ← workflow déploiement template
+
+scripts/                            ← 13 scripts PHP utilitaires
+├── post-page-via-rest.php          ← POST + temp-publish trick
+├── update-page-meta-css.php        ← TAG-AWARE update CSS (préserve user)
+├── regen-spectra.php               ← 4 stratégies cascadées
+├── validate-block-markup.php       ← roundtrip parse/serialize
+├── visual-audit.php                ← 10 checks (WCAG walker, hardcoded color, etc.)
+├── resolve-palette.php             ← resolve var(--ast-global-color-X)
+├── apply-design-tokens.php         ← appliquer tokens design system
+├── snapshot-page.php               ← dump page pour refonte
+├── astra-customizer.php            ← export/apply Astra Customizer
+├── auto-fix-markup.php             ← auto-fix erreurs courantes
+├── detect-environment.php          ← profil site cible
+├── cleanup-test-pages.php          ← cleanup pages test
+└── mu-plugin-skill-test.php        ← mu-plugin compagnon (5 endpoints REST)
+
+modules/                            ← Modules domaine
+├── astra/                          ← Customizer, palette, header/footer
+└── spectra/                        ← Container WOW recipes (12 recettes)
+
+evals/                              ← 10+ prompts test pour mesurer qualité
+screenshots/                        ← Baselines visuelles validées
+examples/                           ← Pages de référence concrètes (PAS le skill)
 ```
-
-Tu ouvres l'URL d'édition. Tu vérifies. Tu ajustes les textes si besoin (les blocs sont 100 % éditables, c'est du Gutenberg standard, pas du custom HTML). Tu publies.
 
 ---
 
@@ -74,44 +150,39 @@ Tu ouvres l'URL d'édition. Tu vérifies. Tu ajustes les textes si besoin (les b
 
 ### 1. Génération depuis un brief
 
-Tu décris ce que tu veux. Le skill route chaque intention vers le bon bloc (Spectra prioritaire pour les compositions visuelles, core pour les blocs atomiques), assemble un markup Gutenberg propre, valide le roundtrip parse/serialize, et POST sur ton site en draft.
+Tu décris ce que tu veux. Le skill route chaque intention vers le bon bloc (Spectra prioritaire pour les compositions visuelles, core pour les blocs atomiques), assemble un markup Gutenberg propre, valide le roundtrip parse/serialize, génère un CSS overrides tag-aware, POST sur ton site en draft, force la régénération Spectra, valide visuellement par screenshot.
 
 ### 2. Refonte intelligente
 
 Tu donnes une URL existante. Le skill snapshot le contenu via REST API, analyse la structure, mappe chaque section vers un pattern Spectra moderne, reconstruit en respectant **chaque mot du contenu original**. Le draft est créé en clone (jamais sur l'URL prod sans validation).
 
-### 3. Templates clic-bouton
+### 3. Templates blueprints
 
-3 templates v0.8 prêts à déployer (page-formation, landing-saas, page-agence). Tu fournis les inputs (titre, prix, contenu), le skill adapte. 5 templates supplémentaires en route pour la v1.0.
+8 templates documentés au format composition de patterns. Page formation, page tarifs, page contact, page à propos, blog editorial, e-commerce produit, landing SaaS, page agence. Chacun avec variables d'entrée, schema SEO (Service / Product / Organization / HowTo / Review), configuration Astra par type de page, variantes par secteur, workflow d'application.
 
 ---
 
-## Ce qui rend ce skill différent
+## CSS persistant : la trouvaille v1.0
 
-### Le bloc `uagb/container` exploité au maximum
+Spectra a un meta natif `_uag_custom_page_level_css` (vérifié dans le code source `class-uagb-post-assets.php:1434`) que le plugin concatène à son stylesheet à chaque rendu. Le skill exploite ce meta avec une **logique tag-aware** :
 
-Toutes les compositions du skill sont wrappées dans `uagb/container` (jamais `core/group`, `core/cover`, `core/columns`). C'est le seul bloc qui te donne :
+```css
+/* === skill-generated v1.0 START === */
+.uagb-block-formation-bts-ndrc-stat-1 .uagb-ifb-title {
+  font-size: 80px !important;
+  color: #FD9800 !important;
+  font-weight: 800 !important;
+}
+/* … autres overrides skill-managed … */
+/* === skill-generated v1.0 END === */
 
-- Backgrounds avancés (gradient mesh, vidéo, parallax, glassmorphism)
-- Dividers haut/bas (curve, wave, tilt, mountain)
-- Box shadow par état (rest + hover)
-- Padding/margin **par breakpoint** (desktop / tablet / mobile indépendants)
-- Min-height en vh, %, em
-- Animations au scroll (fade, slide, zoom)
+/* CSS user post-skill ajouté manuellement dans Spectra UI — préservé */
+.my-custom-class { ... }
+```
 
-→ **12 recettes WOW production-ready** dans [`modules/spectra/container-wow-recipes.md`](modules/spectra/container-wow-recipes.md)
+Quand une session Claude Code régénère le CSS, elle remplace SEULEMENT la section entre balises. Le CSS user ajouté manuellement dans l'admin Spectra (« Page Level CSS » dans la sidebar Gutenberg) est préservé.
 
-### Cohérence design system automatique
-
-Tous les patterns Spectra utilisent `var(--ast-global-color-0..8)` au lieu de hex hardcodés. Résultat : un changement de palette Astra propage instantanément sur **toutes les pages générées** sans intervention. Validé au POC : 199 occurrences héritées, 0 hex hardcoded sur 18 blocs assemblés.
-
-### Validateur roundtrip pré-POST
-
-Le skill ne POST jamais un markup sans avoir vérifié que `serialize_blocks(parse_blocks($content))` égale le source (modulo normalisation cosmétique des `--`). Pas de bloc cassé en prod.
-
-### Auto-fix intelligent
-
-Si un audit visuel détecte un problème (block_id dupliqué, hex hardcodé, H1 multiple), le skill applique la correction automatiquement et re-POST. Maximum 3 retries.
+Documentation complète : [`references/persistent-css-overrides.md`](references/persistent-css-overrides.md)
 
 ---
 
@@ -124,7 +195,7 @@ git clone https://github.com/wpformation/claude-skill-astra-spectra astra-spectr
 
 # 2. Sur ton WP cible : activer Spectra + créer un Application Password
 wp plugin install ultimate-addons-for-gutenberg --activate
-# Puis WP admin > Profil > Application Passwords > new "claude-skill-astra-spectra"
+# Puis WP admin > Profil > Application Passwords > nouveau « claude-skill-astra-spectra »
 
 # 3. Dans Claude Code
 > /astra-spectra
@@ -135,76 +206,32 @@ Détail complet : [INSTALL.md](INSTALL.md)
 
 ---
 
-## Sous le capot
+## Status v1.0
 
-```
-claude-skill-astra-spectra/
-├── SKILL.md                              # routing principal
-├── INSTALL.md / LICENSE / CHANGELOG.md
-├── modules/
-│   ├── spectra/container-wow-recipes.md  # ⭐ 12 recettes WOW
-│   └── astra/customizer-map.md           # cartographie astra-settings
-├── references/
-│   ├── intent-to-block-routing.md        # ⭐ table de décision 45 entrées
-│   ├── spectra-blocks-catalog.md         # 48 blocs uagb/* documentés
-│   ├── block-markup-syntax.md            # syntaxe + 8 règles strictes
-│   └── design-system-tokens.md           # palette Astra ↔ blocs
-├── patterns/                             # 9 patterns hybrides v0.8
-├── templates/                            # 3 templates v0.8 (5 prévus v1.0)
-├── workflows/                            # 3 killer features + visual-loop
-├── scripts/
-│   ├── detect-environment.php            # profil site (Spectra/Astra/palette)
-│   ├── post-page-via-rest.php            # POST automatique vers WP
-│   ├── validate-block-markup.php         # roundtrip parse/serialize
-│   ├── visual-audit.php                  # 12 checks intégrés P0-P3
-│   ├── auto-fix-markup.php               # corrections auto
-│   ├── astra-customizer.php              # export/apply astra-settings
-│   ├── apply-design-tokens.php           # injection palette ou fallback CSS
-│   └── snapshot-page.php                 # dump page existante (refonte)
-├── evals/                                # 10 évals canoniques + runner
-└── lead-magnet/                          # source PDF 32 pages
-```
+✅ **Ce qui est livré**
+
+- Knowledge base complète : 16 documents de référence, dont 7 nouveaux en v1.0 (quirks, i18n, icons-list, core-blocks, astra-templates, apache-mutu, images-ratios)
+- 20 patterns documentés au format « comment construire »
+- 8 templates blueprints (page-formation, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence)
+- 13 scripts PHP utilitaires, dont 2 nouveaux en v1.0 (`update-page-meta-css.php` tag-aware, `regen-spectra.php` 4 stratégies)
+- 4 workflows validés (new-page-from-brief, refonte-page-existante, visual-validation-loop, deploy-template)
+- Mu-plugin compagnon avec 5 endpoints REST custom (setup, upload-image, regen-spectra, inspect-faq, cleanup)
+- Validateur roundtrip parse/serialize anti-crash Gutenberg
+- Audit visuel 10 checks (block_id unique, WCAG walker contraste, hardcoded color avec whitelist contextuelle, alternance bg sections)
+- Baselines screenshots validées sur Astra 4.13.1 + Spectra 2.19.25 + palette_3
+
+🚧 **À venir**
+
+- Test régression production sur cours-ndrc.fr (vrai LiteSpeed + o2switch)
+- Baselines additionnelles palettes default + preset_3 + preset_8 pour `status: stable` officiel par pattern
+- PDF lead magnet 32 pages compilé (Pandoc/Typst)
+- Variantes i18n par pattern (fr-FR.json, en-US.json, de-DE.json, es-ES.json)
+- Workflow GitHub Actions de régression visuelle
+- Endpoint `/skill-test/v1/inspect-icon/{name}` pour auto-validation icônes Spectra
 
 ---
 
-## Status v0.8.1-beta
-
-✅ **Ce qui marche déjà bien**
-- POC validé sur WordPress Playground (3/3 tests passés en ~1h)
-- Test live cours-ndrc.fr (Astra Pro 4.13 + Spectra 2.19) avec 17 blocs valides
-- Architecture stable : modules / references / patterns / templates / workflows / scripts
-- Validator avec normalisation `--` (corrigé 02/05/2026 PM)
-- Pattern info-box compatible rendu Spectra (corrigé 02/05/2026 PM)
-
-🚧 **En route pour v1.0**
-- 6 patterns supplémentaires (tabs, slider, timeline, how-to, review, countdown)
-- 5 templates supplémentaires (blog-editorial, e-commerce-produit, page-tarifs, page-contact, page-a-propos)
-- Liste exhaustive des noms courts d'icônes Spectra
-- Documentation curée des 30+ blocs `core/*`
-- PDF lead magnet compilé + 25 captures Playground
-
-→ Tu trouveras un test concret post-correctifs et une grille de retour dans [CHANGELOG.md](CHANGELOG.md)
-
----
-
-## Le PDF guide premium (gratuit, contre email)
-
-Un guide PDF de **32 pages** avec :
-
-- 12 recettes WOW détaillées avec captures avant/après
-- 8 templates de pages complètes
-- Pilotage Astra Customizer (palette, typo, header, footer)
-- 15 prompts optimisés à copier-coller
-- 15 anti-patterns à éviter
-- 10 erreurs résolues (troubleshooting)
-- Cas d'usage agence (ROI estimé)
-- À propos de l'auteur (14 ans WordPress)
-
-👉 **[Télécharger gratuitement sur wpformation.com/skill-astra-spectra/](https://wpformation.com/skill-astra-spectra/)** *(page en cours de déploiement, ~mi-mai 2026)*
-
----
-
-## Tu veux aller au-delà du skill ?
+## Pour aller au-delà du skill
 
 ### 🎓 Formation WordPress + IA avec Claude Code
 
@@ -218,7 +245,7 @@ Si ce skill te parle et que tu veux **industrialiser ton WordPress avec Claude C
 
 ### 📚 Article complet : Piloter WordPress avec Claude Code
 
-Le contexte, le stack, les 17 skills WPF en prod, le fichier CLAUDE.md commenté ligne par ligne, les MCP utilisés au quotidien, les routines cloud Anthropic.
+Le contexte, le stack, les skills WPF en prod, le fichier CLAUDE.md commenté ligne par ligne, les MCP utilisés au quotidien, les routines cloud Anthropic.
 
 👉 **[Lire « Piloter WordPress avec Claude Code »](https://wpformation.com/claude-code-wordpress/)**
 
@@ -228,17 +255,17 @@ Le contexte, le stack, les 17 skills WPF en prod, le fichier CLAUDE.md commenté
 
 Pas de version premium, pas de dépendance, pas de SaaS qui meurt l'année prochaine. Tout est local, tout est libre.
 
-### 🛡️ Login Armor — 8 couches de sécurité, un seul plugin léger
+### Login Armor — 8 couches de sécurité, un seul plugin léger
 
-Cache `wp-login.php`, brute-force protection en cascade, hardening 13 toggles, 2FA (TOTP + email + backup codes), détection d'incidents temps réel, activity log signé HMAC, headers de sécurité, breach check Have I Been Pwned. **Sub-megabyte ZIP, PHP 8.1+, multisite-ready, suite WP-CLI complète.** Pour les agences et freelances qui livrent des sites prêts à passer un audit.
+Cache `wp-login.php`, brute-force protection en cascade, hardening 13 toggles, 2FA (TOTP + email + backup codes), détection d'incidents temps réel, activity log signé HMAC, headers de sécurité, breach check Have I Been Pwned. Sub-megabyte ZIP, PHP 8.1+, multisite-ready, suite WP-CLI complète. Pour les agences et freelances qui livrent des sites prêts à passer un audit.
 
 👉 **[wpformation.com/login-armor/](https://wpformation.com/login-armor/)** · *Gratuit · sur [WordPress.org](https://wordpress.org/plugins/login-armor/) · publication récente, encore en early adopters*
 
-### 🤖 OGEEAT — l'extension post-SEO pour l'ère de l'IA
+### OGEEAT — l'extension post-SEO pour l'ère de l'IA
 
-Pas un remplaçant de Yoast ou Rank Math, **un complément.** OGEEAT ajoute la couche que les SEO plugins classiques n'ont pas : E-E-A-T (Person + Organization + Article schemas), Score GEO (citabilité IA en 12 critères par article), llms.txt + llms-full.txt enrichis automatiquement, AI Crawler Firewall (bloque GPTBot/CCBot, autorise PerplexityBot/ChatGPT-User), Share with AI (6 moteurs : ChatGPT, Perplexity, Claude, Mistral, Gemini, Grok), Reviewed By pour le YMYL, Trust Signals, audit en masse. **14 modules, GPL forever, zéro premium.**
+Pas un remplaçant de Yoast ou Rank Math, **un complément.** OGEEAT ajoute la couche que les SEO plugins classiques n'ont pas : E-E-A-T (Person + Organization + Article schemas), Score GEO (citabilité IA en 12 critères par article), `llms.txt` + `llms-full.txt` enrichis automatiquement, AI Crawler Firewall (bloque GPTBot/CCBot, autorise PerplexityBot/ChatGPT-User), Share with AI (6 moteurs : ChatGPT, Perplexity, Claude, Mistral, Gemini, Grok), Reviewed By pour le YMYL, Trust Signals, audit en masse. 14 modules, GPL forever, zéro premium.
 
-👉 **[wpformation.com/ogeeat/](https://wpformation.com/ogeeat/)** · *Gratuit · sur [WordPress.org](https://wordpress.org/plugins/ogeeat/) · 5 ★ ★ ★ ★ ★ moyenne sur les premières reviews*
+👉 **[wpformation.com/ogeeat/](https://wpformation.com/ogeeat/)** · *Gratuit · sur [WordPress.org](https://wordpress.org/plugins/ogeeat/)*
 
 ---
 
@@ -246,9 +273,8 @@ Pas un remplaçant de Yoast ou Rank Math, **un complément.** OGEEAT ajoute la c
 
 **Fabrice Ducarme** — formateur WordPress depuis 2012, fondateur de **[WPFormation](https://wpformation.com)**.
 
-- Co-créateur de [WPS Hide Login](https://wordpress.org/plugins/wps-hide-login/) (2M+ installations actives, le plugin qui m'a permis d'arrêter d'expliquer pourquoi /wp-admin/ est une mauvaise idée)
-- 8 plugins publiés sur WordPress.org · 2.1M+ téléchargements cumulés
-- Speaker WordCamp Paris 2013, Paris 2015, Lyon 2022, Marseille 2017
+- Speaker WordCamp Paris 2013, Paris 2015, Marseille 2017, Lyon 2022
+- Plugins publiés sur WordPress.org (2.1M+ téléchargements cumulés)
 - Co-créateur du Meetup WordPress Montpellier
 - Enseignant Pôle Sup (Nîmes)
 - Qualiopi · 14 ans d'expertise WordPress
@@ -261,11 +287,13 @@ Pas un remplaçant de Yoast ou Rank Math, **un complément.** OGEEAT ajoute la c
 
 Issues et pull requests bienvenus. Les domaines où ton aide a le plus de valeur :
 
-- 🎨 **Nouveaux patterns** : tu utilises Spectra et tu as une composition récurrente ? Propose un pattern.
-- 🧪 **Bug reports** : si un block markup échoue à parser sur ton site, ouvre une issue avec le markup en question.
-- 🎨 **Nouveaux templates** : sites clients réussis → templates partageables (anonymisés).
-- 📚 **Doc, traductions, exemples** : toujours bienvenu.
-- 🌍 **Compatibilité** : test sur GeneratePress, Kadence, Hello Elementor, Twenty Twenty-Five → si ça marche, dis-le. Si ça ne marche pas, dis-le aussi.
+- **Nouveaux patterns** : tu utilises Spectra et tu as une composition récurrente non documentée ? Propose un pattern au format « comment construire » (cf `patterns/stats-bar-editorial.md` comme référence)
+- **Nouveau piège Spectra détecté** : ouvre une issue avec Symptôme / Cause / Fix / Détection. Si validé, j'ajoute à `references/spectra-attributes-quirks.md`
+- **Whitelist icônes** : tu as testé une icône hors `references/spectra-icons-list.md` qui marche / ne marche pas ? Document
+- **Bug reports** : si un block markup échoue à parser sur ton site, ouvre une issue avec le markup en question
+- **Nouveaux templates** : sites clients réussis → templates partageables (anonymisés)
+- **Compatibilité multi-thèmes** : tests sur GeneratePress, Kadence, Hello Elementor, Twenty Twenty-Five → si ça marche, dis-le. Si ça ne marche pas, dis-le aussi.
+- **Doc, traductions, exemples** : toujours bienvenu
 
 ---
 
@@ -273,7 +301,7 @@ Issues et pull requests bienvenus. Les domaines où ton aide a le plus de valeur
 
 MIT — voir [LICENSE](LICENSE).
 
-Tu peux le forker, le modifier, l'utiliser commercialement, en faire un produit. Si tu construis quelque chose de cool dessus, je serais ravi de le voir : ping-moi sur [LinkedIn](https://www.linkedin.com/in/fabriceducarme/).
+Tu peux le forker, le modifier, l'utiliser commercialement, en faire un produit. Si tu construis quelque chose dessus, je serais ravi de le voir : ping-moi sur [LinkedIn](https://www.linkedin.com/in/fabriceducarme/).
 
 ---
 
@@ -281,9 +309,9 @@ Tu peux le forker, le modifier, l'utiliser commercialement, en faire un produit.
 
 - 🌐 [WPFormation.com](https://wpformation.com)
 - 🎓 [Formation WordPress + IA](https://wpformation.com/formation-wordpress/)
-- 📚 [Article Claude Code + WP](https://wpformation.com/claude-code-wordpress/)
+- 📚 [Article Claude Code + WordPress](https://wpformation.com/claude-code-wordpress/)
 - 🛡️ [Plugin Login Armor](https://wpformation.com/login-armor/)
-- 🍽️ [Plugin OGEEAT](https://wpformation.com/ogeeat/)
+- 🤖 [Plugin OGEEAT](https://wpformation.com/ogeeat/)
 - 💼 [LinkedIn Fabrice Ducarme](https://www.linkedin.com/in/fabriceducarme/)
 - 🐦 [Twitter @WPFormation](https://x.com/wpformation)
 
