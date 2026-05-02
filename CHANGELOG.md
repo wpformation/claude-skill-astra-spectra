@@ -15,6 +15,65 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 - Article WPFormation dédié
 - Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
 
+## [0.9.4-beta] — 2026-05-02 (15h)
+
+### 🔒 CSS overrides PERSISTANTS via meta natif Spectra
+
+> **Verdict utilisateur** : « Dès que je retouche la page en la modifiant via l'éditeur classique, je perds tous les CSS que tu as intégrés. »
+
+#### Cause racine
+
+Les **styles inline injectés dans le innerHTML** d'un bloc Spectra (`<p style="font-size:80px">227</p>`) sont **strippés par Gutenberg dès le premier save** via l'éditeur. Le parser regenère le innerContent à partir du JSON `attrs` et ignore tout HTML inline qui n'est pas dans le schéma de bloc. Conséquence : le workaround v0.9.3 ne survit pas à une édition utilisateur.
+
+#### Solution propre : `_uag_custom_page_level_css`
+
+Spectra a un meta natif `_uag_custom_page_level_css` que `UAGB_Post_Assets::common_function_for_assets_preparation` concatène à son stylesheet à chaque rendu (vérifié dans le code source `class-uagb-post-assets.php:1434`) :
+
+```php
+$custom_css = get_post_meta( $this->post_id, '_uag_custom_page_level_css', true );
+if ( ! empty( $custom_css ) ) {
+    $this->stylesheet .= UAGB_Admin_Helper::sanitize_inline_css( $custom_css );
+}
+```
+
+Le CSS y est stocké **séparément du `post_content`** → Gutenberg ne le touche jamais lors d'une édition.
+
+#### Persistance prouvée à travers 3 éditions
+
+Test du 02/05/2026 sur loginarmor-dev (Astra 4.13.1 + Spectra 2.19.25 + palette_3) :
+- Page 45 modifiée 3× via REST API (équivalent à éditer + sauvegarder dans Gutenberg)
+- Chaque save : `post_content` re-parsé → strip de tout `style="..."` inline
+- `_uag_custom_page_level_css` reste **intouché** (5200 chars stables)
+- Les classes CSS ciblées (`.uagb-block-v93-stat-1`, etc.) restent stables dans le content
+- **Résultat** : tous les chiffres énormes / guillemets / accent lines persistent visuellement après chaque édition
+
+Baseline : `screenshots/loginarmor-dev-palette3/v094-after-gutenberg-edit-fullpage.png`
+
+#### Nouveau fichier dans le skill
+
+- **`templates/landing-formation-complete-page-css.css`** (5,2 KB) : CSS overrides versionnés et réutilisables. Cible les classes `.uagb-block-v93-{section}-{element}` stables. Inclut media queries responsive (1024 / 600 px).
+
+#### Nouveau référence
+
+- **`references/persistent-css-overrides.md`** : doc complète de la technique. Explique le bug Spectra, la solution `_uag_custom_page_level_css`, les conventions naming, le workflow d'injection, les limitations connues (LiteSpeed cache, sanitize_inline_css filters).
+
+#### Workflow skill mis à jour
+
+```
+1. Génération markup → POST /wp-json/wp/v2/pages
+2. Génération CSS overrides → meta._uag_custom_page_level_css (NOUVEAU)
+3. Régénération Spectra assets → /skill-test/v1/regen-spectra
+4. Hit URL frontend (force pipeline) → temp-publish trick si draft
+5. Validation visuelle agent-browser
+```
+
+#### Stats v0.9.4
+
+- **0 inline style** dans le markup template (tous retirés)
+- **5,2 KB de CSS overrides** versionnés dans `templates/`
+- **3 éditions Gutenberg simulées** : CSS persiste à travers chaque save
+- **Bonus** : Astra `.entry-content { padding-bottom: 0 }` injecté pour résoudre la marge bottom orpheline du dernier bloc alignfull (issue v0.9.3)
+
 ## [0.9.3-beta] — 2026-05-02 (14h)
 
 ### 🎨 Refonte WOW — Stats drama + Testimonials grands guillemets + 3 mini-cards éditoriales

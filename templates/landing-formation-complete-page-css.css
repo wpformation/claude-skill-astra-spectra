@@ -1,0 +1,159 @@
+/* === SKILL ASTRA-SPECTRA — Custom page-level CSS overrides ===
+   Persiste à travers les éditions Gutenberg (meta natif Spectra)
+   Workaround pour le bug Spectra v2.19 : <style id="uagb-style-frontend-X"> non injecté
+*/
+
+/* Stats — chiffres 80px orange */
+.uagb-block-v93-stat-1 .uagb-ifb-title,
+.uagb-block-v93-stat-2 .uagb-ifb-title,
+.uagb-block-v93-stat-3 .uagb-ifb-title,
+.uagb-block-v93-stat-4 .uagb-ifb-title {
+  font-size: 80px !important;
+  color: #FD9800 !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: -3px !important;
+  margin: 0 !important;
+}
+
+/* Recipe story — chiffres 88px orange */
+.uagb-block-v93-recipe-1-num .uagb-ifb-title,
+.uagb-block-v93-recipe-2-num .uagb-ifb-title,
+.uagb-block-v93-recipe-3-num .uagb-ifb-title {
+  font-size: 88px !important;
+  color: #FD9800 !important;
+  font-weight: 800 !important;
+  line-height: 0.9 !important;
+  letter-spacing: -3px !important;
+  margin: 0 !important;
+}
+
+/* Recipe story — labels uppercase 18px bold */
+.uagb-block-v93-recipe-1-num .uagb-ifb-desc,
+.uagb-block-v93-recipe-2-num .uagb-ifb-desc,
+.uagb-block-v93-recipe-3-num .uagb-ifb-desc {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #0F172A !important;
+  margin-top: 12px !important;
+}
+
+/* Features — numéros 01/02/03 48px orange */
+.uagb-block-v93-feat-1-num .uagb-ifb-title,
+.uagb-block-v93-feat-2-num .uagb-ifb-title,
+.uagb-block-v93-feat-3-num .uagb-ifb-title {
+  font-size: 48px !important;
+  color: #FD9800 !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: -2px !important;
+  margin: 0 !important;
+}
+
+/* Features — labels THÉORIE/PRATIQUE/AUTO-ÉVALUATION 13px tracking */
+.uagb-block-v93-feat-1-num .uagb-ifb-desc,
+.uagb-block-v93-feat-2-num .uagb-ifb-desc,
+.uagb-block-v93-feat-3-num .uagb-ifb-desc {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #454F5E !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2.5px !important;
+}
+
+/* Testimonials — guillemet 120px orange display */
+.uagb-block-v93-testi-1-quote .uagb-ifb-title,
+.uagb-block-v93-testi-2-quote .uagb-ifb-title,
+.uagb-block-v93-testi-3-quote .uagb-ifb-title {
+  font-size: 120px !important;
+  color: #FD9800 !important;
+  font-weight: 800 !important;
+  line-height: 0.4 !important;
+  letter-spacing: -4px !important;
+  margin: 0 0 -20px !important;
+}
+
+/* Hero H1 — 76px desktop dramatique */
+.uagb-block-v93-hero-text .uagb-ifb-title {
+  font-size: 76px !important;
+  font-weight: 800 !important;
+  line-height: 1.05 !important;
+  letter-spacing: -2px !important;
+  color: #ffffff !important;
+}
+@media (max-width: 1024px) {
+  .uagb-block-v93-hero-text .uagb-ifb-title { font-size: 54px !important; }
+}
+@media (max-width: 600px) {
+  .uagb-block-v93-hero-text .uagb-ifb-title { font-size: 38px !important; line-height: 1.15 !important; }
+}
+
+/* Section headings — 52px H2 dramatiques */
+.uagb-block-v93-stats-title .uagb-ifb-title,
+.uagb-block-v93-features-title .uagb-ifb-title,
+.uagb-block-v93-story-title .uagb-ifb-title,
+.uagb-block-v93-testi-title .uagb-ifb-title,
+.uagb-block-v93-faq-title .uagb-ifb-title {
+  font-size: 52px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -1.5px !important;
+}
+@media (max-width: 1024px) {
+  .uagb-block-v93-stats-title .uagb-ifb-title,
+  .uagb-block-v93-features-title .uagb-ifb-title,
+  .uagb-block-v93-story-title .uagb-ifb-title,
+  .uagb-block-v93-testi-title .uagb-ifb-title,
+  .uagb-block-v93-faq-title .uagb-ifb-title { font-size: 40px !important; }
+}
+@media (max-width: 600px) {
+  .uagb-block-v93-stats-title .uagb-ifb-title,
+  .uagb-block-v93-features-title .uagb-ifb-title,
+  .uagb-block-v93-story-title .uagb-ifb-title,
+  .uagb-block-v93-testi-title .uagb-ifb-title,
+  .uagb-block-v93-faq-title .uagb-ifb-title { font-size: 30px !important; }
+}
+
+/* CTA final H2 — 62px dramatique */
+.uagb-block-v93-cta-final-text .uagb-ifb-title {
+  font-size: 62px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -1.5px !important;
+  color: #ffffff !important;
+}
+@media (max-width: 1024px) {
+  .uagb-block-v93-cta-final-text .uagb-ifb-title { font-size: 46px !important; }
+}
+@media (max-width: 600px) {
+  .uagb-block-v93-cta-final-text .uagb-ifb-title { font-size: 32px !important; }
+}
+
+/* Eyebrows — 15px tracking 4px orange uppercase */
+.uagb-ifb-title-prefix {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #FD9800 !important;
+  letter-spacing: 4px !important;
+  text-transform: uppercase !important;
+}
+
+/* Avatars circulaires testimonials — border subtle */
+.uagb-block-v93-testi-1-avatar img,
+.uagb-block-v93-testi-2-avatar img,
+.uagb-block-v93-testi-3-avatar img {
+  border: 2px solid #fafafa !important;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.08) !important;
+}
+
+/* Stats accent line orange sous chaque chiffre */
+.uagb-block-v93-stat-1,
+.uagb-block-v93-stat-2,
+.uagb-block-v93-stat-3,
+.uagb-block-v93-stat-4 {
+  border-bottom: 4px solid #FD9800 !important;
+}
+
+/* Astra page padding-bottom reset si dernier bloc alignfull */
+.entry-content > .alignfull:last-child { margin-bottom: 0 !important; }
+.entry-content { padding-bottom: 0 !important; }
