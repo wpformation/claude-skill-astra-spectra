@@ -1,10 +1,30 @@
 # Workflow — Boucle de validation visuelle (auto-retries)
 
+> 🔴 **GATE NON-NÉGOCIABLE** : ce workflow est **OBLIGATOIRE** avant de qualifier une page de WOW / impeccable / propre / éditorial / beau / réussi (cf règle 1 SKILL.md). Sans screenshot validé, l'instance Claude **n'a pas le droit** d'utiliser ces qualificatifs dans sa réponse au user.
+
 > **Killer feature cachée** : génération from brief → screenshot → audit `/impeccable` → re-POST si correction nécessaire → screenshot → … jusqu'à validation. Le tout sans intervention manuelle.
 
 ## Objectif
 
 Garantir qu'une page générée par le skill n'est pas seulement **markup-valide** mais aussi **visuellement correcte** (hiérarchie, spacing, contraste, alignements, design tokens).
+
+> **Origine retour reviewer 02/05/2026** : 3 pages contact générées « techniquement OK » (pre-flight 0 P0/P1, 24 quirks verts) mais qualifiées « moches, niveau débutant » par le user après visualisation. Cause : ce workflow n'était **pas obligatoire** → l'instance Claude a livré sans screenshot.
+
+## Le gate visuel BLOQUANT
+
+Avant TOUTE réponse au user qui annonce un succès design, l'instance Claude DOIT avoir :
+
+1. ✅ Screenshot capturé (cf [`screenshot-options.md`](screenshot-options.md) — 5 options)
+2. ✅ Checklist visuelle minimum passée (10 points dans `screenshot-options.md`)
+3. ✅ Si défaut détecté visuellement : retry markup OU avertir le user explicitement
+
+Si l'un des 3 est ❌, l'instance Claude :
+
+- **Ne qualifie PAS** la composition de WOW / impeccable / propre / éditorial / beau / réussi
+- **Qualifie** la composition de **« non vérifiée visuellement, à juger par le user »**
+- **Demande** au user de screenshotter via Option E de `screenshot-options.md`
+
+Cette règle n'a **pas d'exception**. Aucune.
 
 ## Quand l'utiliser
 

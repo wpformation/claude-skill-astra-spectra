@@ -6,7 +6,7 @@
 [![WordPress 6.0+](https://img.shields.io/badge/WordPress-6.0+-21759b.svg)](https://wordpress.org/)
 [![Spectra Required](https://img.shields.io/badge/Spectra-Required-FF6B00.svg)](https://wpspectra.com/)
 [![Astra Optional](https://img.shields.io/badge/Astra-Optional-blue.svg)](https://wpastra.com/)
-[![Status: v1.0-rc4](https://img.shields.io/badge/Status-v1.0--rc4-orange.svg)](CHANGELOG.md)
+[![Status: v1.0-rc5](https://img.shields.io/badge/Status-v1.0--rc5-orange.svg)](CHANGELOG.md)
 
 ---
 
@@ -16,7 +16,12 @@ Un skill Claude Code, ce n'est pas un thème. Ce n'est pas un kit de templates. 
 
 Ce skill documente ce que personne d'autre n'a documenté pour Spectra :
 
-- **24 pièges** Spectra concrets identifiés en production avec Symptôme / Cause / Fix / Détection (dont 2 nouveaux en v1.0-rc4 : `wp_head` non-hook + double H1 sur block themes FSE)
+- **Guardrails anti-désastre** dans `SKILL.md` (v1.0-rc5) : règles non-négociables qui empêchent les claims aveugles « WOW / impeccable » sans screenshot, l'invention de typo/spacing hors baselines, l'empilage de moves design « créatifs » qui foirent
+- **`references/design-baselines.md`** : rulers concrets typo/spacing/couleurs par section type (Hero / Stats / Features / Testimonials / FAQ / Form / CTA) avec **default + range + hard limit** — anti-improvisation
+- **`references/visual-pitfalls.md`** : 13 moves design qui sonnent créatifs mais foirent en pratique (watermark numérique géant, drop cap CSS, mono fonts isolés, 3+ accents identiques, etc.) avec **Quand c'est OK / Alternative recommandée**
+- **`references/impeccable-bridge.md`** : mapping principes `/impeccable` → patterns Spectra qui les supportent + tags par registre (editorial / minimal / bold / SaaS-corporate / luxe / playful)
+- **`workflows/screenshot-options.md`** : 5 options concrètes pour capturer un screenshot (agent-browser, chrome-headless, Playwright, Playground, demander au user) avec checklist visuelle minimum
+- **24 pièges** Spectra concrets identifiés en production avec Symptôme / Cause / Fix / Détection (dont 2 ajoutés en v1.0-rc4 : `wp_head` non-hook + double H1 sur block themes FSE)
 - **La technique `_uag_custom_page_level_css`** pour styler durablement (le seul moyen pour que le CSS survive aux éditions Gutenberg)
 - **Validateur pre-flight bloqueur** qui parcourt le markup généré et flag les 24 pièges + i18n + conventions AVANT POST
 - **Validateur post-render** qui fetch l'URL frontend après POST et vérifie que `<style id="uagb-style-frontend-X">` est bien injecté + pas de double H1
@@ -83,10 +88,13 @@ references/                         ← Knowledge base critique (LIRE EN PREMIER
 ├── spectra-attributes-quirks.md    ← 24 pièges Spectra documentés (OBLIGATOIRE)
 ├── i18n-rules.md                   ← FR : entities + nbsp typo + apostrophes typo vs ASCII
 ├── persistent-css-overrides.md     ← _uag_custom_page_level_css + workaround Quirk #23
+├── design-baselines.md             ← ⭐ NOUVEAU v1.0-rc5 — rulers typo/spacing par section (anti-improvisation)
+├── visual-pitfalls.md              ← ⭐ NOUVEAU v1.0-rc5 — 13 moves design qui sonnent créatifs mais foirent
+├── impeccable-bridge.md            ← ⭐ NOUVEAU v1.0-rc5 — mapping principes /impeccable → patterns Spectra + tags par registre
 ├── spectra-icons-list.md           ← whitelist icônes validées
 ├── gutenberg-core-blocks.md        ← 30+ blocs core/* curés
 ├── astra-page-template-rules.md    ← anti double-H1, configurations Astra (thèmes classiques)
-├── block-theme-fse-rules.md        ← ⭐ NOUVEAU v1.0-rc4 — Twenty Twenty-Five, Frost, Ollie, etc.
+├── block-theme-fse-rules.md        ← Twenty Twenty-Five, Frost, Ollie, etc.
 ├── apache-mutu-pitfalls.md         ← o2switch / OVH / Hostinger : auth strip, LiteSpeed
 ├── images-ratios.md                ← ratio attendu par pattern
 ├── spectra-blocks-catalog.md       ← 49 blocs uagb avec attributs
@@ -132,7 +140,8 @@ templates/                          ← Blueprints (composition de patterns) —
 workflows/                          ← Pipelines validés
 ├── new-page-from-brief.md          ← 10 étapes from brief (pre-flight check OBLIGATOIRE avant POST)
 ├── refonte-page-existante.md       ← snapshot → analyse → reconstruction
-├── visual-validation-loop.md       ← screenshot + audit + retry max 3
+├── visual-validation-loop.md       ← 🔴 GATE BLOQUANT — screenshot + audit + retry max 3 (renforcé v1.0-rc5)
+├── screenshot-options.md           ← ⭐ NOUVEAU v1.0-rc5 — 5 options concrètes pour capturer un visuel
 └── deploy-template.md              ← workflow déploiement template
 
 scripts/                            ← 15 scripts PHP utilitaires
@@ -223,11 +232,14 @@ Détail complet : [INSTALL.md](INSTALL.md)
 
 ---
 
-## Status v1.0-rc4
+## Status v1.0-rc5
 
 ✅ **Ce qui est livré**
 
-- Knowledge base complète : **17 documents de référence** (quirks, i18n, icons-list, core-blocks, astra-templates, **block-theme-fse-rules** ⭐ nouveau v1.0-rc4, apache-mutu, images-ratios, persistent-css-overrides, design-system-tokens, etc.)
+- **🔴 Guardrails anti-désastre** ⭐ nouveau v1.0-rc5 — règles non-négociables dans `SKILL.md` qui empêchent les claims sans screenshot, l'invention de design hors baselines, l'empilage de 8 sections d'un coup. Avec 6 anti-patterns ❌ et 6 patterns ✅ explicites.
+- **20 documents de référence** ⭐ +3 v1.0-rc5 (`design-baselines.md` rulers concrets, `visual-pitfalls.md` 13 moves qui foirent, `impeccable-bridge.md` mapping principes → patterns)
+- **5 workflows validés** ⭐ +1 v1.0-rc5 (`screenshot-options.md` 5 options concrètes)
+- Knowledge base complète : **20 documents de référence** (quirks, i18n, icons-list, core-blocks, astra-templates, block-theme-fse-rules, apache-mutu, images-ratios, persistent-css-overrides, design-system-tokens, **design-baselines** ⭐, **visual-pitfalls** ⭐, **impeccable-bridge** ⭐, etc.)
 - **24 pièges Spectra documentés** (Symptôme / Cause / Fix / Détection chacun) — 19 en rc1, +3 en rc2, +2 en rc4 (`wp_head` non-hook = quirk #23, double H1 block theme FSE = quirk #24, détectés sur Twenty Twenty-Five + Spectra 2.19 le 02/05/2026)
 - **35+ patterns** documentés au format « comment construire » — couvre les 49 blocs Spectra principaux : hero, stats, features, about-story, team, testimonials, pricing, FAQ, CTA, tabs, slider, timeline, how-to, review, countdown, article-content, **google-maps, modal, marketing-buttons, table-of-contents, forms, post-display (grid/masonry/carousel/timeline), image-gallery, icon-list, inline-notice, social-share, price-list, popup-builder, lottie, star-rating**
 - 8 templates blueprints (page-accueil, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence)

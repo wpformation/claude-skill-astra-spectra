@@ -193,15 +193,61 @@ add_action('rest_api_init', function () {
         'methods' => 'POST',
         'permission_callback' => function () { return current_user_can('manage_options'); },
         'callback' => function ($req) {
-            $pages = get_posts([
-                'post_type' => 'page',
+            // 2 modes : par meta _skill_test_page=1 (default) OU par regex titre (--pattern)
+            $pattern = $req->get_param('pattern'); // ex: '/^(TEST|POC|DEMO|\[skill\])/i'
+            $confirm = (bool) $req->get_param('confirm'); // safety : sans confirm, dry-run
+
+            $found = [];
+
+            // Mode 1 : meta-based
+            $by_meta = get_posts([
+                'post_type' => ['page', 'post'],
                 'posts_per_page' => -1,
                 'meta_key' => '_skill_test_page',
                 'meta_value' => '1',
-                'post_status' => ['publish', 'draft'],
+                'post_status' => ['publish', 'draft', 'pending'],
             ]);
-            foreach ($pages as $p) wp_delete_post($p->ID, true);
-            return ['ok' => true, 'deleted' => count($pages)];
+            foreach ($by_meta as $p) {
+                $found[$p->ID] = ['id' => $p->ID, 'title' => $p->post_title, 'reason' => 'meta'];
+            }
+
+            // Mode 2 : regex titre (si pattern fourni)
+            if ($pattern) {
+                $by_title = get_posts([
+                    'post_type' => ['page', 'post'],
+                    'posts_per_page' => -1,
+                    'post_status' => ['publish', 'draft', 'pending'],
+                ]);
+                foreach ($by_title as $p) {
+                    if (@preg_match($pattern, $p->post_title)) {
+                        $found[$p->ID] = ['id' => $p->ID, 'title' => $p->post_title, 'reason' => $found[$p->ID]['reason'] ?? 'title'];
+                    }
+                }
+            }
+
+            $found = array_values($found);
+
+            if (!$confirm) {
+                return [
+                    'ok' => true,
+                    'mode' => 'dry_run',
+                    'message' => 'Dry run. POST avec confirm=true pour vraiment supprimer.',
+                    'count' => count($found),
+                    'found' => $found,
+                ];
+            }
+
+            $deleted = [];
+            foreach ($found as $f) {
+                $r = wp_delete_post($f['id'], true);
+                if ($r) $deleted[] = $f['id'];
+            }
+            return [
+                'ok' => true,
+                'mode' => 'deleted',
+                'count_deleted' => count($deleted),
+                'deleted_ids' => $deleted,
+            ];
         },
     ]);
 });

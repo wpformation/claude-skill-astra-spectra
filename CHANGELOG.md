@@ -2,6 +2,151 @@
 
 Toutes les modifications notables de ce skill sont documentées dans ce fichier. Format basé sur [Keep a Changelog](https://keepachangelog.com/), versions selon [Semantic Versioning](https://semver.org/).
 
+## [1.0-rc5] — 2026-05-02 (fin de nuit) — Guardrails anti-désastre cross-instance Claude
+
+> **Origine** : retour reviewer 02/05/2026 après 3 pages contact pour cours-ndrc.fr toutes qualifiées « moches, niveau débutant qui n'a jamais touché WordPress » par le user, supprimées. Comparaison directe : la page `loginarmor-dev.local/claude-skill-astra-spectra/` produite par le mainteneur est jugée « très belle, tient la route ». Le reviewer a noté : « le skill v1.0-rc4 est excellent comme knowledge base, mais il assume implicitement que l'instance Claude qui l'utilise a déjà du goût design + discipline visuelle + maîtrise Spectra par expérience. Ces 3 conditions sont VRAIES pour le mainteneur, PAS pour 80% des instances Claude qui vont l'utiliser en prod. »
+
+> **Action** : 9 critiques traitées avec des **guardrails forts** (pas du cosmétique). Le skill est maintenant robuste cross-instance Claude — les instances moins disciplinées ne peuvent plus claim WOW sans preuve, ne peuvent plus inventer typo/spacing hors baselines, ne peuvent plus empiler 8 sections d'un coup.
+
+### 1. SKILL.md — Avertissement gros + règles non-négociables
+
+`SKILL.md` ouvre maintenant avec une section **« ⚠️ AVERTISSEMENT À L'INSTANCE CLAUDE QUI LIT CE SKILL »** qui précède toute autre instruction. Elle contient :
+
+- **Diagnostic honnête** : le skill assume du goût design + discipline. Si tu ne les as pas, RESTE STRICT.
+- **6 règles non-négociables (anti-désastre)** :
+  - 🔴 #1 Gate visuel BLOQUANT — pas de claim WOW sans screenshot
+  - 🔴 #2 Max 3 sections par itération, pas 8
+  - 🔴 #3 Référencer une baseline, ne pas inventer
+  - 🔴 #4 Pas de 2e attempt avant validation user du 1er
+  - 🔴 #5 Pas d'images partagées entre 2 pages du même site
+  - 🔴 #6 Pas plus de 2 occurrences du même accent couleur dans une section
+- **12 anti-patterns instance Claude** sous forme ❌/✅ liste explicite (e.g. « ❌ NE JAMAIS qualifier une page de WOW sans screenshot », « ✅ TOUJOURS référencer une baseline »)
+- **Mode `--strict` recommandé** pour instances sans tooling visuel : reste dans les templates committed, ne propose aucun move design custom
+
+### 2. `references/design-baselines.md` ⭐ nouveau
+
+Rulers concrets pour anti-improvisation. Pour chaque section type (Hero, Stats Bar, Features 3-Cols, Testimonials Cards, FAQ Accordion, Forms, CTA Banner Final), ce fichier donne :
+
+- **Default** — la valeur recommandée
+- **Range** — fourchette acceptable si raison de s'écarter
+- **Hard limit** — au-delà, NE JAMAIS aller sans validation user explicite
+
+Exemples concrets :
+
+| Section / Élément | Default | Range | Hard limit |
+|---|---|---|---|
+| H1 hero desktop | 76px | 60-88px | 100px |
+| Letter-spacing H1 | -2px | -1 à -3 | -4 |
+| Eyebrow font-size | 14px | 13-16px | 18px |
+| Stats numbers desktop | 56px | 48-72px | 88px |
+| Padding hero desktop | 140/140 | 120-200/120-200 | 240/240 |
+| Padding cards | 56/44 | 40-64/32-56 | 80/72 |
+| Avatar testimonial | 64×64 | — | 80×80 |
+
+Plus 4 palettes types pré-validées par registre (Tech / SaaS, Éditorial / formation, E-commerce, Santé / nature).
+
+### 3. `references/visual-pitfalls.md` ⭐ nouveau
+
+13 moves design qui paraissent créatifs mais foirent en pratique. Format **Symptôme du désastre / Pourquoi ça foire / Quand c'est OK / Alternative recommandée** pour chacun :
+
+1. Watermark numérique géant en deco isolée (le « 247 » 480px du reviewer)
+2. Stats asymetric 40/30/20/10 sans calibration typo extrême
+3. Drop cap orange `::first-letter` (Spectra wrap dans des `<span>` qui cassent le sélecteur)
+4. Mono fonts isolés (timestamps en JetBrains Mono dans un design Manrope = perçu comme bug)
+5. 3+ accents couleur identiques dans la même section (saturation orange du reviewer)
+6. Padding éditorial extrême 220/220 sur toutes les sections
+7. `border-radius` extrêmes (0 ou 32px+)
+8. Box-shadows over-the-top (triple shadow + colored shadow + inset)
+9. Animations CSS « subtiles » (float infinite, cubic-bezier overshoot)
+10. Hero overlay opacity 0.92 (image invisible)
+11. Réutiliser la même image entre 2 pages du même site
+12. Trop de sections (8+) en 1 livraison
+13. Auto-claim « WOW / impeccable » sans screenshot
+
+### 4. `references/impeccable-bridge.md` ⭐ nouveau
+
+Mapping entre les principes design `/impeccable` et leur supportabilité dans Spectra. Pour 10 principes courants (ratios typo, palette committed, hiérarchie, drop cap, mono fonts, watermarks, asymetric, motion, glassmorphism, neon glow), ce fichier indique :
+
+- ✅ **Supporté** — implémentation Spectra directe
+- ⚠️ **Supporté avec workaround** — caveats à connaître
+- ⛔ **Non supporté** — alternative recommandée
+
+Plus **6 tags par registre design** (`editorial` / `minimal` / `bold` / `SaaS-corporate` / `luxe` / `playful`) pour filtrer les patterns selon la direction `/impeccable` retenue.
+
+Workflow recommandé `/impeccable` + skill astra-spectra documenté en 6 étapes.
+
+### 5. `workflows/screenshot-options.md` ⭐ nouveau
+
+5 options concrètes pour capturer un screenshot, avec décision tree :
+
+- **Option A** — agent-browser (recommandée) : `agent-browser navigate ... && agent-browser screenshot --full ...`
+- **Option B** — Chrome headless CLI direct : `chrome --headless=new --screenshot=...`
+- **Option C** — Playwright : script Node `chromium.launch()` + `page.screenshot({fullPage: true})`
+- **Option D** — WP Playground (jetable, public)
+- **Option E** — DEMANDER AU USER (fallback obligatoire si A-D indisponibles)
+
+Plus :
+- **Checklist visuelle minimum** post-screenshot (10 points : Lorem Ipsum, double H1, stats empilées, saturation accents, contraste WCAG, etc.)
+- **Format de demande** explicite si tooling absent (template à copier au user)
+- **Logs / debug** si screenshot rate (curl checks pour diagnostiquer)
+
+### 6. `workflows/visual-validation-loop.md` — Gate BLOQUANT explicite
+
+Le workflow était déjà présent mais **non obligatoire**. v1.0-rc5 le rend **non-négociable** :
+
+```
+Avant TOUTE réponse au user qui annonce un succès design,
+l'instance Claude DOIT avoir :
+  1. ✅ Screenshot capturé
+  2. ✅ Checklist visuelle minimum passée
+  3. ✅ Si défaut détecté : retry markup OU avertir le user explicitement
+
+Si l'un des 3 est ❌, l'instance Claude ne qualifie PAS la composition de
+WOW / impeccable / propre / éditorial / beau / réussi.
+Cette règle n'a PAS d'exception. Aucune.
+```
+
+### 7. Mu-plugin compagnon — endpoint `/cleanup` enrichi
+
+`scripts/mu-plugin-skill-test.php` endpoint REST `POST /wp-json/skill-test/v1/cleanup` enrichi :
+
+- **2 modes** : par meta `_skill_test_page=1` (default) OU par regex titre (`pattern` param)
+- **Safety** : `confirm=false` par défaut → dry-run qui liste sans supprimer. `confirm=true` requis pour delete réel
+- Retour JSON avec `mode: dry_run | deleted`, `count`, `found[]` ou `deleted_ids[]`
+
+Le bug `count($argv) sur null` mentionné par le reviewer a déjà été fixé en rc1+ (guards `isset($GLOBALS['argv']) && is_array(...)` partout). Le reviewer travaillait probablement sur un fork plus ancien — confirmation : `scripts/cleanup-test-pages.php` lignes 36 et 116-118 sont safe.
+
+### 8. README — guardrails mis en avant en intro
+
+Section « Ce qui rend ce skill différent » mise à jour pour mettre les guardrails v1.0-rc5 en tête (avant les 24 quirks Spectra). Les instances Claude qui scannent le README en premier voient immédiatement les anti-désastres au lieu de plonger dans la knowledge base et de se croire prêtes.
+
+### 9. Note sur les 8 examples committed (pas de changement code)
+
+Le reviewer demande 8 examples committed avec markup + CSS + 4-5 screenshots PNG par template. **Action différée v1.0 stable** car demande ~1 jour de travail (générer 7 nouveaux templates + screenshots × 4-5 viewports × 7 = 28-35 PNG à produire et committer). En attendant, le skill marketing « 35+ patterns » reste honnête : chaque pattern est documenté avec Symptôme/Variables/Markup/CSS/Pièges, mais pas screenshooté individuellement. Item explicite dans la roadmap v1.0 stable.
+
+### Score de couverture v1.0-rc5
+
+| Critique reviewer | État |
+|---|---|
+| #1 Pas de gate visuel BLOQUANT | ✅ Done — règle 1 SKILL.md + visual-validation-loop.md gate explicite |
+| #2 Pre-flight valide la syntaxe, pas le rendu | ✅ Done — `references/visual-pitfalls.md` + checklist post-screenshot |
+| #3 Aucune baseline typo/spacing | ✅ Done — `references/design-baselines.md` (rulers Hero/Stats/Features/Testi/FAQ/Form/CTA) |
+| #4 /impeccable ne compose pas avec astra-spectra | ✅ Done — `references/impeccable-bridge.md` + 6 tags par registre |
+| #5 Examples/ pauvre (1 seul exemple) | 📅 Différé v1.0 stable — note dans CHANGELOG |
+| #6 Skill assume un niveau qu'il n'a pas | ✅ Done — WARNING + mode --strict + 12 anti-patterns |
+| #7 Anti-patterns instance Claude | ✅ Done — 6 ❌ + 6 ✅ dans SKILL.md |
+| #8 Bug `cleanup-test-pages.php` | ✅ Vérifié — déjà fixé en rc1+. Endpoint REST enrichi en bonus |
+| #9 Workflow visual-validation non documenté | ✅ Done — `workflows/screenshot-options.md` (5 options + decision tree) |
+
+### Reste pour v1.0 stable
+
+- 8 examples committed avec markup + CSS + screenshots (~1 jour de travail)
+- Tagger explicitement chaque pattern dans frontmatter `tags: [editorial, bold, ...]`
+- Validation indépendante par reviewer externe sur 3+ stacks (Twenty Twenty-Four, Frost, Ollie)
+- Workflow GitHub Actions de régression visuelle automatisée
+
+---
+
 ## [1.0-rc4] — 2026-05-02 (fin de nuit) — Quirks #23 + #24 découverts en test live + workarounds mu-plugin + post-render-check
 
 > **Origine** : test du skill sur loginarmor-dev.local pour générer une page de présentation du skill lui-même (méta), en mode **full Spectra sans Astra** (thème Twenty Twenty-Five FSE block theme). Test réussi visuellement, mais 2 nouveaux pièges Spectra/WordPress non documentés détectés en cours de pipeline.
