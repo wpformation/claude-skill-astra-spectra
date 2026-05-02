@@ -2,6 +2,102 @@
 
 Toutes les modifications notables de ce skill sont documentées dans ce fichier. Format basé sur [Keep a Changelog](https://keepachangelog.com/), versions selon [Semantic Versioning](https://semver.org/).
 
+## [1.0.0] — 2026-05-02 (16h) — KNOWLEDGE BASE COMPLÈTE
+
+### 🎯 Refonte fondamentale : du template au vrai skill
+
+> **Verdict utilisateur sur v0.9.4** : « Tu viens de mettre ce CSS en dur. Le but d'un skill, c'est de donner les armes à la session Claude Code qui va prendre le relais. Je veux un vrai skill qui explique concrètement comment fonctionne Spectra, pas une démo qui serait uniquement une copie ou un template. »
+
+#### Ce qui change radicalement
+
+**v0.9.x = démo statique pour cours-ndrc.fr / loginarmor-dev** (markup hardcodé avec `block_id` préfixés `v93-`, CSS spécifique à une page).
+
+**v1.0 = base de connaissance opérationnelle** réutilisable par toute session Claude Code, sur tout site Astra+Spectra, pour générer des pages **du premier coup** sans reproduire les 17 pièges détectés en production.
+
+#### Nouveau : 7 documents de référence (knowledge base critique)
+
+- **`references/spectra-attributes-quirks.md`** : les **17 pièges** Spectra documentés avec Symptôme / Cause / Fix / Détection. Lecture obligatoire avant toute génération.
+- **`references/i18n-rules.md`** : règles strictes français (HTML entities `&eacute;`, espaces insécables `&nbsp;` typo, em-dash `&mdash;`, apostrophe `&rsquo;`)
+- **`references/spectra-icons-list.md`** : whitelist icônes Font Awesome 5 Free validées + fallback strategy (numéros éditoriaux 01/02/03)
+- **`references/gutenberg-core-blocks.md`** : 30+ blocs `core/*` curés avec table de routing core vs uagb
+- **`references/astra-page-template-rules.md`** : forcer no-title pour éliminer le double H1, configurations Astra meta par type de page
+- **`references/apache-mutu-pitfalls.md`** : pièges hébergeurs mutualisés (o2switch, OVH, Hostinger) — auth strip, LiteSpeed cache, rate limiting, App Passwords disabled, wp-cron disabled
+- **`references/images-ratios.md`** : ratios attendus par pattern (16:9 hero, 16:5 story, 1:1 avatar, etc.)
+
+#### Nouveau : 9 patterns documentés
+
+Pattern = guide « comment construire » avec structure, variables, markup squelette, CSS overrides obligatoires, pièges spécifiques, variantes, ratio image, tests post-génération. **Pas un template à copier-coller.**
+
+- **`patterns/stats-bar-editorial.md`** : 4 stats horizontales avec drama (eyebrow + heading + chiffres 80px + accent line orange)
+- **`patterns/features-numbered.md`** : 3 features avec numéros 01/02/03 (anti-piège icônes)
+- **`patterns/testimonials-cards.md`** : 3 cards avec grands guillemets 120px et avatars circulaires
+- **`patterns/tabs-section.md`** : section avec onglets cliquables `uagb/tabs`
+- **`patterns/slider-carousel.md`** : carrousel autoplay + dots `uagb/slider`
+- **`patterns/timeline-vertical.md`** : timeline chronologique `uagb/timeline`
+- **`patterns/how-to-steps.md`** : tutoriel pas-à-pas avec schema HowTo SEO automatique
+- **`patterns/review-product.md`** : review produit avec schema Review + étoiles SERP
+- **`patterns/countdown-launch.md`** : compte à rebours événement `uagb/countdown`
+
+Patterns existants conservés et mis à jour : `hero-image-overlay`, `hero-cta-split`, `features-3-cols`, `about-story-split`, `pricing-3-tiers`, `faq-accordion`, `cta-banner-fullwidth`, `testimonials-grid`, `team-grid`, `stats-counters`, `article-content-rich`.
+
+**Total : 20 patterns documentés**.
+
+#### Nouveau : 5 templates blueprints
+
+Template = composition de patterns avec variables d'entrée, schema SEO, CSS overrides, configuration Astra, variantes par secteur, workflow d'application. **Pas un fichier markup hardcodé**.
+
+- **`templates/page-tarifs.md`** : page tarifs SaaS / formation (3 tiers + comparison table + testimonials + garanties + FAQ)
+- **`templates/page-contact.md`** : page contact pro (hero + infos 4-cols + form + map + FAQ)
+- **`templates/page-a-propos.md`** : page À propos E-E-A-T (story + valeurs + équipe + timeline + stats + testimonials)
+- **`templates/blog-editorial.md`** : page blog éditorial (hero + filtres catégories + grid + newsletter + featured)
+- **`templates/e-commerce-produit.md`** : page produit e-commerce (hero + galerie + features + review + testimonials + pricing + FAQ + CTA, schema Product)
+
+Templates existants conservés : `page-formation`, `landing-saas`, `page-agence`.
+
+**Total : 8 templates documentés**.
+
+#### Nouveau : 2 scripts utilitaires critiques
+
+- **`scripts/update-page-meta-css.php`** : update `_uag_custom_page_level_css` **TAG-AWARE**. Encapsule le CSS skill-generated entre balises `/* === skill-generated v1.0 START/END === */`. Préserve le CSS user existant en dehors des balises. Permet versioning et migrations.
+- **`scripts/regen-spectra.php`** : force régénération assets Spectra avec **4 stratégies cascadées** (mu-plugin compagnon → Spectra native endpoint → temp-publish trick → manual fallback wp-cli).
+
+#### Cleanup
+
+- **Retiré du skill** : `templates/landing-formation-complete-markup.html` et `templates/landing-formation-complete-page-css.css` (déplacés vers `examples/`)
+- **examples/README.md** : explicite que ces fichiers sont des références concrètes, **PAS le skill**, ne PAS copier-coller (block_id `v93-` spécifiques à loginarmor-dev)
+
+#### SKILL.md refondu
+
+Entry point clair qui dit :
+1. **Lecture obligatoire en premier** : 3 docs critiques (quirks + i18n + persistent-css)
+2. **Architecture du skill** : 16 references + 20 patterns + 8 templates + 4 workflows + 13 scripts
+3. **Workflow type** en 10 étapes : detect → read knowledge → choose patterns → variables → generate → validate → CSS → POST → screenshot → deliver
+4. **Conventions strictes** naming, style, contenu
+5. **Table troubleshooting** : symptôme → référence → fix
+6. **Mantra** : « Une page non screenshootée = une page non testée »
+
+#### Pour la session Claude Code qui hérite du skill
+
+Tu n'as plus besoin de :
+- Deviner les noms d'attributs Spectra → c'est dans `spectra-blocks-catalog.md`
+- Tester quelles icônes marchent → whitelist dans `spectra-icons-list.md`
+- Reconstruire le markup à partir de zéro → patterns documentent la structure
+- Réinventer la couche CSS → `persistent-css-overrides.md` explique la technique
+- Galérer avec les accents français → `i18n-rules.md` table complète
+- Découvrir les 17 pièges → `spectra-attributes-quirks.md` les liste tous
+
+Tu lis le bon doc, tu appliques, tu screenshootes, tu valides.
+
+#### Stats v1.0
+
+- **16 references** documents (knowledge base critique)
+- **20 patterns** documentés (comment construire)
+- **8 templates** blueprints (composition de patterns)
+- **4 workflows** validés (new-from-brief, refonte, visual-validation-loop, deploy-template)
+- **13 scripts** PHP (post, update-css tag-aware, regen, validate, audit, resolve, etc.)
+- **17 pièges Spectra** documentés avec fix
+- **0 fichier hardcoded** dans `templates/` (tous déplacés vers `examples/`)
+
 ## [Unreleased]
 
 ### À venir (v1.0 finale)
