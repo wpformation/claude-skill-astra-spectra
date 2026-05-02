@@ -144,8 +144,12 @@ function wpf_skill_visual_audit($content) {
 
   $blocks = parse_blocks($content);
 
-  // Walker récursif. $depth=0 pour les containers racine, >0 pour les nested.
-  $walker = function ($blocks, $depth = 0) use (&$walker, &$report) {
+  // Walker récursif AVEC PROPAGATION DE CURRENT_BG (v0.9.1).
+  // $depth = 0 pour root containers, >0 pour nested.
+  // $current_bg = hex du parent courant (ou null si pas de bg défini en amont).
+  // $is_dark_context = true si le parent a un bg sombre, overlay sombre, image+overlay, etc.
+  //                    Permet de whitelister #ffffff text_inverse legitime.
+  $walker = function ($blocks, $depth = 0, $current_bg = null, $is_dark_context = false) use (&$walker, &$report) {
     foreach ($blocks as $b) {
       if (empty($b['blockName'])) continue;
       $report['stats']['block_count']++;
@@ -180,8 +184,54 @@ function wpf_skill_visual_audit($content) {
         }
       }
 
-      // Check 3 : couleurs hardcodées (hex, rgb, rgba, hsl, hsla)
-      // Étendu aux box-shadow et aux dividers couleur.
+      // Détection bg contextuel pour le bloc courant (avant le check 3)
+      // - Si le bloc lui-même a un bg → c'est son contexte ET celui de ses enfants
+      // - Sinon, le contexte est hérité du parent (current_bg + is_dark_context)
+      $own_bg = $b['attrs']['backgroundColor'] ?? null;
+      $own_bg_type = $b['attrs']['backgroundType'] ?? null;
+      $own_overlay_type = $b['attrs']['overlayType'] ?? null;
+      $own_bg_image_color = $b['attrs']['backgroundImageColor'] ?? null;
+      $own_gradient_c1 = $b['attrs']['backgroundGradientColor1'] ?? null;
+      $own_gradient_c2 = $b['attrs']['backgroundGradientColor2'] ?? null;
+      $has_image_bg = ($own_bg_type === 'image');
+      $has_overlay = (!empty($own_overlay_type));
+      $has_gradient_bg = ($own_bg_type === 'gradient');
+
+      // Résout le bg du bloc courant (utilisé pour le check WCAG)
+      $own_bg_resolved = $own_bg ? wpf_skill_resolve_to_hex($own_bg) : null;
+      // Pour les bgs gradient/image+overlay, on prend la couleur dominante (color1 ou backgroundImageColor)
+      if (!$own_bg_resolved && $has_gradient_bg && $own_gradient_c1) {
+        $own_bg_resolved = wpf_skill_resolve_to_hex($own_gradient_c1);
+      }
+      if (!$own_bg_resolved && $has_image_bg && $own_bg_image_color) {
+        $own_bg_resolved = wpf_skill_resolve_to_hex($own_bg_image_color);
+      }
+
+      // Le bg "effectif" pour les enfants = own_bg si défini, sinon current_bg hérité
+      $effective_bg = $own_bg_resolved ?: $current_bg;
+      // Le contexte dark se propage si :
+      // - on est sur un bg sombre (luminance < 0.4)
+      // - OU on a une image+overlay (assumé dark par défaut)
+      // - OU on a un gradient avec color1 sombre
+      $own_is_dark = false;
+      if ($own_bg_resolved && function_exists('wpf_skill_palette_luminance')) {
+        $lum = wpf_skill_palette_luminance($own_bg_resolved);
+        $own_is_dark = ($lum < 0.4);
+      } elseif ($own_bg_resolved) {
+        // Heuristique fallback : hex sombre = somme des canaux faible
+        $hex = ltrim($own_bg_resolved, '#');
+        if (strlen($hex) === 6) {
+          $r = hexdec(substr($hex, 0, 2));
+          $g = hexdec(substr($hex, 2, 2));
+          $b_ch = hexdec(substr($hex, 4, 2));
+          $own_is_dark = (($r + $g + $b_ch) / 3 < 100);
+        }
+      }
+      $effective_dark = $own_is_dark || $has_image_bg || $has_overlay || $is_dark_context;
+
+      // Check 3 : couleurs hardcodées — AVEC WHITELIST CONTEXTUELLE (v0.9.1)
+      // #ffffff sur context dark = legitime text_inverse, ne PAS flagger
+      // Idem pour les colors text qui sont en #ffffff sur un container avec image+overlay parent
       $color_attrs = [
         'backgroundColor', 'textColor', 'iconColor', 'headingColor',
         'subHeadingColor', 'borderColor', 'color', 'overallBorderColor',
@@ -191,14 +241,31 @@ function wpf_skill_visual_audit($content) {
         'hoverBackgroundColor', 'hoverColor',
         'label_color', 'icon_color', 'icon_bg_color',
       ];
+      $text_color_attrs = ['headingColor', 'subHeadingColor', 'descColor', 'color', 'textColor', 'label_color', 'iconColor', 'iconHoverColor'];
+
       foreach ($color_attrs as $attr) {
         if (isset($b['attrs'][$attr]) && wpf_skill_is_hardcoded_color($b['attrs'][$attr])) {
           $val = $b['attrs'][$attr];
+          $val_lower = strtolower($val);
           $report['stats']['hardcoded_color_count']++;
-          // box-shadow rgba(0,0,0,...) très courant et acceptable (drop shadow neutre) → P3, pas P1
+
           $is_box_shadow = (strpos($attr, 'boxShadow') !== false);
           $is_neutral_rgba = (strpos($val, 'rgba(0,0,0') === 0 || strpos($val, 'rgba(0, 0, 0') === 0);
-          $is_neutral_hex = in_array(strtolower($val), ['#fff', '#ffffff', '#000', '#000000'], true);
+          $is_neutral_hex = in_array($val_lower, ['#fff', '#ffffff', '#000', '#000000'], true);
+          $is_text_attr = in_array($attr, $text_color_attrs, true);
+          $is_white = in_array($val_lower, ['#fff', '#ffffff'], true);
+
+          // WHITELIST v0.9.1 : #ffffff sur text attr dans un dark context = text_inverse legit
+          if ($is_text_attr && $is_white && $effective_dark) {
+            $report['p3'][] = "Block $name $attr=#ffffff (text_inverse legit on dark context — bg=$effective_bg).";
+            continue;
+          }
+          // WHITELIST : #fafafa, #f5f5f5, #f9f9f9 sur backgroundColor sont des grays neutres acceptables
+          $neutral_grays = ['#fafafa', '#f5f5f5', '#f9f9f9', '#f7f7f7', '#fcfcfc', '#e5e7eb', '#e5e5e5', '#eeeeee'];
+          if ($attr === 'backgroundColor' && in_array($val_lower, $neutral_grays, true)) {
+            $report['p3'][] = "Block $name backgroundColor=$val (neutral gray bg, acceptable per section-rhythm.md).";
+            continue;
+          }
 
           if ($is_box_shadow && ($is_neutral_rgba || $is_neutral_hex)) {
             $report['p3'][] = "Block $name $attr=$val (neutral shadow, acceptable but consider opacity-only on token).";
@@ -218,32 +285,35 @@ function wpf_skill_visual_audit($content) {
         }
       }
 
-      // Check 9 : WCAG AA contraste sur paires text/bg du même bloc.
-      // Résout var(--ast-global-color-X) vers les hex réels de la palette
-      // active pour détecter les "texte noir sur fond noir" qui passent
-      // inaperçus quand on regarde juste le markup.
-      $bg = $b['attrs']['backgroundColor'] ?? null;
+      // Check 9 : WCAG AA contraste — AVEC PROPAGATION CURRENT_BG (v0.9.1)
+      // Auparavant le check ne regardait que (text_color, $b['attrs']['backgroundColor']) sur le MÊME bloc.
+      // Bug : un info-box enfant avec headingColor='#0F172A' dans un container parent backgroundColor='#0F172A'
+      // n'était pas détecté car l'info-box lui-même n'a pas de backgroundColor.
+      // Fix : utiliser $effective_bg (own_bg ou current_bg propagé).
       $bid = $b['attrs']['block_id'] ?? '(no block_id)';
+      $check_bg = $effective_bg;
+      // Si le bloc est sur un parent avec image+overlay, on prend la couleur d'overlay
+      // (assumée sombre par défaut) pour le check
+      if (!$check_bg && ($has_image_bg || $has_overlay) && $own_bg_image_color) {
+        $check_bg = wpf_skill_resolve_to_hex($own_bg_image_color);
+      }
+      // Pour les blocs enfants d'un parent overlay/image, on hérite du current_bg parent
+      // qui aura été calculé à partir du bg image color du root parent
       $text_attrs = ['headingColor', 'subHeadingColor', 'descColor', 'color', 'label_color'];
       foreach ($text_attrs as $tattr) {
         $text_color = $b['attrs'][$tattr] ?? null;
-        if (!$bg || !$text_color) continue;
-        $bg_hex = wpf_skill_resolve_to_hex($bg);
+        if (!$check_bg || !$text_color) continue;
         $text_hex = wpf_skill_resolve_to_hex($text_color);
-        if (!$bg_hex || !$text_hex) continue;
+        if (!$text_hex) continue;
 
-        $ratio = wpf_skill_contrast_ratio($bg_hex, $text_hex);
-        // WCAG AA : 4.5:1 pour texte normal, 3:1 pour texte large (≥18pt ou ≥14pt bold)
-        // Pour heading (souvent large), on tolère 3:1 mais on flag à 4.5:1
+        $ratio = wpf_skill_contrast_ratio($check_bg, $text_hex);
         $is_heading = ($tattr === 'headingColor');
         $wcag_threshold = $is_heading ? 3.0 : 4.5;
         if ($ratio < $wcag_threshold) {
           $msg = sprintf(
-            "Block %s ($bid) : contraste %s ($text_hex) sur backgroundColor ($bg_hex) = %.2f:1 < %.1f:1 (WCAG AA %s).",
-            $name, $tattr, $ratio, $wcag_threshold, $is_heading ? 'large text' : 'normal text'
+            "Block %s (%s) : contraste %s (%s) sur bg hérité (%s) = %.2f:1 < %.1f:1 (WCAG AA %s).",
+            $name, $bid, $tattr, $text_hex, $check_bg, $ratio, $wcag_threshold, $is_heading ? 'large text' : 'normal text'
           );
-          // Si ratio < 1.5 → texte quasi invisible (texte noir sur fond noir, etc.) → P0 critique
-          // Sinon → P1 (lisible mais sous WCAG)
           if ($ratio < 1.5) {
             $report['p0'][] = "[ILLISIBLE] $msg";
           } else {
@@ -254,7 +324,8 @@ function wpf_skill_visual_audit($content) {
             'block_id' => $bid,
             'text_attr' => $tattr,
             'text_color_resolved' => $text_hex,
-            'background_resolved' => $bg_hex,
+            'background_resolved' => $check_bg,
+            'background_inherited' => ($check_bg !== $own_bg_resolved),
             'ratio' => round($ratio, 2),
             'wcag_threshold' => $wcag_threshold,
           ];
@@ -296,14 +367,14 @@ function wpf_skill_visual_audit($content) {
         }
       }
 
-      // Récursion sur innerBlocks (depth + 1 pour distinguer racine vs nested)
+      // Récursion sur innerBlocks AVEC PROPAGATION du bg + dark context (v0.9.1)
       if (!empty($b['innerBlocks'])) {
-        $walker($b['innerBlocks'], $depth + 1);
+        $walker($b['innerBlocks'], $depth + 1, $effective_bg, $effective_dark);
       }
     }
   };
 
-  $walker($blocks, 0);
+  $walker($blocks, 0, null, false);
 
   // Check 8 verdict : H1 multiples / absent
   if ($report['stats']['h1_count'] > 1) {

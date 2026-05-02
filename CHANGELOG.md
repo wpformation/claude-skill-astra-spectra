@@ -15,6 +15,114 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 - Article WPFormation dédié
 - Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
 
+## [0.9.1-beta] — 2026-05-02 (12h)
+
+### 🎯 Boucle de validation visuelle FERMÉE — première baseline screenshot prouvée
+
+> **Verdict utilisateur sur v0.9.0-beta** : « C'est juste laid, catastrophique et totalement raté. Une énorme perte de temps. » Rapport forensique détaillé : 5 BLOCKERS structurels (gradient bleu/violet au lieu d'orange palette_3, boutons sans styling, features empilées verticalement, FAQ rendue comme bullet list, pas de cards testimonials). Cause racine : sur draft preview anonyme (Apache mutu o2switch + LiteSpeed), ni Astra CSS ni Spectra CSS n'étaient injectés. Cette version v0.9.1 ferme la boucle : génération end-to-end testée sur WP local, screenshots agent-browser réels, page démo WOW livrée comme baseline.
+
+#### Pipeline de validation visuelle PROUVÉ
+
+- **WP local loginarmor-dev (Astra 4.13.1 + Spectra 2.19.25 + palette_3)** utilisé comme test bench end-to-end (identique à cours-ndrc.fr)
+- **Page démo Natures-style complète** générée et publiée (ID 41) : hero overlay gradient + stats bar dark + 3 features cards + about-story split + 3 testimonials + FAQ accordéon + CTA banner final
+- **Screenshots agent-browser** réels en viewport 1440×900 capturés à 3 itérations (iter 1 baseline, iter 2 fix FAQ, iter 3 finition WOW)
+- **Tous les patterns rendent correctement** : grille 3-cols respectée, bg colors palette-agnostic, typo cohérente, accordéon fonctionnel, image story chargée, CTAs lisibles
+
+Baselines prouvées :
+
+```
+screenshots/loginarmor-dev-palette3/
+├── v091-iter3-WOW-fullpage.png        ← page complète 1440×4500+ (référence)
+├── v091-FINAL-zoom-v3-hero.png        ← hero overlay gradient
+├── v091-FINAL-zoom-v3-stats.png       ← stats bar 4 chiffres orange
+├── v091-FINAL-zoom-v3-features.png    ← 3 cards features 3-cols
+├── v091-FINAL-zoom-v3-story.png       ← about-story split image+texte
+├── v091-FINAL-zoom-v3-testimonials.png← 3 testimonials avec guillemets typo
+├── v091-FINAL-zoom-v3-faq-section.png ← FAQ accordéon avec 1ère ouverte
+└── v091-FINAL-zoom-v3-cta-final.png   ← CTA banner image+overlay
+```
+
+#### BLOCKER user — CSS Spectra absent en draft preview
+
+Cause : sur Apache mutu (o2switch, OVH, Hostinger, 1&1) + LiteSpeed Cache, le hook `wp_head` n'injecte pas le CSS Spectra inline pour les drafts en preview anonyme. Le `_uag_page_assets` post_meta existe avec un `css` de 17K+ chars mais le HTML <head> n'a aucun `<style id="uagb-style-frontend-X">`.
+
+**Fix : `wpf_skill_temp_publish_trick()` dans `scripts/post-page-via-rest.php`**
+
+```php
+function wpf_skill_temp_publish_trick($site_url, $auth, $post_id) {
+  // 1. Lire le statut courant
+  // 2. Update status='publish' temporairement
+  // 3. GET frontend URL (force pipeline complète Astra+Spectra)
+  // 4. Revert au statut original
+}
+```
+
+Stratégies cascadées dans `wpf_skill_trigger_spectra_assets_regen()` :
+1. Endpoint mu-plugin compagnon `/astra-spectra/v1/regen-assets/{id}`
+2. Endpoint mu-plugin compagnon alt `/skill-test/v1/regen-spectra`
+3. Temp-publish trick (publish→GET→revert) — **le fix critique**
+4. Best-effort GET avec `?_uagb_regen=1`
+
+Active par défaut, désactivable via `--no-temp-publish` sur sites live.
+
+#### BUG persistant — Check 9 WCAG walker sans propagation
+
+Cause v0.9.0 : le check ne regardait que `(headingColor, backgroundColor)` du MÊME bloc. Un info-box enfant sans bg sur un container parent dark n'était pas détecté.
+
+**Fix : walker récursif avec propagation de `current_bg` et `is_dark_context`**
+
+```php
+$walker = function ($blocks, $depth = 0, $current_bg = null, $is_dark_context = false) use (&$walker, &$report) {
+  // Détection bg propre du bloc + héritage parent
+  $effective_bg = $own_bg_resolved ?: $current_bg;
+  $effective_dark = $own_is_dark || $has_image_bg || $has_overlay || $is_dark_context;
+  // Check WCAG sur effective_bg (pas seulement own bg)
+  // Récursion avec effective_bg + effective_dark transmis
+};
+```
+
+Le check détecte maintenant `headingColor: #0F172A` sur un container parent `backgroundColor: #0F172A` (auparavant invisible).
+
+#### BUG persistant — Faux positifs #ffffff text_inverse
+
+Cause v0.9.0 : `headingColor: #ffffff` sur un hero avec image+overlay était flaggé P1 « hardcoded color » alors que c'est légitime (text inverse sur bg sombre).
+
+**Fix : whitelist contextuelle dans le check 3**
+
+- `#ffffff` sur attribut text dans un dark context → P3 (legit text_inverse)
+- Neutral grays (`#fafafa`, `#f5f5f5`, `#e5e7eb`...) sur `backgroundColor` → P3 (legit per section-rhythm.md)
+
+Plus de spam P1 sur les patterns hero overlay.
+
+#### Nouveau pattern complet validé visuellement
+
+- **`patterns/landing-formation-complete.md`** : pattern complet 7 sections inspiré du démo Natures, avec markup template versionné dans `templates/landing-formation-complete-markup.html` (~41 KB, 28+ blocs uagb). Validé sur palette_3.
+
+#### Workflow visual-validation-loop enrichi
+
+- Section « Pipeline pratique testé v0.9.1 » avec les commandes exactes agent-browser pour reproduire la baseline
+- 4 pièges critiques documentés avec leurs symptômes et fixes :
+  1. FAQ avec Lorem Ipsum → attribut `answer` (PAS `description`)
+  2. Image about-story qui n'apparaît pas → force `loading="eager"` avant screenshot
+  3. CSS Spectra absent en draft preview → temp-publish trick
+  4. Slot color-7 = noir massif sur palette_3 → `#e5e7eb` direct
+
+#### Mu-plugin compagnon documenté
+
+- **`scripts/mu-plugin-skill-test.php`** : 5 endpoints REST (setup, upload-image, regen-spectra, inspect-faq, cleanup) testés sur loginarmor-dev
+- **`references/mu-plugin-companion.md`** : doc d'install + sécurité + alternatives sans mu-plugin
+- L'endpoint `/inspect-faq` permet de découvrir le bon nom d'attribut (`answer`) sans plonger dans le JS minifié — c'est ce qui a permis de fixer le bug FAQ
+
+#### Stats v0.9.1
+
+- **3 itérations** sur la page démo (iter 1 baseline, iter 2 FAQ fix, iter 3 finition WOW)
+- **8 screenshots de validation** dans le repo (1 fullpage + 7 zoom par section)
+- **41 KB** de markup template validé (`templates/landing-formation-complete-markup.html`)
+- **5 endpoints REST** mu-plugin compagnon testés
+- **2 bugs persistants depuis v0.8.x** corrigés (WCAG walker, false positive #ffffff)
+- **1 trick critique** ajouté (temp-publish pour forcer regen Spectra sur draft)
+- **0 nouvelle dépendance** (tout en PHP natif + agent-browser CLI déjà installé chez les users)
+
 ## [0.9.0-beta] — 2026-05-02 (tard)
 
 ### 🔥 Refonte structurelle après rapport visuel cours-ndrc.fr

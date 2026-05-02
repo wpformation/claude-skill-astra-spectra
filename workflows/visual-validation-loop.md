@@ -152,3 +152,109 @@ Sinon :
 - < 5 % nécessitent intervention manuelle
 
 Ces seuils sont mesurés dans la suite d'évals (`evals/visual-validation.json`).
+
+---
+
+## Pipeline pratique testé v0.9.1 (02/05/2026)
+
+> Cette section documente le pipeline EXACTEMENT exécuté pour produire la baseline `screenshots/loginarmor-dev-palette3/v091-iter3-WOW-fullpage.png`. Reproduire ces commandes garantit un rendu visuel identique pour tester un nouveau pattern ou une régression.
+
+### Setup environnement (une fois)
+
+```bash
+# 1. Vérifier WP local Astra+Spectra accessible
+curl -s -u "admin:APP_PASS" http://loginarmor-dev.local/wp-json/wp/v2/users/me?context=edit \
+  | python -c "import json,sys;print([k for k,v in json.load(sys.stdin).get('capabilities',{}).items() if v][:5])"
+# Doit retourner ['switch_themes', 'edit_themes', 'activate_plugins', 'edit_plugins', ...]
+
+# 2. Installer le mu-plugin compagnon (endpoints custom skill-test/v1)
+# Voir mu-plugin-companion.md pour le code complet
+cp scripts/mu-plugin-skill-test.php "C:/Users/USER/Local Sites/SITE/app/public/wp-content/mu-plugins/"
+
+# 3. Configurer la palette test (palette_3 cours-ndrc.fr orange WPF)
+curl -X POST -u "admin:APP_PASS" \
+  http://loginarmor-dev.local/wp-json/skill-test/v1/setup -H "Content-Type: application/json" -d '{}'
+
+# 4. Uploader 6 images placeholders (Unsplash via skill-test/v1/upload-image avec name custom .jpg)
+for i in 1..6; do
+  curl -X POST -u "admin:APP_PASS" \
+    http://loginarmor-dev.local/wp-json/skill-test/v1/upload-image \
+    -H "Content-Type: application/json" \
+    -d "{\"url\":\"https://images.unsplash.com/photo-XXXX?w=1920&h=1080&fit=crop&q=80\",\"name\":\"hero-img-$i.jpg\"}"
+done
+```
+
+### Pipeline screenshot (chaque test)
+
+```bash
+# 5. Publier la page test
+python -c "
+import json
+content=open('templates/landing-formation-complete-markup.html').read()
+open('payload.json','w').write(json.dumps({'title':'DEMO Skill','content':content,'status':'publish','slug':'demo-skill'}))
+"
+curl -X POST -u "admin:APP_PASS" \
+  http://loginarmor-dev.local/wp-json/wp/v2/pages \
+  -H "Content-Type: application/json; charset=utf-8" --data-binary "@payload.json"
+
+# 6. Régénérer assets Spectra (force CSS file generation)
+curl -X POST -u "admin:APP_PASS" \
+  http://loginarmor-dev.local/wp-json/skill-test/v1/regen-spectra \
+  -H "Content-Type: application/json" -d '{"post_id":<ID>}'
+
+# 7. Setup viewport agent-browser desktop
+agent-browser set viewport 1440 900
+
+# 8. Open + force eager + fullpage screenshot
+agent-browser open http://loginarmor-dev.local/demo-skill/
+sleep 3
+agent-browser eval "document.querySelectorAll('img[loading=lazy]').forEach(i=>i.loading='eager'); window.scrollTo(0,document.body.scrollHeight); 'ok'"
+sleep 2
+agent-browser eval "window.scrollTo(0,0); 'reset'"
+sleep 1
+agent-browser screenshot --full screenshots/<context>/<test-name>-fullpage.png
+
+# 9. Screenshots zoomés par section
+for sect in v3-hero v3-stats v3-features v3-story v3-testimonials v3-faq-section v3-cta-final; do
+  agent-browser eval "document.querySelector('.uagb-block-${sect}').scrollIntoView({behavior:'instant',block:'start'}); window.scrollBy(0,-50); 'ok'"
+  sleep 1
+  agent-browser screenshot screenshots/<context>/<test-name>-zoom-${sect}.png
+done
+```
+
+## 4 pièges critiques détectés et fixés v0.9.1
+
+### Piège 1 — FAQ avec Lorem Ipsum
+**Symptôme observé** : la FAQ accordéon s'expand mais affiche `Lorem ipsum dolor sit amet, consectetur...` au lieu de la vraie réponse.
+**Cause** : l'attribut Spectra s'appelle **`answer`**, pas `description`. Vérifié via `register_rest_route('/inspect-faq')` qui inspecte `WP_Block_Type_Registry`.
+**Fix** : `<!-- wp:uagb/faq-child {"question":"...", "answer":"<reponse complète>"} -->`. Le inner content (`<p class="uagb-faq-content">`) est secondaire mais doit être présent pour la rendition initiale.
+**Validation** : `screenshots/loginarmor-dev-palette3/v091-iter2-faq-fixed.png` — la première question affiche maintenant la vraie réponse.
+
+### Piège 2 — Image about-story qui n'apparaît pas en screenshot fullpage
+**Symptôme** : screenshot fullpage montre une zone blanche à la place de l'image about-story (mais l'image est présente dans le HTML rendu).
+**Cause** : `loading="lazy"` sur `<img>` + agent-browser screenshot --full ne déclenche pas toujours le lazy loading des images en bas de page.
+**Fix** : avant le screenshot, exécuter `document.querySelectorAll('img[loading=lazy]').forEach(i=>i.loading='eager')` puis scroll bottom + scroll top pour déclencher tous les lazy loaders.
+**Validation** : `screenshots/loginarmor-dev-palette3/v091-iter1-1440-fullpage-eager.png` — l'image apparaît correctement.
+
+### Piège 3 — CSS Spectra absent en draft preview
+**Symptôme** : preview anonyme `?preview=true` d'un draft → page rendue sans styles (pas de flex-grid, pas de border-radius, pas de shadow). Le `_uag_page_assets` post_meta existe avec un `css` de 17K+ chars mais le HTML <head> n'a aucun `<style id="uagb-style-frontend-X">`.
+**Cause** : sur Apache mutu (o2switch) + LiteSpeed Cache + plugins de sécurité, le hook `wp_head` n'injecte pas le CSS Spectra inline pour les drafts en preview anonyme. Spectra a un check `is_user_logged_in()` ou `current_user_can('edit_post')` qui filtre.
+**Fix** : `wpf_skill_temp_publish_trick()` dans `scripts/post-page-via-rest.php` v0.9.1 — publish temporaire (~1s) → hit URL frontend (force pipeline complète Astra+Spectra) → revert au statut original. Active par défaut, désactivable via `--no-temp-publish` sur sites live.
+
+### Piège 4 — Slot color-7 = noir massif sur palette_3
+**Symptôme** : section testimonials/FAQ apparaît avec **bord noir massif** sur palette_3 (cours-ndrc.fr, palette orange WPF).
+**Cause** : pattern utilise `borderColor: var(--ast-global-color-7)`. Sur palette_3, color-7 vaut `#141006` (presque noir). Sur palette default, color-7 vaut le secondary gris.
+**Fix** : utiliser **hex direct neutre** `borderColor: "#e5e7eb"` ou résoudre via `wpf_skill_resolve_color('border_subtle', $palette)`. Voir `references/semantic-color-roles.md` pour la table GUARANTEED vs VARIABLE slots Astra.
+
+## Baselines de référence (mises à jour 02/05/2026)
+
+| Palette | Pattern | Baseline screenshot |
+|---------|---------|---------------------|
+| palette_3 (orange WPF) | `landing-formation-complete` | `screenshots/loginarmor-dev-palette3/v091-iter3-WOW-fullpage.png` (~7 sections) |
+| palette_3 | hero-image-overlay (variante gradient) | `screenshots/loginarmor-dev-palette3/v091-FINAL-zoom-v3-hero.png` |
+| palette_3 | features-3-cols | `screenshots/loginarmor-dev-palette3/v091-FINAL-zoom-v3-features.png` |
+| palette_3 | testimonials-grid | `screenshots/loginarmor-dev-palette3/v091-FINAL-zoom-v3-testimonials.png` |
+| palette_3 | faq-accordion | `screenshots/loginarmor-dev-palette3/v091-iter2-faq-fixed.png` |
+| palette_3 | cta-banner-fullwidth | `screenshots/loginarmor-dev-palette3/v091-FINAL-zoom-v3-cta-final.png` |
+
+À ajouter en v1.0 : palette default + preset_8 (orange gourmand piège). Voir `screenshots/README.md` pour le process complet.

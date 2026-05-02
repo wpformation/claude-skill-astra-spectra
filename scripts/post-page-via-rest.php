@@ -67,48 +67,155 @@ function http_request($method, $url, $headers, $body = null) {
 /**
  * Déclenche la régénération CSS Spectra pour un post donné.
  *
- * Spectra peut stocker son CSS dynamique en mode 'file' (dans
- * /wp-content/uploads/uag-plugin/assets/uag-css-{post_id}.css). Quand un post est
- * créé via l'API REST publique, le hook save_post peut ne pas exécuter la
- * génération. Sans CSS, la page apparaît sans styles (pas de flex-grid, pas
- * de box-shadow, layout cassé).
+ * v0.9.1 — pipeline 4 étapes pour garantir que la page draft est visualisable
+ * avec ses styles, MÊME sur des hébergeurs Apache mutu (o2switch, OVH, Hostinger)
+ * où l'auth REST peut être strippée et où le hook wp_head sur preview anonyme
+ * n'injecte pas le CSS Spectra dynamique.
  *
- * Cette fonction tente 3 approches dans l'ordre :
- *   1. POST /wp-json/astra-spectra/v1/regen-assets/{id} (endpoint mu-plugin compagnon)
- *   2. GET sur la page draft avec ?_uagb-regen=1 query param (déclenche le hook
- *      sur certaines configs Spectra qui écoutent template_redirect)
- *   3. Fallback : informe l'utilisateur que la régénération est manuelle
+ * Stratégies (tentées dans l'ordre, première qui réussit gagne) :
+ *   1. mu-plugin compagnon : POST /wp-json/astra-spectra/v1/regen-assets/{id}
+ *   2. mu-plugin compagnon alt : POST /wp-json/skill-test/v1/regen-spectra
+ *   3. Temp-publish trick : update status='publish' → GET frontend URL (force
+ *      le pipeline complet wp_head→Astra CSS→Spectra UAGB_Post_Assets) →
+ *      revert au status original. Validé sur Astra 4.13 + Spectra 2.19.
+ *   4. Fallback : suggère wp-cli ou ouvrir dans Gutenberg admin.
  *
- * Retourne un dict avec le statut de la tentative.
+ * IMPORTANT : la stratégie 3 (temp-publish) modifie temporairement le statut.
+ * Utiliser le param `--no-temp-publish` côté CLI si tu veux garder strictement
+ * draft (par exemple sur un site live où une URL publique d'1 seconde gênerait).
+ *
+ * Retourne un dict avec le statut de la tentative + diagnostics.
  */
-function wpf_skill_trigger_spectra_assets_regen($site_url, $auth, $post_id) {
+function wpf_skill_trigger_spectra_assets_regen($site_url, $auth, $post_id, $allow_temp_publish = true) {
   $headers = [
     'Authorization: Basic ' . $auth,
     'Accept: application/json',
-    'User-Agent: claude-skill-astra-spectra/0.9.0',
+    'Content-Type: application/json',
+    'User-Agent: claude-skill-astra-spectra/0.9.1',
   ];
 
-  // Tentative 1 : endpoint mu-plugin compagnon (si installé)
+  // Stratégie 1 : endpoint mu-plugin compagnon officiel
   $endpoint = "$site_url/wp-json/astra-spectra/v1/regen-assets/$post_id";
   $r = http_request('POST', $endpoint, $headers, json_encode(['post_id' => $post_id]));
   if ($r['code'] === 200) {
     return ['method' => 'mu-plugin-endpoint', 'status' => 'ok', 'http' => 200];
   }
 
-  // Tentative 2 : trigger via GET sur la page draft authentifiée
-  // (sur certaines configs, Spectra régénère au premier load)
+  // Stratégie 2 : endpoint mu-plugin compagnon alternative (skill-test)
+  $endpoint2 = "$site_url/wp-json/skill-test/v1/regen-spectra";
+  $r1b = http_request('POST', $endpoint2, $headers, json_encode(['post_id' => $post_id]));
+  if ($r1b['code'] === 200) {
+    $data = json_decode($r1b['body'], true);
+    return [
+      'method' => 'skill-test-endpoint',
+      'status' => 'ok',
+      'css_len' => $data['css_len'] ?? null,
+      'js_len' => $data['js_len'] ?? null,
+    ];
+  }
+
+  // Stratégie 3 : temp-publish trick (si autorisé)
+  // Validé sur loginarmor-dev (Astra 4.13.1 + Spectra 2.19.25 + palette_3) le 02/05/2026
+  if ($allow_temp_publish) {
+    $temp = wpf_skill_temp_publish_trick($site_url, $auth, $post_id);
+    if ($temp['ok']) {
+      return [
+        'method' => 'temp-publish-trick',
+        'status' => 'ok',
+        'detail' => $temp,
+      ];
+    }
+    // Si temp-publish a échoué, garder l'erreur dans le diagnostic
+    $temp_publish_error = $temp;
+  }
+
+  // Stratégie 4 : trigger via GET sur la page draft authentifiée
   $preview_url = "$site_url/?p=$post_id&preview=true&_uagb_regen=1";
   $r2 = http_request('GET', $preview_url, $headers);
   $triggered = ($r2['code'] === 200 || $r2['code'] === 301 || $r2['code'] === 302);
 
-  // Tentative 3 : suggérer la régénération manuelle
   return [
     'method' => 'best_effort',
     'status' => $triggered ? 'preview_loaded' : 'manual_required',
     'preview_http_code' => $r2['code'],
+    'temp_publish_attempted' => $allow_temp_publish ? ($temp_publish_error ?? null) : 'skipped_by_user',
     'manual_command_wp_cli' => "wp eval 'if (class_exists(\"UAGB_Post_Assets\")) { (new UAGB_Post_Assets($post_id))->generate_assets(); }'",
     'manual_command_admin' => "Ouvrir la page dans Gutenberg (l'edit_url ci-dessus) et la sauvegarder une fois → Spectra régénère le CSS.",
     'note' => 'Si la preview frontend apparaît sans styles (flex-grid cassé, pas de border-radius), exécuter une des manual_command_* ci-dessus. Pour automatiser, déployer le mu-plugin compagnon décrit dans references/mu-plugin-companion.md.',
+  ];
+}
+
+/**
+ * Temp-publish trick : publie temporairement la page pour déclencher tous les
+ * hooks WP/Astra/Spectra (notamment wp_head + UAGB_Post_Assets dans son contexte
+ * frontend complet), hit l'URL frontend, puis revert au statut original.
+ *
+ * Cette astuce résout le bug critique signalé sur cours-ndrc.fr (palette_3) :
+ * sur draft preview anonyme, ni Astra CSS ni Spectra CSS ne sont injectés
+ * dans la <head>, donc la page apparaît sans styles. Le temp-publish force
+ * la génération via le pipeline normal.
+ *
+ * NOTE : la page est en statut 'publish' pendant ~1-2 secondes. Si le site
+ * a un cache CDN agressif (Cloudflare, etc.) ou un crawler watching, la URL
+ * peut être brièvement indexée. Sur un site dev, c'est anodin. Sur un site
+ * live, utiliser `allow_temp_publish=false` et préférer le mu-plugin.
+ *
+ * @return array{ok: bool, original_status: string, frontend_http: ?int, error: ?string}
+ */
+function wpf_skill_temp_publish_trick($site_url, $auth, $post_id) {
+  $headers = [
+    'Authorization: Basic ' . $auth,
+    'Accept: application/json',
+    'Content-Type: application/json',
+    'User-Agent: claude-skill-astra-spectra/0.9.1',
+  ];
+
+  // 1. Récupérer le statut actuel
+  $get_url = "$site_url/wp-json/wp/v2/pages/$post_id?context=edit";
+  $r = http_request('GET', $get_url, $headers);
+  if ($r['code'] !== 200) {
+    return ['ok' => false, 'error' => "Cannot read post status (HTTP {$r['code']})"];
+  }
+  $post_data = json_decode($r['body'], true);
+  $original_status = $post_data['status'] ?? 'draft';
+  $permalink = $post_data['link'] ?? null;
+
+  if ($original_status === 'publish') {
+    // Déjà publié, juste hit la frontend pour déclencher la regen
+    if ($permalink) {
+      http_request('GET', $permalink, ['User-Agent: claude-skill-astra-spectra/0.9.1']);
+    }
+    return ['ok' => true, 'original_status' => 'publish', 'note' => 'already_published'];
+  }
+
+  // 2. Publier temporairement
+  $upd_url = "$site_url/wp-json/wp/v2/pages/$post_id";
+  $upd_body = json_encode(['status' => 'publish']);
+  $r2 = http_request('POST', $upd_url, $headers, $upd_body);
+  if ($r2['code'] !== 200) {
+    return ['ok' => false, 'error' => "Temp-publish failed (HTTP {$r2['code']})"];
+  }
+  $pub_data = json_decode($r2['body'], true);
+  $frontend_url = $pub_data['link'] ?? $permalink;
+
+  // 3. Hit la URL frontend (anonyme, sans auth header)
+  $frontend_http = null;
+  if ($frontend_url) {
+    $r3 = http_request('GET', $frontend_url, ['User-Agent: claude-skill-astra-spectra/0.9.1']);
+    $frontend_http = $r3['code'];
+  }
+
+  // 4. Revert au statut original
+  $revert_body = json_encode(['status' => $original_status]);
+  $r4 = http_request('POST', $upd_url, $headers, $revert_body);
+  $revert_ok = ($r4['code'] === 200);
+
+  return [
+    'ok' => true,
+    'original_status' => $original_status,
+    'frontend_http' => $frontend_http,
+    'reverted' => $revert_ok,
+    'note' => $revert_ok ? 'css_generated_then_reverted' : 'WARNING: revert failed, page may still be public',
   ];
 }
 
