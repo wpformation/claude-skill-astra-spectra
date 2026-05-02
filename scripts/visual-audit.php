@@ -3,7 +3,7 @@
  * visual-audit.php
  *
  * Audit interne d'une page draft sans dépendance à /impeccable.
- * Applique les 12 checks visuels intégrés sur le markup d'une page.
+ * Applique 8 checks visuels intégrés sur le markup d'une page.
  *
  * Usage CLI :
  *   php visual-audit.php <page_id>
@@ -24,6 +24,23 @@ if (!defined('ABSPATH')) {
   }
 }
 
+/**
+ * Détecte une couleur hardcodée (hex, rgb, rgba, hsl, hsla) qui n'utilise PAS
+ * une variable CSS Astra (--ast-global-color-X).
+ */
+function wpf_skill_is_hardcoded_color($val) {
+  if (!is_string($val) || $val === '') return false;
+  // Si la valeur contient déjà une CSS var Astra → OK
+  if (strpos($val, 'var(--ast-global-color') !== false) return false;
+  // Hex 3 ou 6 chars : #fff ou #ffffff
+  if (preg_match('/^#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $val)) return true;
+  // rgb(...) ou rgba(...)
+  if (preg_match('/^rgba?\s*\(/i', $val)) return true;
+  // hsl(...) ou hsla(...)
+  if (preg_match('/^hsla?\s*\(/i', $val)) return true;
+  return false;
+}
+
 function wpf_skill_visual_audit($content) {
   $report = [
     'status' => 'OK',
@@ -36,9 +53,19 @@ function wpf_skill_visual_audit($content) {
       'h1_count' => 0,
       'h2_count' => 0,
       'h3_count' => 0,
-      'hex_hardcoded' => 0,
+      'hardcoded_color_count' => 0,
       'block_ids_seen' => [],
       'block_ids_duplicates' => [],
+    ],
+    'checks_run' => [
+      '1_heading_hierarchy',
+      '2_block_id_unique',
+      '3_no_hardcoded_color',
+      '4_image_alt',
+      '5_container_max_width',
+      '6_root_container_responsive_padding',
+      '7_cta_present',
+      '8_h1_present',
     ],
   ];
 
@@ -50,8 +77,8 @@ function wpf_skill_visual_audit($content) {
 
   $blocks = parse_blocks($content);
 
-  // Walker récursif pour collecter stats
-  $walker = function ($blocks) use (&$walker, &$report) {
+  // Walker récursif. $depth=0 pour les containers racine, >0 pour les nested.
+  $walker = function ($blocks, $depth = 0) use (&$walker, &$report) {
     foreach ($blocks as $b) {
       if (empty($b['blockName'])) continue;
       $report['stats']['block_count']++;
@@ -72,7 +99,7 @@ function wpf_skill_visual_audit($content) {
         elseif ($tag === 'h3') $report['stats']['h3_count']++;
       }
 
-      // Check 4 : block_id Spectra
+      // Check 2 : block_id Spectra
       if (strpos($name, 'uagb/') === 0) {
         $bid = $b['attrs']['block_id'] ?? null;
         if (empty($bid)) {
@@ -86,19 +113,37 @@ function wpf_skill_visual_audit($content) {
         }
       }
 
-      // Check 3 : hex hardcodés dans attrs couleur
-      $color_attrs = ['backgroundColor', 'textColor', 'iconColor', 'headingColor', 'subHeadingColor', 'borderColor', 'color', 'overallBorderColor', 'topDividerColor'];
+      // Check 3 : couleurs hardcodées (hex, rgb, rgba, hsl, hsla)
+      // Étendu aux box-shadow et aux dividers couleur.
+      $color_attrs = [
+        'backgroundColor', 'textColor', 'iconColor', 'headingColor',
+        'subHeadingColor', 'borderColor', 'color', 'overallBorderColor',
+        'topDividerColor', 'bottomDividerColor',
+        'boxShadowColor', 'boxShadowColorHover',
+        'iconBgColor', 'iconHoverColor',
+        'hoverBackgroundColor', 'hoverColor',
+        'label_color', 'icon_color', 'icon_bg_color',
+      ];
       foreach ($color_attrs as $attr) {
-        if (isset($b['attrs'][$attr]) && is_string($b['attrs'][$attr])) {
+        if (isset($b['attrs'][$attr]) && wpf_skill_is_hardcoded_color($b['attrs'][$attr])) {
           $val = $b['attrs'][$attr];
-          if (preg_match('/^#[0-9a-fA-F]{6}$/', $val)) {
-            $report['stats']['hex_hardcoded']++;
-            $report['p1'][] = "Block $name uses hex $val for $attr (prefer var(--ast-global-color-X)).";
+          $report['stats']['hardcoded_color_count']++;
+          // box-shadow rgba(0,0,0,...) très courant et acceptable (drop shadow neutre) → P3, pas P1
+          $is_box_shadow = (strpos($attr, 'boxShadow') !== false);
+          $is_neutral_rgba = (strpos($val, 'rgba(0,0,0') === 0 || strpos($val, 'rgba(0, 0, 0') === 0);
+          $is_neutral_hex = in_array(strtolower($val), ['#fff', '#ffffff', '#000', '#000000'], true);
+
+          if ($is_box_shadow && ($is_neutral_rgba || $is_neutral_hex)) {
+            $report['p3'][] = "Block $name $attr=$val (neutral shadow, acceptable but consider opacity-only on token).";
+          } elseif ($is_box_shadow) {
+            $report['p1'][] = "Block $name uses colored shadow $val for $attr (prefer rgba(0,0,0,X) neutral or var(--ast-global-color-X)).";
+          } else {
+            $report['p1'][] = "Block $name uses hardcoded color $val for $attr (prefer var(--ast-global-color-X)).";
           }
         }
       }
 
-      // Check 7 : alt vides sur images
+      // Check 4 : alt vides sur images
       if ($name === 'core/image' || $name === 'uagb/image') {
         $alt = $b['attrs']['alt'] ?? null;
         if (empty($alt)) {
@@ -106,31 +151,39 @@ function wpf_skill_visual_audit($content) {
         }
       }
 
-      // Check 8 : container largeur excessive
+      // Check 5 : container largeur excessive
       if ($name === 'uagb/container') {
         $width = $b['attrs']['contentWidth'] ?? null;
         if (is_numeric($width) && $width > 1400) {
           $report['p2'][] = "Container with contentWidth=$width (recommended ≤ 1200 for readability).";
         }
 
-        // Check 9 : responsive padding
-        $has_tablet = isset($b['attrs']['topPaddingTablet']) || isset($b['attrs']['rightPaddingTablet']);
-        $has_mobile = isset($b['attrs']['topPaddingMobile']) || isset($b['attrs']['rightPaddingMobile']);
-        if (!$has_tablet || !$has_mobile) {
-          $report['p1'][] = "Container without responsive padding (tablet/mobile breakpoints missing).";
+        // Check 6 : responsive padding — UNIQUEMENT sur containers racine (depth 0).
+        // Les containers internes héritent souvent du padding parent en flex/grid layout
+        // et n'ont pas besoin de leurs propres breakpoints responsive. Avant v0.8.2 ce
+        // check était déclenché sur tous les containers → spam de faux positifs.
+        if ($depth === 0) {
+          $has_top_padding = isset($b['attrs']['topPaddingDesktop']) || isset($b['attrs']['topPaddingTablet']) || isset($b['attrs']['topPaddingMobile']);
+          $has_tablet = isset($b['attrs']['topPaddingTablet']) || isset($b['attrs']['rightPaddingTablet']) || isset($b['attrs']['bottomPaddingTablet']);
+          $has_mobile = isset($b['attrs']['topPaddingMobile']) || isset($b['attrs']['rightPaddingMobile']) || isset($b['attrs']['bottomPaddingMobile']);
+          // On n'avertit que si le container racine a un padding desktop défini mais pas ses équivalents tablet/mobile
+          if ($has_top_padding && (!$has_tablet || !$has_mobile)) {
+            $bid = $b['attrs']['block_id'] ?? '(no block_id)';
+            $report['p1'][] = "Root container '$bid' has desktop padding but missing tablet/mobile breakpoints.";
+          }
         }
       }
 
-      // Récursion sur innerBlocks
+      // Récursion sur innerBlocks (depth + 1 pour distinguer racine vs nested)
       if (!empty($b['innerBlocks'])) {
-        $walker($b['innerBlocks']);
+        $walker($b['innerBlocks'], $depth + 1);
       }
     }
   };
 
-  $walker($blocks);
+  $walker($blocks, 0);
 
-  // Check 1 verdict : H1 multiples
+  // Check 8 verdict : H1 multiples / absent
   if ($report['stats']['h1_count'] > 1) {
     $report['p0'][] = "Multiple H1 detected ({$report['stats']['h1_count']}). Keep only one H1 per page.";
   }
@@ -138,7 +191,7 @@ function wpf_skill_visual_audit($content) {
     $report['p1'][] = "No H1 detected. Page should have exactly one H1.";
   }
 
-  // Check 12 : CTA visible
+  // Check 7 : CTA visible
   $cta_count = preg_match_all('/uagb\\/buttons|core\\/buttons/', $content);
   if ($cta_count === 0) {
     $report['p1'][] = "No CTA button block found. Pages should have at least one clear CTA.";

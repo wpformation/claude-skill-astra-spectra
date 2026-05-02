@@ -75,6 +75,17 @@ Idem que `new-page-from-brief.md` étape 5.
 
 ### Étape 6 — POST de la page
 
+Avant le POST, résoudre `{{ASTRA_TEMPLATE}}` via le mapping suivant (selon le `template_name` choisi à l'étape 1) :
+
+| `template_name` (input) | `{{ASTRA_TEMPLATE}}` (résolu) | Justification |
+|------------------------|------------------------------|---------------|
+| `page-formation`       | `""` (vide = défaut Astra)    | Sidebar OK pour navigation cours |
+| `landing-saas`         | `""` (sidebar désactivable au Customizer) | Conversion = pas de distraction |
+| `page-agence`          | `""` (sidebar désactivable au Customizer) | Hero impact full-width |
+| `blog-editorial` (v1.0) | `""` (sidebar par défaut)     | Content + widgets utiles |
+
+Par défaut on laisse `""` : le thème applique son template configuré dans Customizer > Layout > Page Layout. Plus sûr que de hardcoder un slug de template qui peut différer selon les thèmes.
+
 ```bash
 curl -X POST 'https://{{SITE_URL}}/wp-json/wp/v2/pages' \
   -u 'admin:{{APP_PASSWORD}}' \
@@ -88,7 +99,9 @@ curl -X POST 'https://{{SITE_URL}}/wp-json/wp/v2/pages' \
   }'
 ```
 
-Note : `template` peut être `default`, `no-sidebar`, `full-width`, etc. selon ce que le thème fournit. Pour un template Spectra full-width, recommandé : `template: "no-sidebar"` ou rien (defaut Astra).
+Si tu n'es pas certain d'une valeur valide pour le thème actif, **omet le champ `template` du payload** : Astra appliquera le template par défaut configuré dans Customizer.
+
+> **Note FSE** : sur les block themes (FSE), le champ `template` est ignoré. Le skill détecte ce cas via `detect-environment.php` (champ `theme.is_block_theme`) et omet le champ automatiquement.
 
 ### Étape 7 — Récap
 

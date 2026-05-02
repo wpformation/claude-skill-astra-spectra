@@ -2,9 +2,15 @@
 
 ## Lancer les évals
 
+### En CLI sur un site cible
+
 ```bash
-# Toutes les évals
-php evals/run-evals.php
+# Le runner doit avoir wp-load.php accessible. Lancer depuis la racine WP :
+cd /chemin/vers/wordpress
+php /chemin/vers/skill/evals/run-evals.php
+
+# Ou via WP-CLI :
+wp eval-file /chemin/vers/skill/evals/run-evals.php
 
 # Filtrer par catégorie
 php evals/run-evals.php --category=validation
@@ -14,6 +20,35 @@ php evals/run-evals.php --category=astra
 # Une eval précise
 php evals/run-evals.php --id=validate-01-malformed-markup
 ```
+
+### En CI (proposition)
+
+Pas encore intégré. Pour ajouter une CI dans un fork :
+
+```yaml
+# .github/workflows/evals.yml (exemple à adapter)
+name: Evals
+on: [pull_request]
+jobs:
+  validation-evals:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8
+        env: { MYSQL_ROOT_PASSWORD: root, MYSQL_DATABASE: wp }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup WP test instance
+        run: |
+          curl -O https://wordpress.org/latest.tar.gz
+          tar xzf latest.tar.gz
+          cd wordpress && wp config create --dbname=wp --dbuser=root --dbpass=root && wp core install
+          wp plugin install ultimate-addons-for-gutenberg --activate
+      - name: Run validation evals only (no LLM)
+        run: php evals/run-evals.php --category=validation
+```
+
+Les évals `category=build / refonte / template / astra` nécessitent une session live (LLM + WP). Elles ne sont pas testables en CI sans Anthropic API key. Le runner les marque `SKIP` automatiquement avec note explicative.
 
 ## Catégories
 

@@ -47,17 +47,62 @@ function wpf_skill_get_active_palette_colors() {
   return $default;
 }
 
+function wpf_skill_color_luminance($hex) {
+  $r = hexdec(substr($hex, 1, 2)) / 255;
+  $g = hexdec(substr($hex, 3, 2)) / 255;
+  $b = hexdec(substr($hex, 5, 2)) / 255;
+  // Coefficients ITU-R BT.601 (perceptual)
+  return 0.299 * $r + 0.587 * $g + 0.114 * $b;
+}
+
 function wpf_skill_color_distance($hex1, $hex2) {
+  // Distance euclidienne pondérée par perception : composante luminance amplifiée
+  // pour que noir vs gris foncé soit bien distingué de noir vs blanc cassé.
   $r1 = hexdec(substr($hex1, 1, 2)); $g1 = hexdec(substr($hex1, 3, 2)); $b1 = hexdec(substr($hex1, 5, 2));
   $r2 = hexdec(substr($hex2, 1, 2)); $g2 = hexdec(substr($hex2, 3, 2)); $b2 = hexdec(substr($hex2, 5, 2));
-  return sqrt(pow($r1 - $r2, 2) + pow($g1 - $g2, 2) + pow($b1 - $b2, 2));
+  $dr = $r1 - $r2; $dg = $g1 - $g2; $db = $b1 - $b2;
+  // Pondération « redmean » (approximation Lab légère, sans dépendance)
+  $r_avg = ($r1 + $r2) / 2;
+  $weight_r = 2 + $r_avg / 256;
+  $weight_g = 4;
+  $weight_b = 2 + (255 - $r_avg) / 256;
+  return sqrt($weight_r * $dr * $dr + $weight_g * $dg * $dg + $weight_b * $db * $db);
 }
 
 function wpf_skill_nearest_token($hex) {
   $hex = strtolower($hex);
-  // Récupère la palette ACTIVE (pas une palette hardcodée)
   $palette = wpf_skill_get_active_palette_colors();
+  $hex_lum = wpf_skill_color_luminance($hex);
 
+  // Step 1 : préférence sémantique pour les noirs très foncés (luminance < 0.15)
+  // Les slots Astra par convention : 2 = text body, 3 = heading dark.
+  // Si l'un de ces deux slots a une couleur très foncée aussi, on le préfère
+  // au slot le plus proche en distance pure (qui peut tomber sur color-7 par hasard).
+  if ($hex_lum < 0.15) {
+    foreach ([2, 3, 1, 8] as $semantic_idx) {
+      if (isset($palette[$semantic_idx])) {
+        $slot_lum = wpf_skill_color_luminance(strtolower($palette[$semantic_idx]));
+        if ($slot_lum < 0.25) {
+          return "var(--ast-global-color-$semantic_idx)";
+        }
+      }
+    }
+  }
+
+  // Step 2 : préférence sémantique pour les blancs très clairs (luminance > 0.9)
+  // Les slots Astra par convention : 5 = body bg, 7 = off-white.
+  if ($hex_lum > 0.9) {
+    foreach ([5, 7, 6] as $semantic_idx) {
+      if (isset($palette[$semantic_idx])) {
+        $slot_lum = wpf_skill_color_luminance(strtolower($palette[$semantic_idx]));
+        if ($slot_lum > 0.85) {
+          return "var(--ast-global-color-$semantic_idx)";
+        }
+      }
+    }
+  }
+
+  // Step 3 : fallback sur distance pondérée perceptuelle
   $best_idx = 0;
   $best_dist = PHP_INT_MAX;
   foreach ($palette as $idx => $palette_hex) {
@@ -77,11 +122,27 @@ function wpf_skill_auto_fix(&$blocks, &$fixes_log, &$seen_ids, &$h1_seen, $conte
     if (empty($b['blockName'])) continue;
     $name = $b['blockName'];
 
-    // Fix : block_id manquant ou dupliqué
+    // Fix : block_id manquant ou dupliqué.
+    // Génère un block_id parlant `<short-block-name>-<hash6>` au lieu d'un UUID anonyme.
+    // Plus facile à debug visuellement dans Gutenberg (« uagb-block-info-box-c293b1 »
+    // au lieu de « uagb-block-c293b1ce »).
     if (strpos($name, 'uagb/') === 0) {
       $bid = $b['attrs']['block_id'] ?? null;
       if (empty($bid) || in_array($bid, $seen_ids, true)) {
-        $new_bid = substr(wpf_skill_uuid_v4(), 0, 8);
+        $short_name = substr($name, 5); // retire "uagb/"
+        // garder seulement les chars valides (alpha-num + tirets)
+        $short_name = preg_replace('/[^a-z0-9-]/', '', strtolower($short_name));
+        // tronquer à 16 chars max pour éviter des classes CSS trop longues
+        if (strlen($short_name) > 16) $short_name = substr($short_name, 0, 16);
+        $hash = substr(wpf_skill_uuid_v4(), 0, 6);
+        $new_bid = "$short_name-$hash";
+        // sécurité : si encore dupliqué (très improbable) → ajout suffixe
+        $attempt = 0;
+        while (in_array($new_bid, $seen_ids, true) && $attempt < 5) {
+          $hash = substr(wpf_skill_uuid_v4(), 0, 6);
+          $new_bid = "$short_name-$hash";
+          $attempt++;
+        }
         $b['attrs']['block_id'] = $new_bid;
         $fixes_log[] = "[$name] block_id → $new_bid";
         $bid = $new_bid;

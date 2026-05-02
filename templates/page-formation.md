@@ -1,6 +1,8 @@
 # Template : Page Formation
 
 > **Use case** : Page de vente d'une formation en ligne. Structure éprouvée pour conversion : hero promesse + bénéfices + programme + témoignages + tarif + FAQ + CTA inscription.
+>
+> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet — il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
 
 ## Variables à fournir
 
@@ -102,39 +104,39 @@
 <div class="wp-block-uagb-advanced-heading uagb-block-pricing-form-heading"><h2 class="uagb-heading-text">Tarif</h2><p class="uagb-desc-text">Une formation, un prix juste, accès à vie</p></div>
 <!-- /wp:uagb/advanced-heading -->
 
-<!-- wp:uagb/container {"block_id":"pricing-card-form","variationSelected":true,"contentWidth":"boxed","directionDesktop":"column","alignItemsDesktop":"center","rowGapDesktop":24,"topPaddingDesktop":48,"bottomPaddingDesktop":48,"leftPaddingDesktop":48,"rightPaddingDesktop":48,"backgroundType":"color","backgroundColor":"var(--ast-global-color-4)","borderStyle":"solid","borderTopWidth":3,"borderRightWidth":3,"borderBottomWidth":3,"borderLeftWidth":3,"borderColor":"var(--ast-global-color-0)","borderRadiusTopLeft":20,"borderRadiusTopRight":20,"borderRadiusBottomLeft":20,"borderRadiusBottomRight":20,"boxShadowColor":"rgba(255,140,0,0.18)","boxShadowVOffset":12,"boxShadowBlur":40} -->
-<div class="wp-block-uagb-container uagb-block-pricing-card-form"><!-- wp:uagb/advanced-heading {"block_id":"pricing-form-price","headingTag":"div","headingTitle":"{{PRICE}}","headingDesc":"{{PRICE_DETAIL}}","headingColor":"var(--ast-global-color-0)","subHeadingColor":"var(--ast-global-color-3)","headingAlign":"center","headingFontWeight":800,"headingFontSizeDesktop":72,"subHeadingFontSizeDesktop":16} -->
-<div class="wp-block-uagb-advanced-heading uagb-block-pricing-form-price"><div class="uagb-heading-text">{{PRICE}}</div><p class="uagb-desc-text">{{PRICE_DETAIL}}</p></div>
+<!-- wp:uagb/container {"block_id":"pricing-card-form","variationSelected":true,"contentWidth":"boxed","directionDesktop":"column","alignItemsDesktop":"center","rowGapDesktop":24,"topPaddingDesktop":48,"bottomPaddingDesktop":48,"leftPaddingDesktop":48,"rightPaddingDesktop":48,"backgroundType":"color","backgroundColor":"var(--ast-global-color-5)","borderStyle":"solid","borderTopWidth":3,"borderRightWidth":3,"borderBottomWidth":3,"borderLeftWidth":3,"borderColor":"var(--ast-global-color-0)","borderRadiusTopLeft":20,"borderRadiusTopRight":20,"borderRadiusBottomLeft":20,"borderRadiusBottomRight":20,"boxShadowColor":"rgba(0,0,0,0.16)","boxShadowVOffset":12,"boxShadowBlur":40} -->
+<div class="wp-block-uagb-container uagb-block-pricing-card-form"><!-- wp:uagb/advanced-heading {"block_id":"pricing-form-price","headingTag":"h3","headingTitle":"{{PRICE}}","headingDesc":"{{PRICE_DETAIL}}","headingColor":"var(--ast-global-color-0)","subHeadingColor":"var(--ast-global-color-3)","headingAlign":"center","headingFontWeight":800,"headingFontSizeDesktop":72,"subHeadingFontSizeDesktop":16,"separatorWidth":0} -->
+<div class="wp-block-uagb-advanced-heading uagb-block-pricing-form-price"><h3 class="uagb-heading-text">{{PRICE}}</h3><p class="uagb-desc-text">{{PRICE_DETAIL}}</p></div>
 <!-- /wp:uagb/advanced-heading -->
 
 <!-- wp:uagb/icon-list {"block_id":"pricing-form-features","gap":12,"icon_layout":"horizontal","label_color":"var(--ast-global-color-2)","icon_color":"var(--ast-global-color-0)"} -->
 <div class="wp-block-uagb-icon-list uagb-block-pricing-form-features"><!-- wp:uagb/icon-list-child {"block_id":"feat-form-1","label":"6 modules vidéo (15h+)","icon":"check","link":""} -->
-<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-1"><span class="uagb-icon-list-source"><svg></svg></span><span class="uagb-icon-list-label">6 modules vidéo (15h+)</span></div>
+<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-1"><span class="uagb-icon-list-label">6 modules vidéo (15h+)</span></div>
 <!-- /wp:uagb/icon-list-child -->
 
 <!-- wp:uagb/icon-list-child {"block_id":"feat-form-2","label":"Exercices pratiques après chaque chapitre","icon":"check","link":""} -->
-<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-2"><span class="uagb-icon-list-source"><svg></svg></span><span class="uagb-icon-list-label">Exercices pratiques après chaque chapitre</span></div>
+<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-2"><span class="uagb-icon-list-label">Exercices pratiques après chaque chapitre</span></div>
 <!-- /wp:uagb/icon-list-child -->
 
 <!-- wp:uagb/icon-list-child {"block_id":"feat-form-3","label":"Communauté Discord privée","icon":"check","link":""} -->
-<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-3"><span class="uagb-icon-list-source"><svg></svg></span><span class="uagb-icon-list-label">Communauté Discord privée</span></div>
+<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-3"><span class="uagb-icon-list-label">Communauté Discord privée</span></div>
 <!-- /wp:uagb/icon-list-child -->
 
 <!-- wp:uagb/icon-list-child {"block_id":"feat-form-4","label":"Certificat de complétion","icon":"check","link":""} -->
-<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-4"><span class="uagb-icon-list-source"><svg></svg></span><span class="uagb-icon-list-label">Certificat de complétion</span></div>
+<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-4"><span class="uagb-icon-list-label">Certificat de complétion</span></div>
 <!-- /wp:uagb/icon-list-child -->
 
 <!-- wp:uagb/icon-list-child {"block_id":"feat-form-5","label":"Accès à vie aux mises à jour","icon":"check","link":""} -->
-<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-5"><span class="uagb-icon-list-source"><svg></svg></span><span class="uagb-icon-list-label">Accès à vie aux mises à jour</span></div>
+<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-5"><span class="uagb-icon-list-label">Accès à vie aux mises à jour</span></div>
 <!-- /wp:uagb/icon-list-child -->
 
 <!-- wp:uagb/icon-list-child {"block_id":"feat-form-6","label":"Support email + Discord","icon":"check","link":""} -->
-<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-6"><span class="uagb-icon-list-source"><svg></svg></span><span class="uagb-icon-list-label">Support email + Discord</span></div>
+<div class="wp-block-uagb-icon-list-child uagb-block-feat-form-6"><span class="uagb-icon-list-label">Support email + Discord</span></div>
 <!-- /wp:uagb/icon-list-child --></div>
 <!-- /wp:uagb/icon-list -->
 
 <!-- wp:uagb/buttons {"block_id":"pricing-form-cta-wrap","align":"center"} -->
-<div class="wp-block-uagb-buttons uagb-block-pricing-form-cta-wrap"><!-- wp:uagb/buttons-child {"block_id":"pricing-form-cta","label":"{{CTA_LABEL}}","link":"{{CTA_URL}}","backgroundColor":"var(--ast-global-color-0)","color":"var(--ast-global-color-4)","hoverBackgroundColor":"var(--ast-global-color-1)","hoverColor":"var(--ast-global-color-4)","borderRadius":8,"sizeType":"px","size":18,"paddingTop":18,"paddingBottom":18,"paddingLeft":40,"paddingRight":40,"fontWeight":700,"boxShadowColor":"rgba(0,0,0,0.15)","boxShadowVOffset":8,"boxShadowBlur":24} -->
+<div class="wp-block-uagb-buttons uagb-block-pricing-form-cta-wrap"><!-- wp:uagb/buttons-child {"block_id":"pricing-form-cta","label":"{{CTA_LABEL}}","link":"{{CTA_URL}}","backgroundColor":"var(--ast-global-color-0)","color":"var(--ast-global-color-5)","hoverBackgroundColor":"var(--ast-global-color-1)","hoverColor":"var(--ast-global-color-5)","borderRadius":8,"sizeType":"px","size":18,"paddingTop":18,"paddingBottom":18,"paddingLeft":40,"paddingRight":40,"fontWeight":700,"boxShadowColor":"rgba(0,0,0,0.15)","boxShadowVOffset":8,"boxShadowBlur":24} -->
 <div class="wp-block-uagb-buttons-child uagb-block-pricing-form-cta"><a class="uagb-buttons-repeater wp-block-uagb-buttons-child__link" href="{{CTA_URL}}"><span class="uagb-button-text">{{CTA_LABEL}}</span></a></div>
 <!-- /wp:uagb/buttons-child --></div>
 <!-- /wp:uagb/buttons --></div>

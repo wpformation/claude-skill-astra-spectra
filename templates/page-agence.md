@@ -1,8 +1,10 @@
 # Template : Page Agence
 
 > **Use case** : Site vitrine d'une agence digitale, marketing, design, dev, ou freelance solo positionné en agence. Conversion via prise de RDV ou demande de devis.
+>
+> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet — il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
 
-## Structure
+## Structure (ordre des patterns)
 
 ```
 1. Hero impact (full-screen, dark mode)

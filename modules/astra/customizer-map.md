@@ -5,15 +5,22 @@
 ## Règle d'or
 
 ```
-1. $current = get_option('astra-settings');         // 1942 keys, 242 KB
+1. $current = get_option('astra-settings');         // 200+ top-level keys, plusieurs centaines à milliers de leaves selon ta config
 2. $merged = array_merge_recursive($current, $patch); // sur-ensemble
 3. update_option('astra-settings', $merged);        // écriture
-4. astra_clear_all_assets_cache();                   // invalide cache CSS Astra
+4. astra_clear_all_assets_cache();                   // invalide cache CSS Astra (si fonction dispo selon la version d'Astra)
 5. delete_transient('astra_dynamic_css');            // invalide transient
 6. wp_cache_flush();                                 // flush global
 ```
 
-**JAMAIS** un `update_option('astra-settings', $patch)` brut : ça écrase les 1942 autres keys.
+**JAMAIS** un `update_option('astra-settings', $patch)` brut : ça écrase les centaines (à milliers selon la config) d'autres keys.
+
+> **Mesure réelle** sur quelques sites tests :
+> - Astra (gratuit, defaults) : ~150-220 top-level keys, ~30 KB sérialisé
+> - Astra Pro avec header/footer builder configurés : 200-300 top-level keys, 40-80 KB sérialisé
+> - Astra Pro + Customizer fortement personnalisé : peut atteindre plusieurs milliers de leaves cumulées et 200+ KB
+>
+> La conclusion ne change pas : c'est une option **massive** qu'il ne faut JAMAIS réinitialiser, juste patcher.
 
 ## 1. Identité du site (logo, favicon)
 
@@ -214,7 +221,14 @@ $current['global-color-palette']['palette'] = [
 ];
 $current['global-color-palette']['currentPalette'] = 'default';
 update_option('astra-settings', $current);
-astra_clear_all_assets_cache();
+
+// astra_clear_all_assets_cache() n'est pas toujours définie :
+// - elle existe dans Astra ≥ 3.5 quand le module CSS Generator est actif
+// - sinon (versions plus anciennes ou flag désactivé), la fonction est absente
+// → toujours guarder avec function_exists()
+if (function_exists('astra_clear_all_assets_cache')) {
+  astra_clear_all_assets_cache();
+}
 delete_transient('astra_dynamic_css');
 wp_cache_flush();
 ```

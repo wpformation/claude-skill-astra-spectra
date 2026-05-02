@@ -140,7 +140,24 @@ function main() {
   }
 
   if ($response['code'] === 401) {
-    fail("Authentication failed (401). Check --user and --app-password. Make sure Application Password is created on /wp-admin/profile.php.");
+    // Pré-test : vérifier si c'est un strip d'Authorization header (Apache mutu)
+    $diagnostic = "Authentication failed (401).\n\n";
+    $diagnostic .= "Diagnostic possibles, du plus fréquent au moins fréquent :\n\n";
+    $diagnostic .= "1. HÉBERGEMENT MUTUALISÉ APACHE (o2switch, OVH mutu, 1&1, Hostinger, etc.)\n";
+    $diagnostic .= "   Ton serveur strippe probablement l'header Authorization avant WordPress.\n";
+    $diagnostic .= "   Fix : ajouter dans .htaccess (racine WP) après 'RewriteEngine On' :\n";
+    $diagnostic .= "     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]\n\n";
+    $diagnostic .= "   Test : curl -u 'user:pass' $site_url/wp-json/wp/v2/users/me\n";
+    $diagnostic .= "   Si réponse = {\"code\":\"rest_not_logged_in\"}, c'est ce strip qui pose problème.\n\n";
+    $diagnostic .= "2. APPLICATION PASSWORD INVALIDE\n";
+    $diagnostic .= "   Recopier exactement (espaces compris) depuis /wp-admin/profile.php.\n";
+    $diagnostic .= "   Format attendu : 'xxxx xxxx xxxx xxxx xxxx xxxx' (24 chars + 5 espaces).\n\n";
+    $diagnostic .= "3. USERNAME INCORRECT\n";
+    $diagnostic .= "   Souvent ton login admin (pas ton email). Visible dans /wp-admin/users.php.\n\n";
+    $diagnostic .= "4. APPLICATION PASSWORDS DÉSACTIVÉS\n";
+    $diagnostic .= "   Certains plugins de sécurité (Solid Security, Wordfence) ou mu-plugins\n";
+    $diagnostic .= "   désactivent Application Passwords. Vérifier le profile.php.\n";
+    fail($diagnostic);
   }
   if ($response['code'] === 403) {
     fail("Permission denied (403). The user '{$args['user']}' must have edit_pages capability.");

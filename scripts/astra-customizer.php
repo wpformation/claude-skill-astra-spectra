@@ -29,14 +29,34 @@ if (!defined('ABSPATH')) {
   }
 }
 
+// Compte récursif de toutes les leaves (valeurs scalaires) d'un array imbriqué.
+// Astra stocke beaucoup de configs en arrays imbriqués → un count() top-level
+// sous-évalue massivement (ex: 216 vs 1942 réels).
+function wpf_skill_count_leaves($arr) {
+  if (!is_array($arr)) return 1;
+  $n = 0;
+  foreach ($arr as $v) {
+    $n += is_array($v) ? wpf_skill_count_leaves($v) : 1;
+  }
+  return $n;
+}
+
 function wpf_skill_astra_export() {
   $current = get_option('astra-settings');
   if (!$current) return ['error' => 'astra-settings option not found. Astra theme inactive?'];
 
+  // currentPalette est dans une option séparée 'astra-color-palettes' (pilote l'UI Customizer),
+  // PAS dans 'astra-settings.global-color-palette.currentPalette'.
+  $current_palette_name = null;
+  $color_palettes = get_option('astra-color-palettes');
+  if (is_array($color_palettes) && isset($color_palettes['currentPalette'])) {
+    $current_palette_name = $color_palettes['currentPalette'];
+  }
+
   // Extraire les sections clés
   return [
     'palette' => [
-      'currentPalette' => $current['global-color-palette']['currentPalette'] ?? null,
+      'currentPalette' => $current_palette_name,
       'colors' => $current['global-color-palette']['palette'] ?? [],
     ],
     'typography' => [
@@ -70,7 +90,8 @@ function wpf_skill_astra_export() {
       'single_post_sidebar' => $current['single-post-sidebar-layout'] ?? null,
     ],
     '_meta' => [
-      'total_keys' => count($current),
+      'top_level_keys' => count($current),
+      'total_leaves' => wpf_skill_count_leaves($current),
       'option_size_kb' => round(strlen(serialize($current)) / 1024, 1),
     ],
   ];

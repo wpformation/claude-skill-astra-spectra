@@ -129,7 +129,7 @@ astra-spectra/
 ├── scripts/
 │   ├── detect-environment.php            # profil site (Spectra/Astra/thème/palette)
 │   ├── apply-design-tokens.php           # inject palette Astra ou fallback CSS
-│   ├── astra-customizer.php              # export/apply astra-settings (préserve 1942 keys)
+│   ├── astra-customizer.php              # export/apply astra-settings (préserve toutes les keys non touchées)
 │   ├── validate-block-markup.php         # roundtrip parse/serialize (normalise --)
 │   ├── visual-audit.php                  # 12 checks intégrés P0-P3
 │   ├── auto-fix-markup.php               # corrections auto block_id/hex/H1
@@ -175,7 +175,7 @@ Quand l'utilisateur dit « crée une page X » :
 - **NE JAMAIS** écraser une page existante sans confirmation utilisateur (préférer le clone via copy)
 - **NE JAMAIS** mettre des hex hardcoded dans les attrs de blocs uagb (toujours `var(--ast-global-color-X)` ou un token nommé)
 - **NE JAMAIS** générer un bloc Spectra sans `block_id` unique (sinon Gutenberg recompute et casse)
-- **NE JAMAIS** reset l'option `astra-settings` (242 KB, 1942 keys, perte du config user). Toujours read → modify → write
+- **NE JAMAIS** reset l'option `astra-settings` (option massive, des centaines de keys, peut atteindre 200+ KB sur configs avancées). Toujours read → modify → write
 - **NE JAMAIS** envoyer le contenu d'une page sans avoir validé le markup via `validate-block-markup.php` (roundtrip parse → reserialize doit faire 0 char de diff)
 
 ## Pourquoi ce skill existe

@@ -66,14 +66,26 @@ L'Application Password permet au skill de communiquer avec ton site sans utilise
 
 ## Étape 3 — Tester la connexion (30 secondes)
 
-Lance Claude Code et invoque le skill avec ces 3 paramètres :
+Tu as deux façons d'invoquer le skill :
+
+### Option A — Invocation explicite (recommandée pour test reproductible)
 
 ```
-> Invoque le skill astra-spectra : détecte mon site https://monsite.com,
-> user admin, app password "abcd 1234 efgh 5678".
+> /astra-spectra
+> détecte mon site https://monsite.com user=admin app-password="abcd 1234 efgh 5678"
 ```
 
-Sous le capot, Claude Code lance `scripts/detect-environment.php` (via `wp eval-file` si tu as WP-CLI local, ou via un endpoint REST si tu as installé le mu-plugin compagnon, ou en téléchargeant le script et en l'exécutant côté hébergeur).
+### Option B — Langage naturel (Claude Code détecte le skill)
+
+```
+> Détecte mon site https://monsite.com avec ce password : abcd 1234 efgh 5678
+```
+
+Sous le capot, Claude Code lance `scripts/detect-environment.php` :
+
+- Via `wp eval-file detect-environment.php` si tu as WP-CLI local sur le serveur
+- Via un endpoint REST `/wp-json/astra-spectra/v1/detect` si tu as installé un mu-plugin compagnon (non fourni par défaut, à toi de l'écrire si tu en veux un)
+- Sinon en téléchargeant le script via FTP/SSH/cPanel et en le requêtant via curl
 
 Le skill devrait répondre avec :
 
@@ -99,6 +111,17 @@ Si tu obtiens **HTTP 401** :
 
 - Vérifie ton Application Password (recopie-le exactement, espaces compris)
 - Vérifie le username (souvent ton email ou ton nom d'utilisateur admin)
+- ⚠️ **Si tu es sur o2switch, OVH mutualisé, 1&1, ou tout hébergement Apache mutualisé** : ton serveur strippe probablement l'header `Authorization` avant qu'il n'arrive à WordPress. C'est une protection Apache par défaut sur le hosting partagé. Sans correction, **toute Application Password est inutilisable**.
+
+  Ajouter dans `.htaccess` (à la racine WordPress, juste après `RewriteEngine On`) :
+
+  ```apache
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+  ```
+
+  Si tu n'as pas accès au `.htaccess`, demander au support de ton hébergeur d'ajouter cette directive ou de créer un `.htaccess` à la racine.
+
+  Test rapide : `curl -u 'admin:xxxx xxxx xxxx xxxx' https://monsite.com/wp-json/wp/v2/users/me` doit renvoyer un objet utilisateur, pas `{"code":"rest_not_logged_in"}`.
 
 ## Étape 4 — Générer ta première page (2 minutes)
 
@@ -137,6 +160,16 @@ Composition : 12 blocs (8 uagb + 4 core), 0 erreur de parsing.
 🎉 **Bravo !** Tu viens de générer ta première page WordPress avec ce skill.
 
 ## Troubleshooting
+
+### Les icônes Spectra n'apparaissent pas en preview frontend non-authentifiée
+
+C'est normal. Spectra rend la plupart des icônes **côté JavaScript au mount du bloc**, pas côté serveur. En preview frontend déconnecté ou avec un agent crawler désactivant JS, les icônes peuvent être absentes du HTML rendu. Pour vérifier que les icônes existent bien dans le markup :
+
+- Ouvrir la page dans Gutenberg authentifié → icônes présentes
+- Sur le frontend connecté → icônes présentes (JS Spectra chargé)
+- En CI / screenshot Playwright → utiliser `page.waitForSelector('.uagb-ifb-icon-wrap svg')` pour s'assurer que JS a tourné avant capture
+
+Pour SEO : ce n'est pas un problème, Google rend JavaScript depuis 2018+ et voit les icônes au crawl.
 
 ### Le skill n'est pas détecté par Claude Code
 

@@ -267,7 +267,7 @@ Résultat : 9 variables CSS `--ast-global-color-0..8` régénérées en moins de
 1. ❌ Hex hardcodé dans un attribut couleur — toujours `var(--ast-global-color-X)`
 2. ❌ Oublier `block_id` sur un bloc Spectra — Gutenberg recompute et casse le rendu
 3. ❌ Réutiliser le même `block_id` entre 2 blocs — duplicate fail
-4. ❌ `update_option('astra-settings', $patch)` — écrase 1942 keys, désastre
+4. ❌ `update_option('astra-settings', $patch)` — écrase les centaines de keys de l'option, désastre
 5. ❌ Modifier le header builder sans Astra Pro actif — fallback widgetisé
 6. ❌ POST sur l'URL prod sans clone — perte du contenu legacy
 7. ❌ Heading H1 multiple sur une page — SEO fail

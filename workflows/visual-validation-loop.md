@@ -57,22 +57,20 @@ Verrouillage : couleurs Astra global-color-* respectées (ne JAMAIS proposer de 
 Output : liste de problèmes priorisés (P0 critique → P3 cosmétique)
 ```
 
-**Si `/impeccable` absent**, appliquer ces 12 checks intégrés :
+**Si `/impeccable` absent**, le script `scripts/visual-audit.php` applique ces 8 checks intégrés (statiques, sur le markup, sans rendu visuel) :
 
-| Check | Critère | Sévérité |
-|-------|---------|----------|
-| 1. Hiérarchie titres | un seul H1, H2/H3 cohérents, pas de saut H1→H4 | P0 |
-| 2. Contraste texte/fond | ratio WCAG AA ≥ 4.5 sur tous les containers | P0 |
-| 3. Hex hardcodé | détecter `color:#XXXXXX` au lieu de `var(--ast-global-color-*)` | P1 |
-| 4. block_id manquant | tous les `uagb/*` doivent avoir un `block_id` unique | P0 |
-| 5. Padding incohérent | `paddingTop`/`paddingBottom` cohérents entre sections (60-80-100) | P2 |
-| 6. Boutons sans CTA texte | pas de bouton sans label clair | P1 |
-| 7. Images sans alt | `<img alt="">` vide → P1 |
-| 8. Largeur container | `contentWidth` ≤ 1200 sur écrans desktop | P2 |
-| 9. Responsive breakpoints | au moins `tablet` + `mobile` définis sur containers | P1 |
-| 10. Typo cohérente | mêmes `headingFontFamily` dans toute la page | P3 |
-| 11. Espace vertical | gap minimum 40px entre sections | P2 |
-| 12. CTA primaire visible | au moins un CTA `var(--ast-global-color-0)` au-dessus de la ligne de flottaison | P1 |
+| # | Check | Critère | Sévérité |
+|---|-------|---------|----------|
+| 1 | Hiérarchie titres | exactement 1 H1, comptage H2/H3 | P0 (multiple) / P1 (absent) |
+| 2 | block_id Spectra | tous les `uagb/*` ont un `block_id` unique | P0 (manquant ou dupliqué) |
+| 3 | Couleur hardcodée | détecte hex/rgb/rgba/hsl au lieu de `var(--ast-global-color-X)` | P1 (général) / P3 (box-shadow neutre rgba(0,0,0,X) accepté) |
+| 4 | Image alt | `core/image` ou `uagb/image` sans alt text | P1 |
+| 5 | Container width | `contentWidth > 1400` (lecture désconfortable) | P2 |
+| 6 | Padding responsive sur container racine | container racine avec padding desktop mais sans tablet/mobile | P1 |
+| 7 | CTA présent | au moins un `uagb/buttons` ou `core/buttons` sur la page | P1 |
+| 8 | H1 présent | exactement 1 H1 sur la page | P1 (absent) |
+
+> **Note honnêteté** : ces 8 checks sont les plus utiles parce qu'ils sont mesurables sur le markup statique sans rendu navigateur. Les checks visuels avancés (contraste WCAG mesuré sur DOM rendu, font-size minimum, spacing rhythm, weight image, ordre sémantique a11y, micro-interactions) **nécessitent un vrai rendu navigateur** et sont délégués à `/impeccable` qui pilote Chrome via Playwright. Si `/impeccable` est installé, l'audit est plus profond. S'il ne l'est pas, ces 8 checks couvrent ~80 % des problèmes critiques.
 
 ### 3. Décision : retry ou done
 

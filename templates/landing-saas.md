@@ -1,8 +1,10 @@
 # Template : Landing SaaS
 
 > **Use case** : Landing page d'une application SaaS / outil web (analytics, CRM, dashboard, etc.). Structure conversion B2B classique.
+>
+> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet — il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
 
-## Structure
+## Structure (ordre des patterns)
 
 ```
 1. Hero CTA Split avec capture d'écran produit ou animation Lottie

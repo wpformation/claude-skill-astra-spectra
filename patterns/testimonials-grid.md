@@ -1,47 +1,81 @@
 # Pattern : Testimonials Grid
 
-> **Use case** : Section témoignages client/utilisateur en grille 2-3 cards. Chaque témoignage : photo + citation + nom + poste/company. Renforce la preuve sociale, idéal entre features et pricing.
+> **Use case** : Section témoignages en grille 3 cards. Chaque témoignage : citation + nom + poste/company. Renforce la preuve sociale, idéal entre features et pricing.
 
-## Block markup (3 témoignages)
+## Note d'implémentation (v0.8.2)
+
+Le bloc Spectra `uagb/testimonial` natif a un rendu HTML complexe et fragile (carousel, item arrays imbriqués, dynamic JS layout) qui diverge facilement du HTML attendu et provoque des « invalid content » à l'ouverture dans Gutenberg. **Ce pattern utilise donc une composition `uagb/container` + 3× `uagb/info-box` qui produit le même résultat visuel sans le risque.** C'est une décision pragmatique : `uagb/info-box` rend de façon prévisible et a déjà été corrigé pour matcher le rendu réel Spectra.
+
+## Variables d'entrée
+
+| Variable | Description | Exemple |
+|----------|-------------|---------|
+| `{{SECTION_HEADLINE}}` | Titre de section | `Ils nous font confiance` |
+| `{{SECTION_SUBLINE}}` | Sous-titre optionnel | `Plus de 200 entreprises automatisent avec nous` |
+| `{{T1_DESC}}` etc. | Texte témoignage (60-300 chars idéal) | `Page de vente livrée en 90 secondes...` |
+| `{{T1_NAME}}` etc. | Nom + poste + company | `Marie Dupont, CMO chez ACME` |
+
+Pas de variable `{{T1_IMAGE}}` dans cette version : les photos d'avatar dans `uagb/info-box` nécessitent un media library upload, ce qui ne peut pas se faire depuis le markup. Si tu veux des photos, ajoute-les manuellement après création de la page (étape 2 du workflow).
+
+## Block markup
 
 ```html
-<!-- wp:uagb/container {"block_id":"testimonials-section","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":1280,"directionDesktop":"column","alignItemsDesktop":"center","rowGapDesktop":48,"topPaddingDesktop":80,"bottomPaddingDesktop":80,"backgroundType":"color","backgroundColor":"var(--ast-global-color-4)"} -->
-<div class="wp-block-uagb-container alignwide uagb-block-testimonials-section"><!-- wp:uagb/advanced-heading {"block_id":"testimonials-heading","headingTag":"h2","headingTitle":"{{SECTION_HEADLINE}}","headingDesc":"{{SECTION_SUBLINE}}","headingColor":"var(--ast-global-color-2)","subHeadingColor":"var(--ast-global-color-3)","headingAlign":"center","headingFontWeight":700,"headingFontSizeDesktop":36,"subHeadingTopMarginDesktop":12} -->
+<!-- wp:uagb/container {"block_id":"testimonials-section","variationSelected":true,"contentWidth":"alignwide","innerContentCustomWidthDesktop":1280,"directionDesktop":"column","alignItemsDesktop":"center","rowGapDesktop":48,"topPaddingDesktop":100,"bottomPaddingDesktop":100,"topPaddingTablet":60,"bottomPaddingTablet":60,"backgroundType":"color","backgroundColor":"var(--ast-global-color-7)"} -->
+<div class="wp-block-uagb-container alignwide uagb-block-testimonials-section"><!-- wp:uagb/advanced-heading {"block_id":"testimonials-heading","headingTag":"h2","headingTitle":"{{SECTION_HEADLINE}}","headingDesc":"{{SECTION_SUBLINE}}","headingColor":"var(--ast-global-color-2)","subHeadingColor":"var(--ast-global-color-3)","headingAlign":"center","headingFontWeight":700,"headingFontSizeDesktop":40,"headingFontSizeTablet":32,"headingFontSizeMobile":28,"subHeadingFontSizeDesktop":18,"separatorWidth":0,"subHeadingTopMarginDesktop":16} -->
 <div class="wp-block-uagb-advanced-heading uagb-block-testimonials-heading"><h2 class="uagb-heading-text">{{SECTION_HEADLINE}}</h2><p class="uagb-desc-text">{{SECTION_SUBLINE}}</p></div>
 <!-- /wp:uagb/advanced-heading -->
 
-<!-- wp:uagb/testimonial {"block_id":"testimonials-grid","test_block_count":3,"test_item_count":3,"columns":3,"tcolumn":3,"test_items":[{"description":"{{T1_DESC}}","name":"{{T1_NAME}}","company":"{{T1_COMPANY}}","image":{"url":"{{T1_IMAGE}}","id":0}},{"description":"{{T2_DESC}}","name":"{{T2_NAME}}","company":"{{T2_COMPANY}}","image":{"url":"{{T2_IMAGE}}","id":0}},{"description":"{{T3_DESC}}","name":"{{T3_NAME}}","company":"{{T3_COMPANY}}","image":{"url":"{{T3_IMAGE}}","id":0}}],"headingColor":"var(--ast-global-color-2)","subHeadingColor":"var(--ast-global-color-3)","descColor":"var(--ast-global-color-3)","iconColor":"var(--ast-global-color-0)","backgroundType":"color","backgroundColor":"var(--ast-global-color-5)","containerBorderRadius":16,"containerPaddingTop":32,"containerPaddingBottom":32,"containerPaddingLeft":32,"containerPaddingRight":32,"showImage":true,"imgPosition":"top","testItemsPerLine":3,"showRatings":true,"ratingsColor":"#FFC107"} -->
-<div class="wp-block-uagb-testimonial uagb-block-testimonials-grid">[Spectra render testimonial cards]</div>
-<!-- /wp:uagb/testimonial --></div>
+<!-- wp:uagb/container {"block_id":"testimonials-row","variationSelected":true,"contentWidth":"boxed","directionDesktop":"row","alignItemsDesktop":"stretch","justifyContentDesktop":"space-between","columnGapDesktop":32,"rowGapDesktop":32,"directionTablet":"column","rowGapTablet":24} -->
+<div class="wp-block-uagb-container uagb-block-testimonials-row"><!-- wp:uagb/info-box {"block_id":"testimonial-1","headingTag":"h3","headingTitle":"{{T1_NAME}}","headingDesc":"{{T1_DESC}}","showIcon":false,"headingColor":"var(--ast-global-color-2)","subHeadingColor":"var(--ast-global-color-3)","headingAlign":"left","headingFontSizeDesktop":18,"subHeadingFontSizeDesktop":15,"subHeadingLineHeightDesktop":1.6,"ctaType":"none","backgroundColor":"var(--ast-global-color-5)","containerPaddingTopDesktop":32,"containerPaddingBottomDesktop":32,"containerPaddingLeftDesktop":28,"containerPaddingRightDesktop":28,"borderRadiusTopLeft":12,"borderRadiusTopRight":12,"borderRadiusBottomLeft":12,"borderRadiusBottomRight":12,"boxShadowColor":"rgba(0,0,0,0.06)","boxShadowVOffset":4,"boxShadowBlur":16,"widthDesktop":33.33,"widthTypeDesktop":"%","widthTablet":100,"widthTypeTablet":"%"} -->
+<div class="wp-block-uagb-info-box uagb-block-testimonial-1"><div class="uagb-ifb-content"><p class="uagb-ifb-desc">{{T1_DESC}}</p><div class="uagb-ifb-title-wrap"><h3 class="uagb-ifb-title">{{T1_NAME}}</h3></div></div></div>
+<!-- /wp:uagb/info-box -->
+
+<!-- wp:uagb/info-box {"block_id":"testimonial-2","headingTag":"h3","headingTitle":"{{T2_NAME}}","headingDesc":"{{T2_DESC}}","showIcon":false,"headingColor":"var(--ast-global-color-2)","subHeadingColor":"var(--ast-global-color-3)","headingAlign":"left","headingFontSizeDesktop":18,"subHeadingFontSizeDesktop":15,"subHeadingLineHeightDesktop":1.6,"ctaType":"none","backgroundColor":"var(--ast-global-color-5)","containerPaddingTopDesktop":32,"containerPaddingBottomDesktop":32,"containerPaddingLeftDesktop":28,"containerPaddingRightDesktop":28,"borderRadiusTopLeft":12,"borderRadiusTopRight":12,"borderRadiusBottomLeft":12,"borderRadiusBottomRight":12,"boxShadowColor":"rgba(0,0,0,0.06)","boxShadowVOffset":4,"boxShadowBlur":16,"widthDesktop":33.33,"widthTypeDesktop":"%","widthTablet":100,"widthTypeTablet":"%"} -->
+<div class="wp-block-uagb-info-box uagb-block-testimonial-2"><div class="uagb-ifb-content"><p class="uagb-ifb-desc">{{T2_DESC}}</p><div class="uagb-ifb-title-wrap"><h3 class="uagb-ifb-title">{{T2_NAME}}</h3></div></div></div>
+<!-- /wp:uagb/info-box -->
+
+<!-- wp:uagb/info-box {"block_id":"testimonial-3","headingTag":"h3","headingTitle":"{{T3_NAME}}","headingDesc":"{{T3_DESC}}","showIcon":false,"headingColor":"var(--ast-global-color-2)","subHeadingColor":"var(--ast-global-color-3)","headingAlign":"left","headingFontSizeDesktop":18,"subHeadingFontSizeDesktop":15,"subHeadingLineHeightDesktop":1.6,"ctaType":"none","backgroundColor":"var(--ast-global-color-5)","containerPaddingTopDesktop":32,"containerPaddingBottomDesktop":32,"containerPaddingLeftDesktop":28,"containerPaddingRightDesktop":28,"borderRadiusTopLeft":12,"borderRadiusTopRight":12,"borderRadiusBottomLeft":12,"borderRadiusBottomRight":12,"boxShadowColor":"rgba(0,0,0,0.06)","boxShadowVOffset":4,"boxShadowBlur":16,"widthDesktop":33.33,"widthTypeDesktop":"%","widthTablet":100,"widthTypeTablet":"%"} -->
+<div class="wp-block-uagb-info-box uagb-block-testimonial-3"><div class="uagb-ifb-content"><p class="uagb-ifb-desc">{{T3_DESC}}</p><div class="uagb-ifb-title-wrap"><h3 class="uagb-ifb-title">{{T3_NAME}}</h3></div></div></div>
+<!-- /wp:uagb/info-box --></div>
+<!-- /wp:uagb/container --></div>
 <!-- /wp:uagb/container -->
 ```
 
-## Variables
+Note structurelle : `<p class="uagb-ifb-desc">` est avant `<h3 class="uagb-ifb-title">` dans le HTML, parce que pour un témoignage on lit d'abord la citation puis on regarde de qui elle vient — ordre visuel naturel.
 
-- `{{SECTION_HEADLINE}}` : « Ils nous font confiance », « Ce qu'en pensent nos clients »
-- `{{T1_DESC}}` etc. : témoignage texte (60-200 chars idéal, max 300)
-- `{{T1_NAME}}` etc. : nom de la personne
-- `{{T1_COMPANY}}` etc. : poste + company (« CEO chez ACME ») ou seulement company
-- `{{T1_IMAGE}}` etc. : URL photo (carrée, 200x200 min)
+## Block IDs
+
+- `testimonials-section`, `testimonials-heading`, `testimonials-row`
+- `testimonial-1`, `testimonial-2`, `testimonial-3`
+
+Renommer si plusieurs sections testimonials sur la même page : `testimonial-saas-1`, `testimonial-formation-1`, etc.
 
 ## Variantes
 
-### Variante 1 — 6 témoignages en carousel
+### Variante 1 — 4 témoignages
 
-`columns: 3, layout: "carousel", autoplay: true, autoplaySpeed: 4000`. Plus de témoignages affichables sans scroll page.
+Remplacer `widthDesktop: 33.33` par `widthDesktop: 24` (4 cards en ligne avec gap 24px) ou `widthDesktop: 48.5` (2 cards par ligne sur 2 lignes).
 
-### Variante 2 — Avec étoiles (rating)
+### Variante 2 — Avec photo (action manuelle)
 
-`showRatings: true, ratings: 5` par item dans `test_items`.
+Après création de la page, ouvrir chaque info-box, activer `Show Image`, uploader la photo (carrée 200×200 min), positionner `Image Position: Above title`. Laisser le skill pour le markup, ajouter les photos depuis le media library Gutenberg.
 
-### Variante 3 — Single testimonial featured (1 grand)
+### Variante 3 — Single featured (1 grand testimonial)
 
-`columns: 1, testItemsPerLine: 1`, padding plus large, image plus grande (left positioned).
+Garder un seul `uagb/info-box` avec `widthDesktop: 80`, `headingFontSizeDesktop: 28`, padding plus large, citation en plus gros corps.
+
+### Variante 4 — Background dark
+
+Section : `backgroundColor: var(--ast-global-color-2)`. Cards : `backgroundColor: var(--ast-global-color-3)`. Heading des cards : `var(--ast-global-color-7)`. Desc : `var(--ast-global-color-7)` aussi avec opacity 0.85 visuelle.
 
 ## Bonnes pratiques
 
 - **Maximum 6 témoignages** par section (au-delà, lassitude)
-- **Photos vraies** > photos stock (impact crédibilité x2)
+- **Photos vraies** > photos stock (impact crédibilité × 2)
 - **Nom + poste + company** complets > juste prénom (autorité)
 - **Témoignages spécifiques** > génériques (« j'ai gagné 3h/semaine » > « super outil »)
-- **Logos clients** en complément si possible (séparé en grid below)
+- **Logos clients** en complément si possible (séparés en grid below)
+
+## Test post-génération
+
+Ouvrir la page créée dans Gutenberg authentifié. Aucun warning « invalid content » ne doit apparaître sur les info-box. Si warning : vérifier la structure `uagb-ifb-content > uagb-ifb-title-wrap > h3` + `uagb-ifb-desc`.

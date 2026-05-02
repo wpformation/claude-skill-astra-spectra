@@ -15,6 +15,52 @@ Toutes les modifications notables de ce skill sont documentées dans ce fichier.
 - Article WPFormation dédié
 - Distribution communauté (LinkedIn, Discord WP, soumission #ai-tools Slack)
 
+## [0.8.2-beta] — 2026-05-02 (soir)
+
+### Re-test cours-ndrc.fr : 4 BLOCKERS + 6 MAJEURS + 7 MINEURS + 3 comportements corrigés
+
+#### Corrigé — 4 BLOCKERS
+
+- **`patterns/testimonials-grid.md`** : `[Spectra render testimonial cards]` était un placeholder textuel littéral dans le HTML rendu, qui divergeait du HTML réel produit par `uagb/testimonial` à l'ouverture → warning « invalid content » garanti. Pattern réécrit avec composition `uagb/container` + 3× `uagb/info-box` (qui rend de façon prévisible et a déjà été corrigé en v0.8.1). Décision pragmatique documentée dans le pattern.
+- **`patterns/team-grid.md`** : MÊME bug que testimonials-grid (`[Spectra render team cards]`). Détecté par self-audit grep. Réécrit avec composition `uagb/info-box` + sub-heading pour le rôle.
+- **`patterns/pricing-3-tiers.md`** : `<span class="uagb-icon-list-source"><svg></svg></span>` divergeait du SVG check réel généré par Spectra → warning. Retiré, le HTML rendu reste minimal (juste `<span class="uagb-icon-list-label">`), Spectra injecte le SVG au mount.
+- **`patterns/pricing-3-tiers.md`** : block_id `t1-feat`, `t2-feat`, `t3-feat` non-uniques pour features multiples. Renommés en `t1-feat-1`, `t1-feat-2`, ... Ajout note explicite « pour ajouter plus de features, suffixer en `-N` ».
+- **`patterns/pricing-3-tiers.md`** : `boxShadowColor: "rgba(255,140,0,0.18)"` (orange WPF hardcodé) sur tier 2 → remplacé par `rgba(0,0,0,0.16)` neutre qui marche sur n'importe quelle palette.
+- **`templates/page-formation.md`** : 6 occurrences de `<svg></svg>` vides + box-shadow orange hardcodé + `headingTag:"div"` sur le prix + couleur texte CTA `--ast-global-color-4` (illisible) — détectés par self-audit, tous corrigés.
+
+#### Corrigé — Comportement critique O2
+
+- **`scripts/post-page-via-rest.php`** : message d'erreur 401 enrichi avec diagnostic 4-points (header `Authorization` strippé par Apache mutu, app password invalide, username incorrect, plugin sécurité). Test guide `curl /wp-json/wp/v2/users/me`. Couvre o2switch, OVH mutu, 1&1, Hostinger.
+- **`INSTALL.md`** : note critique sur `.htaccess` `RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]` pour les hébergements mutualisés Apache.
+
+#### Corrigé — 6 MAJEURS
+
+- **`scripts/auto-fix-markup.php`** : algorithme nearest-color amélioré avec biais sémantique. Avant : `#0a0a0a` mappé sur `--ast-global-color-7` (faux). Après : noirs très foncés (luminance < 0.15) prioritisent `--ast-global-color-2` ou `--ast-global-color-3` (slots conventionnels heading/text). Blancs très clairs prioritisent `--ast-global-color-5`. Distance euclidienne pondérée `redmean` (approximation perceptuelle Lab) en fallback.
+- **`scripts/astra-customizer.php`** : `currentPalette` lu depuis `astra-color-palettes` (option qui pilote l'UI Customizer), pas depuis `astra-settings.global-color-palette` qui ne contient pas ce champ. Bug rendait l'export inutile sur palettes nommées (palette_3 etc.).
+- **`scripts/astra-customizer.php`** : ajout `wpf_skill_count_leaves()` récursif qui compte toutes les leaves (valeurs scalaires) d'un array imbriqué. Le `count()` top-level sous-évaluait massivement (216 sur prod vs 1942 promis dans la doc). Output `_meta.top_level_keys` + `_meta.total_leaves`. Doc alignée : « 200+ top-level keys, des centaines à milliers de leaves selon la config ». Plus de promesse fausse de 1942.
+- **`templates/landing-saas.md` + `page-agence.md` + `page-formation.md`** : reclassés comme « blueprints d'assemblage » avec note explicite. Le markup statique de 1500+ lignes par template aurait dérivé en 2 mois. Le workflow `deploy-template.md` assemble les patterns dynamiquement. Création de `templates/README.md` qui explique l'architecture.
+- **`scripts/visual-audit.php`** : honnêteté alignée — 8 checks réellement implémentés au lieu des 12 promis. Doc workflow mise à jour. Les checks visuels avancés (contraste WCAG, font-size, spacing rhythm, accessibility) délégués à `/impeccable` (qui pilote un vrai navigateur). Regex couleur étendu à hex/rgb/rgba/hsl/hsla. Faux positif containers internes corrigé : check responsive padding seulement sur containers racine (depth 0).
+- **`workflows/deploy-template.md`** : variable `{{ASTRA_TEMPLATE}}` était utilisée sans être définie. Ajout d'une table de mapping explicite par template. Note FSE : champ `template` ignoré sur block themes, omis automatiquement.
+
+#### Corrigé — 7 MINEURS + 3 comportements
+
+- **m1** (visual-audit faux positif containers internes) : intégré au fix M5 ci-dessus.
+- **m2** (`headingTag:"div"` problématique) : remplacé par `h3`/`h4`/`h6` sémantiquement corrects dans `pricing-3-tiers.md` et `templates/page-formation.md`. `headingTag:"div"` conservé sur `uagb/table-of-contents` (intentionnel : ne pas créer un heading SEO concurrent du H2 de section).
+- **m3** (block_ids générés en hex anonyme) : `auto-fix-markup.php` génère désormais des block_ids parlants `<short-block-name>-<hash6>` (ex `info-box-c293b1` au lieu de `c293b1ce`). Plus facile à debug dans Gutenberg.
+- **m4** (evals/run-evals.php non testé end-to-end) : `evals/README.md` documente la commande CLI WP-CLI + propose un workflow GitHub Actions (filtrage `--category=validation` pour CI sans LLM).
+- **m5** (cleanup pages TEST manuel) : nouveau script `scripts/cleanup-test-pages.php` avec sous-commandes `list` et `delete` (dry-run par défaut, `--confirm` pour exécuter). Pattern regex personnalisable.
+- **m6** (visual-audit ne détecte pas rgba) : intégré au fix M5 ci-dessus. La regex couvre maintenant hex 3 chars, hex 6 chars, rgb, rgba, hsl, hsla. Distinction P1 (couleur intentionnelle) vs P3 (rgba(0,0,0,X) shadow neutre acceptable).
+- **m7** (INSTALL commande slash ambiguë) : section refactorée avec « Option A » (invocation explicite `/astra-spectra` + paramètres) et « Option B » (langage naturel). Plus reproductible.
+- **O1** (icônes côté JS uniquement) : note explicative dans INSTALL.md troubleshooting. Workaround Playwright `waitForSelector('.uagb-ifb-icon-wrap svg')` pour CI.
+- **O2** : voir BLOCKER ci-dessus.
+- **O3** (`astra_clear_all_assets_cache()` conditionnelle) : note explicite dans `customizer-map.md` que la fonction n'existe que dans Astra ≥ 3.5 avec CSS Generator actif. `function_exists()` guard documenté.
+
+#### Self-audit final
+
+Grep `<svg></svg>|[Spectra render|rgba(255,140,0|color":"var(--ast-global-color-4)"` : 0 résultat dans le code productif (seulement dans la doc d'anti-patterns).
+Grep `headingTag":"div"` : 1 occurrence intentionnelle (TOC), 0 problématique.
+Tous les patterns avec fond primary (color-0) ont leur texte de bouton/CTA en color-5 (white body bg) garantissant la lisibilité sur toute palette standard.
+
 ## [0.8.1-beta] — 2026-05-02 (PM)
 
 ### Correctifs post-test cours-ndrc.fr (rapport 19 issues)
