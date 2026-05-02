@@ -225,27 +225,21 @@ Le contexte, le stack, les 17 skills WPF en prod, le fichier CLAUDE.md commenté
 
 ---
 
-## Mes plugins WordPress
+## Mes deux derniers plugins (2026, GPL forever)
 
-Si ce skill t'a aidé, jette un œil à mes autres plugins. Ils servent tous une obsession : **laisser à WordPress ce que WordPress fait bien, et laisser au reste ce que le reste fait mieux.**
+Pas de version premium, pas de dépendance, pas de SaaS qui meurt l'année prochaine. Tout est local, tout est libre.
 
-### 🛡️ Login Armor — la suite sécurité minimale qui suffit
+### 🛡️ Login Armor — 8 couches de sécurité, un seul plugin léger
 
-Cache l'URL de login, limite les tentatives, ajoute le 2FA optionnel, log les accès suspects. Pas une usine à gaz comme Wordfence : **le minimum vital, configuré en 2 minutes.**
+Cache `wp-login.php`, brute-force protection en cascade, hardening 13 toggles, 2FA (TOTP + email + backup codes), détection d'incidents temps réel, activity log signé HMAC, headers de sécurité, breach check Have I Been Pwned. **Sub-megabyte ZIP, PHP 8.1+, multisite-ready, suite WP-CLI complète.** Pour les agences et freelances qui livrent des sites prêts à passer un audit.
 
-👉 **[wpformation.com/login-armor/](https://wpformation.com/login-armor/)** · *Gratuit · ~3K installations actives*
+👉 **[wpformation.com/login-armor/](https://wpformation.com/login-armor/)** · *Gratuit · sur [WordPress.org](https://wordpress.org/plugins/login-armor/) · publication récente, encore en early adopters*
 
-### 🍽️ OGEEAT — plugin restauration + traiteur
+### 🤖 OGEEAT — l'extension post-SEO pour l'ère de l'IA
 
-Menu, prise de commande en ligne, gestion des allergènes, paiement Stripe, étiquette imprimable. Pensé par un développeur qui a travaillé en cuisine pendant 5 ans. **Gratuit, sans abonnement, pas de SaaS qui meurt en 2027.**
+Pas un remplaçant de Yoast ou Rank Math, **un complément.** OGEEAT ajoute la couche que les SEO plugins classiques n'ont pas : E-E-A-T (Person + Organization + Article schemas), Score GEO (citabilité IA en 12 critères par article), llms.txt + llms-full.txt enrichis automatiquement, AI Crawler Firewall (bloque GPTBot/CCBot, autorise PerplexityBot/ChatGPT-User), Share with AI (6 moteurs : ChatGPT, Perplexity, Claude, Mistral, Gemini, Grok), Reviewed By pour le YMYL, Trust Signals, audit en masse. **14 modules, GPL forever, zéro premium.**
 
-👉 **[wpformation.com/ogeeat/](https://wpformation.com/ogeeat/)** · *Gratuit · publié sur WordPress.org*
-
-### Plus largement (8 plugins, 2.1M+ téléchargements cumulés)
-
-- [WPS Hide Login](https://wordpress.org/plugins/wps-hide-login/) — 2M+ installations actives
-- [WPS Limit Login](https://wordpress.org/plugins/wps-limit-login/) — 100K+
-- [WPS Cleaner](https://wordpress.org/plugins/wps-cleaner/), [WPS Bidouille](https://wordpress.org/plugins/wps-bidouille/), etc.
+👉 **[wpformation.com/ogeeat/](https://wpformation.com/ogeeat/)** · *Gratuit · sur [WordPress.org](https://wordpress.org/plugins/ogeeat/) · 5 ★ ★ ★ ★ ★ moyenne sur les premières reviews*
 
 ---
 
@@ -280,7 +274,7 @@ Issues et pull requests bienvenus. Les domaines où ton aide a le plus de valeur
 
 MIT — voir [LICENSE](LICENSE).
 
-Tu peux le forker, le modifier, l'utiliser commercialement, en faire un produit. Si tu construis quelque chose de cool dessus, je serais ravi de le voir : [wibeweb@gmail.com](mailto:wibeweb@gmail.com) ou [LinkedIn](https://www.linkedin.com/in/fabriceducarme/).
+Tu peux le forker, le modifier, l'utiliser commercialement, en faire un produit. Si tu construis quelque chose de cool dessus, je serais ravi de le voir : ping-moi sur [LinkedIn](https://www.linkedin.com/in/fabriceducarme/).
 
 ---
 
