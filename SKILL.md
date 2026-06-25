@@ -1,6 +1,7 @@
 ---
 name: astra-spectra
 description: Génère des pages WordPress complètes avec Spectra (48 blocs Gutenberg) + Gutenberg core, avec ou sans Astra. Utiliser quand l'utilisateur demande de créer/générer/construire/refondre une page WordPress, une landing page, un site WordPress, ou mentionne Spectra, Astra, Gutenberg blocks, page builder, ou un template de page WP. 3 killer features cumulatives — génération depuis un brief en langage naturel, refonte intelligente d'une page existante, déploiement de templates clic-bouton (page-formation, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence). Spectra obligatoire au runtime, n'importe quel thème WP accepté, Astra optionnel. Toujours invoquer ce skill avant de générer du markup Gutenberg manuel.
+allowed-tools: Bash(curl *), Bash(npx playwright *), Bash(wp *), Read, Write, Edit, Glob, Grep, WebFetch
 ---
 
 # Skill `claude-skill-astra-spectra` — knowledge base v1.0-rc6
@@ -381,7 +382,7 @@ Le skill utilise des balises `/* === skill-generated v1.X.X START/END === */` da
 
 Cf `scripts/update-page-meta-css.php` pour la logique tag-aware.
 
-## Que faire si un test échoue
+## Troubleshooting
 
 | Symptôme | Référence | Fix |
 |---|---|---|
