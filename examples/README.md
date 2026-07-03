@@ -1,4 +1,4 @@
-# Examples — pas le skill, juste des références concrètes
+# Examples : pas le skill, juste des références concrètes
 
 > **CES FICHIERS NE SONT PAS LE SKILL.** Ce sont des exemples concrets validés sur loginarmor-dev.local (Astra 4.13.1 + Spectra 2.19.25 + palette_3) le 02/05/2026. Ils servent à voir ce que le skill peut produire quand il est correctement utilisé.
 

@@ -17,7 +17,7 @@ Un skill Claude Code, ce n'est pas un thème. Ce n'est pas un kit de templates. 
 Ce skill documente ce que personne d'autre n'a documenté pour Spectra :
 
 - **Guardrails anti-désastre** dans `SKILL.md` (v1.0-rc5) : règles non-négociables qui empêchent les claims aveugles « WOW / impeccable » sans screenshot, l'invention de typo/spacing hors baselines, l'empilage de moves design « créatifs » qui foirent
-- **`references/design-baselines.md`** : rulers concrets typo/spacing/couleurs par section type (Hero / Stats / Features / Testimonials / FAQ / Form / CTA) avec **default + range + hard limit** — anti-improvisation
+- **`references/design-baselines.md`** : rulers concrets typo/spacing/couleurs par section type (Hero / Stats / Features / Testimonials / FAQ / Form / CTA) avec **default + range + hard limit** : anti-improvisation
 - **`references/visual-pitfalls.md`** : 13 moves design qui sonnent créatifs mais foirent en pratique (watermark numérique géant, drop cap CSS, mono fonts isolés, 3+ accents identiques, etc.) avec **Quand c'est OK / Alternative recommandée**
 - **`references/impeccable-bridge.md`** : mapping principes `/impeccable` → patterns Spectra qui les supportent + tags par registre (editorial / minimal / bold / SaaS-corporate / luxe / playful)
 - **`workflows/screenshot-options.md`** : 5 options concrètes pour capturer un screenshot (agent-browser, chrome-headless, Playwright, Playground, demander au user) avec checklist visuelle minimum
@@ -25,7 +25,7 @@ Ce skill documente ce que personne d'autre n'a documenté pour Spectra :
 - **La technique `_uag_custom_page_level_css`** pour styler durablement (le seul moyen pour que le CSS survive aux éditions Gutenberg)
 - **Validateur pre-flight bloqueur** qui parcourt le markup généré et flag les 24 pièges + i18n + conventions AVANT POST
 - **Validateur post-render** qui fetch l'URL frontend après POST et vérifie que `<style id="uagb-style-frontend-X">` est bien injecté + pas de double H1
-- **35+ patterns** documentés au format « comment construire » (pas du copier-coller) — couvre les 49 blocs Spectra principaux
+- **35+ patterns** documentés au format « comment construire » (pas du copier-coller) : couvre les 49 blocs Spectra principaux
 - **8 templates** blueprints : compositions de patterns avec variables, schema SEO, configurations Astra
 - **14 scripts** PHP utilitaires (POST tag-aware, regen Spectra 4 stratégies, validate roundtrip, pre-flight, audit, resolve palette)
 - **Whitelist d'icônes** Font Awesome 5 Free validées (anti-piège fallback identique sur 3 cards)
@@ -88,9 +88,9 @@ references/                         ← Knowledge base critique (LIRE EN PREMIER
 ├── spectra-attributes-quirks.md    ← 24 pièges Spectra documentés (OBLIGATOIRE)
 ├── i18n-rules.md                   ← FR : entities + nbsp typo + apostrophes typo vs ASCII
 ├── persistent-css-overrides.md     ← _uag_custom_page_level_css + workaround Quirk #23
-├── design-baselines.md             ← ⭐ NOUVEAU v1.0-rc5 — rulers typo/spacing par section (anti-improvisation)
-├── visual-pitfalls.md              ← ⭐ NOUVEAU v1.0-rc5 — 13 moves design qui sonnent créatifs mais foirent
-├── impeccable-bridge.md            ← ⭐ NOUVEAU v1.0-rc5 — mapping principes /impeccable → patterns Spectra + tags par registre
+├── design-baselines.md             ← ⭐ NOUVEAU v1.0-rc5 : rulers typo/spacing par section (anti-improvisation)
+├── visual-pitfalls.md              ← ⭐ NOUVEAU v1.0-rc5 : 13 moves design qui sonnent créatifs mais foirent
+├── impeccable-bridge.md            ← ⭐ NOUVEAU v1.0-rc5 : mapping principes /impeccable → patterns Spectra + tags par registre
 ├── spectra-icons-list.md           ← whitelist icônes validées
 ├── gutenberg-core-blocks.md        ← 30+ blocs core/* curés
 ├── astra-page-template-rules.md    ← anti double-H1, configurations Astra (thèmes classiques)
@@ -106,7 +106,7 @@ references/                         ← Knowledge base critique (LIRE EN PREMIER
 ├── mu-plugin-companion.md          ← installer le mu-plugin compagnon
 └── spectra-demo-reference.md       ← analyse design Spectra Natures
 
-patterns/                           ← Comment construire (PAS du copier-coller) — 35+ patterns
+patterns/                           ← Comment construire (PAS du copier-coller) : 35+ patterns
 │
 │   Compositions visuelles (sections de landing)
 ├── hero-image-overlay.md            hero-cta-split.md
@@ -130,7 +130,7 @@ patterns/                           ← Comment construire (PAS du copier-coller
 ├── price-list.md                    star-rating.md
 └── lottie.md
 
-templates/                          ← Blueprints (composition de patterns) — 8 templates
+templates/                          ← Blueprints (composition de patterns) : 8 templates
 ├── page-accueil.md                  page-tarifs.md
 ├── page-contact.md                  page-a-propos.md
 ├── blog-editorial.md                e-commerce-produit.md
@@ -140,13 +140,13 @@ templates/                          ← Blueprints (composition de patterns) —
 workflows/                          ← Pipelines validés
 ├── new-page-from-brief.md          ← 10 étapes from brief (pre-flight check OBLIGATOIRE avant POST)
 ├── refonte-page-existante.md       ← snapshot → analyse → reconstruction
-├── visual-validation-loop.md       ← 🔴 GATE BLOQUANT — screenshot + audit + retry max 3 (renforcé v1.0-rc5)
-├── screenshot-options.md           ← ⭐ NOUVEAU v1.0-rc5 — 5 options concrètes pour capturer un visuel
+├── visual-validation-loop.md       ← 🔴 GATE BLOQUANT : screenshot + audit + retry max 3 (renforcé v1.0-rc5)
+├── screenshot-options.md           ← ⭐ NOUVEAU v1.0-rc5 : 5 options concrètes pour capturer un visuel
 └── deploy-template.md              ← workflow déploiement template
 
 scripts/                            ← 15 scripts PHP utilitaires
 ├── pre-flight-check.php            ← VALIDATEUR PRE-POST BLOQUEUR (24 quirks + i18n + conventions)
-├── post-render-check.php           ← ⭐ NOUVEAU v1.0-rc4 — validateur POST-render (fetch URL, check Quirks #23/#24)
+├── post-render-check.php           ← ⭐ NOUVEAU v1.0-rc4 : validateur POST-render (fetch URL, check Quirks #23/#24)
 ├── post-page-via-rest.php          ← POST + temp-publish trick
 ├── update-page-meta-css.php        ← TAG-AWARE update CSS (préserve user)
 ├── regen-spectra.php               ← 4 stratégies cascadées
@@ -202,7 +202,7 @@ Spectra a un meta natif `_uag_custom_page_level_css` (vérifié dans le code sou
 /* … autres overrides skill-managed … */
 /* === skill-generated v1.0 END === */
 
-/* CSS user post-skill ajouté manuellement dans Spectra UI — préservé */
+/* CSS user post-skill ajouté manuellement dans Spectra UI : préservé */
 .my-custom-class { ... }
 ```
 
@@ -236,13 +236,13 @@ Détail complet : [INSTALL.md](INSTALL.md)
 
 ✅ **Ce qui est livré**
 
-- **⭐ NOUVEAU v1.0-rc6 — Quirk #25 OPcache PHP-FPM** : si tu installes le mu-plugin compagnon dans la même session puis enchaînes immédiatement sur un POST + screenshot, OPcache PHP-FPM (revalidate_freq 2-3s) sert l'ancienne version du fichier et les workarounds Quirks #23/#24 ne s'activent pas → faux négatif silencieux. Documenté + 3 stratégies de fix cumulables (auto-invalidation dans le mu-plugin, invalidation explicite après pose, sleep de sécurité). Découvert pendant le POC `claude-skill-gutenberg-core` 02/05/2026, rétro-porté sur ce skill car concerne tout pipeline qui pose un mu-plugin pendant la session.
-- **🔴 Guardrails anti-désastre** v1.0-rc5 — règles non-négociables dans `SKILL.md` qui empêchent les claims sans screenshot, l'invention de design hors baselines, l'empilage de 8 sections d'un coup. Avec 6 anti-patterns ❌ et 6 patterns ✅ explicites.
+- **⭐ NOUVEAU v1.0-rc6 : Quirk #25 OPcache PHP-FPM** : si tu installes le mu-plugin compagnon dans la même session puis enchaînes immédiatement sur un POST + screenshot, OPcache PHP-FPM (revalidate_freq 2-3s) sert l'ancienne version du fichier et les workarounds Quirks #23/#24 ne s'activent pas → faux négatif silencieux. Documenté + 3 stratégies de fix cumulables (auto-invalidation dans le mu-plugin, invalidation explicite après pose, sleep de sécurité). Découvert pendant le POC `claude-skill-gutenberg-core` 02/05/2026, rétro-porté sur ce skill car concerne tout pipeline qui pose un mu-plugin pendant la session.
+- **🔴 Guardrails anti-désastre** v1.0-rc5 : règles non-négociables dans `SKILL.md` qui empêchent les claims sans screenshot, l'invention de design hors baselines, l'empilage de 8 sections d'un coup. Avec 6 anti-patterns ❌ et 6 patterns ✅ explicites.
 - **20 documents de référence** ⭐ +3 v1.0-rc5 (`design-baselines.md` rulers concrets, `visual-pitfalls.md` 13 moves qui foirent, `impeccable-bridge.md` mapping principes → patterns)
 - **5 workflows validés** ⭐ +1 v1.0-rc5 (`screenshot-options.md` 5 options concrètes)
 - Knowledge base complète : **20 documents de référence** (quirks, i18n, icons-list, core-blocks, astra-templates, block-theme-fse-rules, apache-mutu, images-ratios, persistent-css-overrides, design-system-tokens, **design-baselines** ⭐, **visual-pitfalls** ⭐, **impeccable-bridge** ⭐, etc.)
-- **24 pièges Spectra documentés** (Symptôme / Cause / Fix / Détection chacun) — 19 en rc1, +3 en rc2, +2 en rc4 (`wp_head` non-hook = quirk #23, double H1 block theme FSE = quirk #24, détectés sur Twenty Twenty-Five + Spectra 2.19 le 02/05/2026)
-- **35+ patterns** documentés au format « comment construire » — couvre les 49 blocs Spectra principaux : hero, stats, features, about-story, team, testimonials, pricing, FAQ, CTA, tabs, slider, timeline, how-to, review, countdown, article-content, **google-maps, modal, marketing-buttons, table-of-contents, forms, post-display (grid/masonry/carousel/timeline), image-gallery, icon-list, inline-notice, social-share, price-list, popup-builder, lottie, star-rating**
+- **24 pièges Spectra documentés** (Symptôme / Cause / Fix / Détection chacun) : 19 en rc1, +3 en rc2, +2 en rc4 (`wp_head` non-hook = quirk #23, double H1 block theme FSE = quirk #24, détectés sur Twenty Twenty-Five + Spectra 2.19 le 02/05/2026)
+- **35+ patterns** documentés au format « comment construire » : couvre les 49 blocs Spectra principaux : hero, stats, features, about-story, team, testimonials, pricing, FAQ, CTA, tabs, slider, timeline, how-to, review, countdown, article-content, **google-maps, modal, marketing-buttons, table-of-contents, forms, post-display (grid/masonry/carousel/timeline), image-gallery, icon-list, inline-notice, social-share, price-list, popup-builder, lottie, star-rating**
 - 8 templates blueprints (page-accueil, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence)
 - **15 scripts PHP utilitaires**, dont `pre-flight-check.php` (validateur bloqueur 24 quirks + i18n, exit 1 si BLOCKED), **`post-render-check.php` ⭐ nouveau v1.0-rc4** (validateur post-POST qui fetch l'URL frontend et vérifie quirks #23 + #24), `update-page-meta-css.php` (tag-aware), `regen-spectra.php` (4 stratégies cascadées)
 - 4 workflows validés (new-page-from-brief avec pre-flight obligatoire, refonte-page-existante, visual-validation-loop, deploy-template)
@@ -266,7 +266,7 @@ Détail complet : [INSTALL.md](INSTALL.md)
 
 ### 🎓 Formation WordPress + IA avec Claude Code
 
-Si ce skill te parle et que tu veux **industrialiser ton WordPress avec Claude Code** au-delà de la génération de pages — créer ton propre fichier CLAUDE.md, tes propres skills, tes propres routines cloud, ton stack MCP, automatiser tout ce qui est répétitif sur ton site — j'enseigne ça en formation sur-mesure.
+Si ce skill te parle et que tu veux **industrialiser ton WordPress avec Claude Code** au-delà de la génération de pages : créer ton propre fichier CLAUDE.md, tes propres skills, tes propres routines cloud, ton stack MCP, automatiser tout ce qui est répétitif sur ton site : j'enseigne ça en formation sur-mesure.
 
 - 20 à 60 heures, en visio ou en présentiel
 - Organisme certifié Qualiopi, financement OPCO possible
@@ -286,13 +286,13 @@ Le contexte, le stack, les skills WPF en prod, le fichier CLAUDE.md commenté li
 
 Pas de version premium, pas de dépendance, pas de SaaS qui meurt l'année prochaine. Tout est local, tout est libre.
 
-### Login Armor — 8 couches de sécurité, un seul plugin léger
+### Login Armor : 8 couches de sécurité, un seul plugin léger
 
 Cache `wp-login.php`, brute-force protection en cascade, hardening 13 toggles, 2FA (TOTP + email + backup codes), détection d'incidents temps réel, activity log signé HMAC, headers de sécurité, breach check Have I Been Pwned. Sub-megabyte ZIP, PHP 8.1+, multisite-ready, suite WP-CLI complète. Pour les agences et freelances qui livrent des sites prêts à passer un audit.
 
 👉 **[wpformation.com/login-armor/](https://wpformation.com/login-armor/)** · *Gratuit · sur [WordPress.org](https://wordpress.org/plugins/login-armor/) · publication récente, encore en early adopters*
 
-### OGEEAT — l'extension post-SEO pour l'ère de l'IA
+### OGEEAT : l'extension post-SEO pour l'ère de l'IA
 
 Pas un remplaçant de Yoast ou Rank Math, **un complément.** OGEEAT ajoute la couche que les SEO plugins classiques n'ont pas : E-E-A-T (Person + Organization + Article schemas), Score GEO (citabilité IA en 12 critères par article), `llms.txt` + `llms-full.txt` enrichis automatiquement, AI Crawler Firewall (bloque GPTBot/CCBot, autorise PerplexityBot/ChatGPT-User), Share with AI (6 moteurs : ChatGPT, Perplexity, Claude, Mistral, Gemini, Grok), Reviewed By pour le YMYL, Trust Signals, audit en masse. 14 modules, GPL forever, zéro premium.
 
@@ -302,7 +302,7 @@ Pas un remplaçant de Yoast ou Rank Math, **un complément.** OGEEAT ajoute la c
 
 ## L'auteur
 
-**Fabrice Ducarme** — formateur WordPress depuis 2012, fondateur de **[WPFormation](https://wpformation.com)**.
+**Fabrice Ducarme** : formateur WordPress depuis 2012, fondateur de **[WPFormation](https://wpformation.com)**.
 
 - Speaker WordCamp Paris 2013, Paris 2015, Marseille 2017, Lyon 2022
 - Plugins publiés sur WordPress.org (2.1M+ téléchargements cumulés)
@@ -330,7 +330,7 @@ Issues et pull requests bienvenus. Les domaines où ton aide a le plus de valeur
 
 ## License
 
-MIT — voir [LICENSE](LICENSE).
+MIT : voir [LICENSE](LICENSE).
 
 Tu peux le forker, le modifier, l'utiliser commercialement, en faire un produit. Si tu construis quelque chose dessus, je serais ravi de le voir : ping-moi sur [LinkedIn](https://www.linkedin.com/in/fabriceducarme/).
 

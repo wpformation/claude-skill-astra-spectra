@@ -1,8 +1,8 @@
-# Workflow : screenshot-options — 5 options concrètes pour capturer un visuel
+# Workflow : screenshot-options : 5 options concrètes pour capturer un visuel
 
 > **LECTURE OBLIGATOIRE** par l'instance Claude qui s'apprête à valider visuellement une page (cf règle 1 SKILL.md). Sans screenshot, tu **n'as pas le droit** de qualifier une composition de « WOW / impeccable / studio editorial / propre / éditorial / beau ».
 
-> **Origine** : retour reviewer 02/05/2026 — sur Windows + Chrome installé + hooks bloquant le publish, l'instance Claude a galéré à screenshotter et a fini par claim aveugle. Doc concrète manquante.
+> **Origine** : retour reviewer 02/05/2026 : sur Windows + Chrome installé + hooks bloquant le publish, l'instance Claude a galéré à screenshotter et a fini par claim aveugle. Doc concrète manquante.
 
 ## Décision tree
 
@@ -28,7 +28,7 @@
 
 ---
 
-## Option A — `agent-browser` (recommandée)
+## Option A : `agent-browser` (recommandée)
 
 ### Pré-requis
 
@@ -83,7 +83,7 @@ agent-browser --session=wp-admin screenshot --full "./preview.png"
 
 ---
 
-## Option B — Chrome headless CLI
+## Option B : Chrome headless CLI
 
 ### Pré-requis
 
@@ -114,7 +114,7 @@ chrome \
 
 WordPress drafts demandent un nonce de preview, plus délicat. 2 sous-options :
 
-#### Sous-option B.1 — Page publish temporaire
+#### Sous-option B.1 : Page publish temporaire
 
 ```bash
 # 1. Publier la page temporairement
@@ -139,7 +139,7 @@ curl -X POST -u "admin:APP_PASS" \
 
 ⚠️ Si site SEO indexé : la page est **indexable pendant le temps publish**. Si tu veux éviter ça, ajouter `meta robots noindex` via Yoast/RankMath avant de publish, OU utiliser sous-option B.2.
 
-#### Sous-option B.2 — Preview avec session cookie
+#### Sous-option B.2 : Preview avec session cookie
 
 ```bash
 # 1. Login admin pour récupérer cookies
@@ -162,7 +162,7 @@ chrome --user-data-dir="/tmp/wp-session" \
 
 ---
 
-## Option C — Playwright
+## Option C : Playwright
 
 ### Pré-requis
 
@@ -213,7 +213,7 @@ await browser.close();
 
 ---
 
-## Option D — WP Playground (jetable)
+## Option D : WP Playground (jetable)
 
 Si le site est **un Playground public** (URL `https://playground.wordpress.net/?id=...`), tu peux le capturer directement comme une URL publique.
 
@@ -226,7 +226,7 @@ Avantage : pas d'auth requise, page publique. Inconvénient : cache navigateur P
 
 ---
 
-## Option E — DEMANDER AU USER (fallback)
+## Option E : DEMANDER AU USER (fallback)
 
 Si **aucune** des options A-D n'est disponible (pas de tooling installé, pas de Playground, restrictions environnement), tu DOIS demander au user.
 
@@ -239,18 +239,18 @@ Je n'ai pas pu capturer un screenshot moi-même (pas de tooling visuel disponibl
 dans mon environnement actuel). **Avant de te confirmer que la page est OK
 visuellement**, j'ai besoin que tu m'aides :
 
-**Option 1 — Screenshot via aperçu Gutenberg (le plus simple)** :
+**Option 1 : Screenshot via aperçu Gutenberg (le plus simple)** :
 1. Ouvre l'URL d'édition : http://site.com/wp-admin/post.php?post=42&action=edit
 2. Clique sur le bouton « Aperçu » (ou Cmd/Ctrl+P)
 3. Capture la page complète (Win+Shift+S sur Windows, Cmd+Shift+5 sur Mac)
 4. Drag-drop l'image dans cette conversation
 
-**Option 2 — Screenshot via DevTools fullpage (Chrome)** :
+**Option 2 : Screenshot via DevTools fullpage (Chrome)** :
 1. Ouvre l'URL : http://site.com/?p=42&preview=true
 2. F12 (DevTools), Ctrl+Shift+P, tape `Capture full size screenshot`, Entrée
 3. Drag-drop l'image dans cette conversation
 
-**Option 3 — Tu publies la page et tu me partages l'URL** :
+**Option 3 : Tu publies la page et tu me partages l'URL** :
 1. Tu publies la page en frontend
 2. Tu me donnes l'URL et je peux fetcher le HTML pour vérifier la structure
    (mais pas la qualité visuelle)
@@ -274,7 +274,7 @@ Une fois le screenshot obtenu (option A/B/C/D ou via user en E), **avant** de cl
 
 - [ ] **Pas de Lorem Ipsum** dans la FAQ ou autre section (cf quirk #3)
 - [ ] **Pas de `201C` littéral** dans les watermarks (cf quirk #21)
-- [ ] **Pas de double H1** visible (1 seul H1 visuel — cf quirks #13/#24)
+- [ ] **Pas de double H1** visible (1 seul H1 visuel : cf quirks #13/#24)
 - [ ] **Pas de stats empilées** verticalement quand attendu en row (cf quirk #2)
 - [ ] **Pas de 3 cards avec même icône** (cf quirk #8)
 - [ ] **Pas d'overlay opacity > 0.85** rendant l'image invisible (cf quirk #9)
@@ -323,7 +323,7 @@ sont WOW.
 👉 Ouvre l'URL : http://site.com/{slug}/
 👉 Si quelque chose ne va pas (typo trop petite, accent saturé, layout cassé,
    image absente, etc.), dis-le moi et on itère.
-👉 Si tu vois un défaut, je préfère que tu screenshottes avant qu'on continue —
+👉 Si tu vois un défaut, je préfère que tu screenshottes avant qu'on continue -
    évite-moi de partir dans une 2e direction sans validation.
 ```
 

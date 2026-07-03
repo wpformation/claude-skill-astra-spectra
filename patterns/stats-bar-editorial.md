@@ -80,7 +80,7 @@ uagb/container#stats (root, alignfull, bg #0F172A dark, padding 96px)
 À cause du piège #1 (headingFontSize ignoré sur tag=p) ET piège #6 (CSS Spectra dynamique non injecté), les chiffres énormes nécessitent du CSS dans le meta natif :
 
 ```css
-/* Stats — chiffres 80px orange dramatic */
+/* Stats : chiffres 80px orange dramatic */
 .uagb-block-{slug}-stat-1 .uagb-ifb-title,
 .uagb-block-{slug}-stat-2 .uagb-ifb-title,
 .uagb-block-{slug}-stat-3 .uagb-ifb-title,
@@ -93,7 +93,7 @@ uagb/container#stats (root, alignfull, bg #0F172A dark, padding 96px)
   margin: 0 !important;
 }
 
-/* Stats — labels uppercase tracking */
+/* Stats : labels uppercase tracking */
 .uagb-block-{slug}-stat-1 .uagb-ifb-desc,
 .uagb-block-{slug}-stat-2 .uagb-ifb-desc,
 .uagb-block-{slug}-stat-3 .uagb-ifb-desc,
@@ -113,7 +113,7 @@ uagb/container#stats (root, alignfull, bg #0F172A dark, padding 96px)
   border-bottom: 4px solid {{ACCENT_COLOR}} !important;
 }
 
-/* Section heading H2 — 36-52px desktop drama */
+/* Section heading H2 : 36-52px desktop drama */
 .uagb-block-{slug}-stats-title .uagb-ifb-title {
   font-size: 36px !important;
   font-weight: 800 !important;
@@ -158,15 +158,15 @@ uagb/container#stats (root, alignfull, bg #0F172A dark, padding 96px)
 
 ## Variantes
 
-### Variante 1 — Stats sur fond clair (light theme)
+### Variante 1 : Stats sur fond clair (light theme)
 
 Inverser couleurs : `BG_COLOR: #fafafa`, `TEXT_COLOR: #0F172A`, accent line + chiffres orange. Visuellement plus discret, OK pour pages secondaires.
 
-### Variante 2 — 3 stats au lieu de 4
+### Variante 2 : 3 stats au lieu de 4
 
 Width des wrappers : `widthDesktop:30` (au lieu de 22). Container `justifyContent:space-around`. Chiffres encore plus gros (96px desktop).
 
-### Variante 3 — Stats avec prefixe (« +5K », « 500+ »)
+### Variante 3 : Stats avec prefixe (« +5K », « 500+ »)
 
 Dans le markup, mettre le préfixe directement dans `STAT_1_VALUE` :
 
@@ -177,7 +177,7 @@ STAT_3_VALUE: 87&thinsp;%
 STAT_4_VALUE: 4&frasl;5
 ```
 
-### Variante 4 — Stats inline (pas de section héro, juste une bande étroite)
+### Variante 4 : Stats inline (pas de section héro, juste une bande étroite)
 
 Réduire padding : `topPaddingDesktop:48`, `bottomPaddingDesktop:48`. Pas de title/desc, juste les 4 stats centrées. Utile en dessous d'un hero.
 

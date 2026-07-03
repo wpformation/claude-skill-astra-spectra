@@ -2,7 +2,7 @@
 
 > **Use case** : Landing page d'une application SaaS / outil web (analytics, CRM, dashboard, etc.). Structure conversion B2B classique.
 >
-> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet — il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
+> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet : il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
 
 ## Structure (ordre des patterns)
 
@@ -22,7 +22,7 @@
    - Couleurs primaires sur les icônes
    - Box hover avec scale + shadow
 
-4. Container split (50/50) — Comment ça marche
+4. Container split (50/50) : Comment ça marche
    - Texte gauche : 3-step process
    - GIF / vidéo droite
 
@@ -61,10 +61,10 @@ FAQ_QUESTIONS: [...]
 
 ## Palette suggérée
 
-- **wpf-corporate** (#1E40AF bleu) — défaut B2B
-- **preset_2** (#6528F7 violet) — SaaS modern / Web3
-- **preset_7** (#1B9C85 turquoise) — fintech / sécurité
-- **preset_4** (#54B435 vert) — éco / sustainability
+- **wpf-corporate** (#1E40AF bleu) : défaut B2B
+- **preset_2** (#6528F7 violet) : SaaS modern / Web3
+- **preset_7** (#1B9C85 turquoise) : fintech / sécurité
+- **preset_4** (#54B435 vert) : éco / sustainability
 
 ## Effet wow recommandé
 

@@ -43,7 +43,7 @@ Pattern `hero-image-overlay.md` :
 - Subheading 2-line tagline
 - Pas de CTA hero (la page = la story, pas la conversion)
 
-### 2. Story split — « Notre approche »
+### 2. Story split : « Notre approche »
 
 Pattern `about-story-split.md` :
 - Image éditoriale 16:5 du fondateur ou du bureau
@@ -51,30 +51,30 @@ Pattern `about-story-split.md` :
 - Desc storytelling 3-4 phrases
 - Bonus : 3 mini-cards 3/2/5 « 3 idées clés / 2 exemples / 5 erreurs » (cf v0.9.3)
 
-### 3. 3 valeurs — features-numbered
+### 3. 3 valeurs : features-numbered
 
 Pattern `features-numbered.md` :
-- 01 — EXCELLENCE « Chaque cours est relu par 3 anciens étudiants avant publication. »
-- 02 — PÉDAGOGIE « Pas de jargon. Les concepts expliqués comme tu les entendrais en cafèt. »
-- 03 — INNOVATION « QCM générés par AI, corrigés humainement. Best of both worlds. »
+- 01 : EXCELLENCE « Chaque cours est relu par 3 anciens étudiants avant publication. »
+- 02 : PÉDAGOGIE « Pas de jargon. Les concepts expliqués comme tu les entendrais en cafèt. »
+- 03 : INNOVATION « QCM générés par AI, corrigés humainement. Best of both worlds. »
 
 ### 4. Timeline historique
 
 Pattern `timeline-vertical.md`. 4-6 events :
-- 2012 — Lancement du site
-- 2015 — 100 000 utilisateurs
-- 2018 — Refonte UX
-- 2020 — Lancement des QCM
-- 2023 — 1 million d'utilisateurs annuels
-- 2026 — Refonte IA
+- 2012 : Lancement du site
+- 2015 : 100 000 utilisateurs
+- 2018 : Refonte UX
+- 2020 : Lancement des QCM
+- 2023 : 1 million d'utilisateurs annuels
+- 2026 : Refonte IA
 
 ### 5. Stats clés
 
 Pattern `stats-bar-editorial.md`. 4 chiffres :
-- 13 — ANNÉES D'EXISTENCE
-- 250K — ÉTUDIANTS AIDÉS
-- 227 — COURS RÉDIGÉS
-- 87% — TAUX DE RÉUSSITE
+- 13 : ANNÉES D'EXISTENCE
+- 250K : ÉTUDIANTS AIDÉS
+- 227 : COURS RÉDIGÉS
+- 87% : TAUX DE RÉUSSITE
 
 ### 6. Team grid
 

@@ -100,7 +100,7 @@ Supprime toutes les pages avec meta `_skill_test_page=1`. Permission : `manage_o
 
 Voir [`scripts/mu-plugin-skill-test.php`](../scripts/mu-plugin-skill-test.php) pour le code complet.
 
-## Sécurité — recommandations production
+## Sécurité : recommandations production
 
 **ATTENTION** : ce mu-plugin expose des endpoints qui modifient la palette Astra, uploadent des images, créent et suppriment des pages. **À retirer après usage** sur un site live.
 

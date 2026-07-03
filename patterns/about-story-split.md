@@ -33,11 +33,11 @@
 
 ## Variantes
 
-### Variante 1 — Image à droite, texte à gauche
+### Variante 1 : Image à droite, texte à gauche
 
 Inverser l'ordre des blocs : `image` en deuxième, `container row` en premier.
 
-### Variante 2 — Avec eyebrow kicker au-dessus du heading
+### Variante 2 : Avec eyebrow kicker au-dessus du heading
 
 Modifier `about-story-heading` :
 
@@ -63,11 +63,11 @@ HTML :
 </div>
 ```
 
-### Variante 3 — Avec CTA bouton
+### Variante 3 : Avec CTA bouton
 
 Ajouter un `uagb/buttons` après l'info-box `about-story-desc`. Bouton « En savoir plus → » ghost, color-2 → hover color-0.
 
-### Variante 4 — Background dark mode
+### Variante 4 : Background dark mode
 
 Remplacer `backgroundColor: "#fafafa"` par `backgroundColor: "var(--ast-global-color-2)"` (slot heading dark, garanti sombre). Inverser headingColor → `#ffffff`, descColor → `rgba(255,255,255,0.85)`.
 
@@ -94,4 +94,4 @@ Ouvrir dans Gutenberg authentifié. Vérifier :
 
 ## Inspiration
 
-Inspiré du démo officiel **Spectra Natures** (websitedemos.net/natures-01) — section « Our Story » de la page About. Voir [`references/spectra-demo-reference.md`](../references/spectra-demo-reference.md).
+Inspiré du démo officiel **Spectra Natures** (websitedemos.net/natures-01) : section « Our Story » de la page About. Voir [`references/spectra-demo-reference.md`](../references/spectra-demo-reference.md).

@@ -41,7 +41,7 @@ Pas de variable `{{T1_IMAGE}}` dans cette version : les photos d'avatar dans `ua
 <!-- /wp:uagb/container -->
 ```
 
-Note structurelle : `<p class="uagb-ifb-desc">` est avant `<h3 class="uagb-ifb-title">` dans le HTML, parce que pour un témoignage on lit d'abord la citation puis on regarde de qui elle vient — ordre visuel naturel.
+Note structurelle : `<p class="uagb-ifb-desc">` est avant `<h3 class="uagb-ifb-title">` dans le HTML, parce que pour un témoignage on lit d'abord la citation puis on regarde de qui elle vient : ordre visuel naturel.
 
 ## Block IDs
 
@@ -52,19 +52,19 @@ Renommer si plusieurs sections testimonials sur la même page : `testimonial-saa
 
 ## Variantes
 
-### Variante 1 — 4 témoignages
+### Variante 1 : 4 témoignages
 
 Remplacer `widthDesktop: 33.33` par `widthDesktop: 24` (4 cards en ligne avec gap 24px) ou `widthDesktop: 48.5` (2 cards par ligne sur 2 lignes).
 
-### Variante 2 — Avec photo (action manuelle)
+### Variante 2 : Avec photo (action manuelle)
 
 Après création de la page, ouvrir chaque info-box, activer `Show Image`, uploader la photo (carrée 200×200 min), positionner `Image Position: Above title`. Laisser le skill pour le markup, ajouter les photos depuis le media library Gutenberg.
 
-### Variante 3 — Single featured (1 grand testimonial)
+### Variante 3 : Single featured (1 grand testimonial)
 
 Garder un seul `uagb/info-box` avec `widthDesktop: 80`, `headingFontSizeDesktop: 28`, padding plus large, citation en plus gros corps.
 
-### Variante 4 — Background dark
+### Variante 4 : Background dark
 
 Section : `backgroundColor: var(--ast-global-color-2)`. Cards : `backgroundColor: var(--ast-global-color-3)`. Heading des cards : `var(--ast-global-color-7)`. Desc : `var(--ast-global-color-7)` aussi avec opacity 0.85 visuelle.
 

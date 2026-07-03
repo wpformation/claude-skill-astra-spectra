@@ -1,4 +1,4 @@
-# Screenshots — preuve visuelle des patterns sur palettes Astra
+# Screenshots : preuve visuelle des patterns sur palettes Astra
 
 > **Origine** : rapport visuel cours-ndrc.fr (palette_3) du 02/05/2026 a montré que la v0.8.2 produit des sections noires illisibles. Tous les fixes techniques (validator roundtrip, block_id unique, hex 0) passaient mais le rendu était inutilisable. **Conclusion : un pattern non screenshooté est un pattern non testé.**
 
@@ -88,7 +88,7 @@ jobs:
             $PLAYGROUND_URL/?p=$PAGE_ID screenshots/${{ matrix.palette }}/${PATTERN}.png
       - name: Compare against baseline
         run: |
-          # diff vs screenshots/_baseline/ — fail si > 5% pixels diff
+          # diff vs screenshots/_baseline/ : fail si > 5% pixels diff
 ```
 
 ## Convention frontmatter pattern

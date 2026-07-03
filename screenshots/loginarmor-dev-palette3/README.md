@@ -1,4 +1,4 @@
-# Baseline screenshots — loginarmor-dev.local (Astra 4.13.1 + Spectra 2.19.25 + palette_3)
+# Baseline screenshots : loginarmor-dev.local (Astra 4.13.1 + Spectra 2.19.25 + palette_3)
 
 > **Première baseline visuelle prouvée du skill** (02/05/2026, v0.9.1-beta).
 >
@@ -37,7 +37,7 @@
 | Fichier | Itération | Note |
 |---------|-----------|------|
 | `v091-iter1-1440-fullpage.png` | Iter 1 | Page complète avant fix (image story manquante) |
-| `v091-iter1-1440-fullpage-eager.png` | Iter 1 | Avec `loading=eager` forcé — image story apparaît |
+| `v091-iter1-1440-fullpage-eager.png` | Iter 1 | Avec `loading=eager` forcé : image story apparaît |
 | `v091-iter1-viewport.png` | Iter 1 | Viewport mobile par défaut (problème de viewport) |
 | `v091-iter2-faq.png` | Iter 2 | FAQ avec Lorem Ipsum (avant fix `answer`) |
 | `v091-iter2-faq-fixed.png` | Iter 2 | FAQ correcte (après fix `answer` au lieu de `description`) |
@@ -63,7 +63,7 @@ Voir `workflows/visual-validation-loop.md` section « Pipeline pratique testé v
 
 - ☐ `screenshots/astra-default/` (baseline palette default Astra)
 - ☐ `screenshots/preset_3/` (palette saturée chaude)
-- ☐ `screenshots/preset_8/` (palette orange gourmand — slots variables remappés, plus piège)
+- ☐ `screenshots/preset_8/` (palette orange gourmand : slots variables remappés, plus piège)
 - ☐ `screenshots/cours-ndrc-fr-palette3/` (régression test sur site client réel)
 
 Tant que ces 4 baselines ne sont pas produites, le skill reste en `status: experimental`. Voir `screenshots/README.md` racine pour le process complet.

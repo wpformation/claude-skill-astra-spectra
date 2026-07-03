@@ -85,7 +85,7 @@ uagb/container#features (root, alignfull, bg #fafafa, padding 140px)
 ## CSS overrides obligatoires (`_uag_custom_page_level_css`)
 
 ```css
-/* Numéros 01 / 02 / 03 — 48px orange */
+/* Numéros 01 / 02 / 03 : 48px orange */
 .uagb-block-{slug}-feat-1-num .uagb-ifb-title,
 .uagb-block-{slug}-feat-2-num .uagb-ifb-title,
 .uagb-block-{slug}-feat-3-num .uagb-ifb-title {
@@ -97,7 +97,7 @@ uagb/container#features (root, alignfull, bg #fafafa, padding 140px)
   margin: 0 !important;
 }
 
-/* Labels THÉORIE / PRATIQUE / AUTO-ÉVALUATION — uppercase tracking */
+/* Labels THÉORIE / PRATIQUE / AUTO-ÉVALUATION : uppercase tracking */
 .uagb-block-{slug}-feat-1-num .uagb-ifb-desc,
 .uagb-block-{slug}-feat-2-num .uagb-ifb-desc,
 .uagb-block-{slug}-feat-3-num .uagb-ifb-desc {
@@ -161,11 +161,11 @@ uagb/container#features (root, alignfull, bg #fafafa, padding 140px)
 
 ## Variantes
 
-### Variante 1 — 4 features (au lieu de 3)
+### Variante 1 : 4 features (au lieu de 3)
 
 Width cards : `widthDesktop:23.5`. Numéros 01/02/03/04. Container `columnGapDesktop:20`.
 
-### Variante 2 — Avec icône au-dessus du numéro
+### Variante 2 : Avec icône au-dessus du numéro
 
 Si tu veux ajouter une icône Spectra **validée** (cf `references/spectra-icons-list.md`), insérer un `uagb/icon` AVANT le numéro :
 
@@ -175,17 +175,17 @@ Si tu veux ajouter une icône Spectra **validée** (cf `references/spectra-icons
 <!-- /wp:uagb/icon -->
 ```
 
-### Variante 3 — Cards horizontales (numéro à gauche, texte à droite)
+### Variante 3 : Cards horizontales (numéro à gauche, texte à droite)
 
 Au lieu de num au-dessus, utiliser un container interne `direction:row` :
 - Colonne gauche (width 25%) : numéro 64px orange
 - Colonne droite (width 70%) : H3 + desc
 
-### Variante 4 — Sans border ni shadow (style brut éditorial)
+### Variante 4 : Sans border ni shadow (style brut éditorial)
 
 Retirer `containerBorder*` et `boxShadow*`. Padding cards 0. Séparation entre cards uniquement via `columnGap`. Look magazine pur.
 
-### Variante 5 — Background dark mode
+### Variante 5 : Background dark mode
 
 `backgroundColor: "#0F172A"` sur la section. Cards `backgroundColor: "#1E293B"`. Heading et desc colors inversées (white). Border-color rgba(255,255,255,0.1).
 

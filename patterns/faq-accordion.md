@@ -52,16 +52,16 @@
 
 ## Variantes
 
-### Variante 1 — Layout grid 2 colonnes
+### Variante 1 : Layout grid 2 colonnes
 
 Remplacer `layout: "accordion"` par `layout: "grid"` et ajouter `columns: 2`. Mieux pour 6+ questions courtes.
 
-### Variante 2 — Mode dark
+### Variante 2 : Mode dark
 
 Container parent : `backgroundColor: var(--ast-global-color-2)`.
 Faq : `questionBgColor: var(--ast-global-color-6)`, `headingColor: var(--ast-global-color-4)`, `answerColor: var(--ast-global-color-7)`.
 
-### Variante 3 — Avec icônes catégories
+### Variante 3 : Avec icônes catégories
 
 Ajouter avant chaque `faq-child` un emoji ou icône en début de question (ex: « 💰 Quels sont vos tarifs ? »). Pas de modification structurelle, juste enrichissement texte.
 

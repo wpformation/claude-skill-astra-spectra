@@ -1,24 +1,24 @@
-# Référence : Spectra icônes — whitelist validée et fallback strategy
+# Référence : Spectra icônes : whitelist validée et fallback strategy
 
 > **Tu DOIS lire ce fichier avant de générer du markup `uagb/icon` ou des icons sur n'importe quel bloc Spectra.** Mes 3 premiers tests ont produit 3 cards features avec **la même icône fallback** parce que `book-open`, `clipboard-check`, `timer` ne sont pas reconnus.
 
 ## Le problème en bref
 
-Spectra utilise un sous-ensemble Font Awesome **5 Free** (pas FA 6, pas FA Pro). Si tu mets un nom d'icône invalide, Spectra **ne crash pas** — il affiche silencieusement une icône fallback (souvent un rectangle vide ou une icône placeholder identique sur toutes les instances). Donc tu n'as **aucune erreur** au markup mais tes 3 cards ont la même icône invisible.
+Spectra utilise un sous-ensemble Font Awesome **5 Free** (pas FA 6, pas FA Pro). Si tu mets un nom d'icône invalide, Spectra **ne crash pas** : il affiche silencieusement une icône fallback (souvent un rectangle vide ou une icône placeholder identique sur toutes les instances). Donc tu n'as **aucune erreur** au markup mais tes 3 cards ont la même icône invisible.
 
 ## Stratégies recommandées
 
-### Stratégie A — Numéros éditoriaux (PRÉFÉRÉE)
+### Stratégie A : Numéros éditoriaux (PRÉFÉRÉE)
 
 Au lieu d'icônes Font Awesome génériques, utiliser des **numéros 01 / 02 / 03** dans un `uagb/info-box` avec gros chiffre orange. Plus distinctif visuellement, 0 risque de fallback.
 
 Voir `patterns/features-numbered.md`.
 
-### Stratégie B — Whitelist d'icônes validées
+### Stratégie B : Whitelist d'icônes validées
 
 Si tu as vraiment besoin d'icônes (ex : pricing tiers avec checkmarks), utiliser uniquement des noms de la whitelist ci-dessous, validés sur Spectra v2.19.x.
 
-### Stratégie C — Custom SVG via core/html
+### Stratégie C : Custom SVG via core/html
 
 Pour des icônes vraiment custom (logos, illustrations), utiliser `core/html` avec un SVG inline. Pas Font Awesome.
 
@@ -132,7 +132,7 @@ key fingerprint user-shield
 
 ## Comment tester un nom d'icône avant de l'utiliser
 
-### Méthode 1 — Test live sur Playground / WP local
+### Méthode 1 : Test live sur Playground / WP local
 
 ```php
 <?php
@@ -142,13 +142,13 @@ require_once ABSPATH . 'wp-content/plugins/ultimate-addons-for-gutenberg/dist/bl
 
 Plus simple : créer un `uagb/icon` block avec le nom à tester, screenshot. Si l'icône matche le nom Font Awesome attendu, c'est OK. Sinon, fallback.
 
-### Méthode 2 — Comparer avec FA 5 Free
+### Méthode 2 : Comparer avec FA 5 Free
 
 Tous les noms FA 5 Free sont sur https://fontawesome.com/v5/search?o=r&m=free.
 
 **ATTENTION** : Spectra mappe les noms FA en court (sans préfixe `fas` ou `far`). Donc `fa-book` → `book`, `fa-clipboard` → `clipboard`.
 
-### Méthode 3 — Test programmatique
+### Méthode 3 : Test programmatique
 
 Le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` peut être étendu avec un endpoint `/inspect-icon/{name}` qui :
 1. Crée un bloc `uagb/icon` avec le nom
@@ -169,7 +169,7 @@ Le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` peut être étendu ave
 | `gear` | `cog` | FA 5 vs FA 6 |
 | `arrow-up-right-from-square` | `external-link-alt` | FA 5 vs FA 6 |
 
-## Fallback strategy — Que faire si une icône foire en prod
+## Fallback strategy : Que faire si une icône foire en prod
 
 Si tu détectes une icône doublonnée/invisible après screenshot :
 

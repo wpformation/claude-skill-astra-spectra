@@ -59,12 +59,12 @@ Spectra :
 
 ## Comment l'utiliser depuis le skill
 
-### Étape 1 — Préparer les overrides CSS
+### Étape 1 : Préparer les overrides CSS
 
 Cibler les classes stables `.uagb-block-{block_id}` qui Spectra génère pour chaque bloc :
 
 ```css
-/* Stats — chiffres 80px orange */
+/* Stats : chiffres 80px orange */
 .uagb-block-v93-stat-1 .uagb-ifb-title,
 .uagb-block-v93-stat-2 .uagb-ifb-title,
 .uagb-block-v93-stat-3 .uagb-ifb-title,
@@ -76,7 +76,7 @@ Cibler les classes stables `.uagb-block-{block_id}` qui Spectra génère pour ch
   letter-spacing: -3px !important;
 }
 
-/* Recipe story — chiffres 88px */
+/* Recipe story : chiffres 88px */
 .uagb-block-v93-recipe-1-num .uagb-ifb-title,
 .uagb-block-v93-recipe-2-num .uagb-ifb-title,
 .uagb-block-v93-recipe-3-num .uagb-ifb-title {
@@ -87,7 +87,7 @@ Cibler les classes stables `.uagb-block-{block_id}` qui Spectra génère pour ch
 
 `!important` est nécessaire pour override le CSS Spectra dynamique par défaut.
 
-### Étape 2 — Injecter via REST API
+### Étape 2 : Injecter via REST API
 
 ```bash
 curl -X POST -u "user:app-pass" \
@@ -107,7 +107,7 @@ Ou via PHP CLI (mu-plugin compagnon) :
 update_post_meta($post_id, '_uag_custom_page_level_css', $custom_css);
 ```
 
-### Étape 3 — Régénérer les assets Spectra
+### Étape 3 : Régénérer les assets Spectra
 
 ```bash
 curl -X POST -u "user:app-pass" \
@@ -154,10 +154,10 @@ Exemple complet : voir [`examples/landing-formation-complete-page-css.css`](../e
 2. **Pas de CSS Unicode escapes `\HHHH` dans les valeurs `content:`** (cf quirk #21). `UAGB_Admin_Helper::sanitize_inline_css()` strippe le backslash. Résultat : `content: "\201C"` rend le texte littéral `201C` au lieu du caractère « guillemet ». **Solution** : utiliser le caractère UTF-8 littéral directement :
 
    ```css
-   /* MAUVAIS — strippé par sanitize, rendu littéral */
+   /* MAUVAIS : strippé par sanitize, rendu littéral */
    .card::before { content: "\201C"; }
 
-   /* BON — caractère UTF-8 littéral */
+   /* BON : caractère UTF-8 littéral */
    .card::before { content: "“"; }
    ```
 
@@ -181,7 +181,7 @@ Exemple complet : voir [`examples/landing-formation-complete-page-css.css`](../e
 
 5. **Cache LiteSpeed** : sur cours-ndrc.fr (LiteSpeed actif), purger les caches `wp litespeed-purge all` après update du meta. Sinon le CSS du meta est appliqué mais peut ne pas remonter dans le HTML cached.
 
-## Workaround Quirk #23 — `wp_head` non-hook
+## Workaround Quirk #23 : `wp_head` non-hook
 
 Découvert 02/05/2026 sur loginarmor-dev (Twenty Twenty-Five FSE) + Spectra v2.19. Confirmé aussi sur Astra 4.13.1 + Spectra v2.19 (cf quirk #6 originel sur cours-ndrc.fr).
 

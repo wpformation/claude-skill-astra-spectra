@@ -1,8 +1,8 @@
-# Référence : impeccable-bridge — mapping principes /impeccable → patterns Spectra
+# Référence : impeccable-bridge : mapping principes /impeccable → patterns Spectra
 
 > **Use case** : tu veux composer une page avec les principes de design enseignés par le skill `/impeccable` (ratios typo, palette committed, hiérarchie, motion, etc.) MAIS tu dois rester dans les contraintes Spectra (49 blocs `uagb/*`, `_uag_custom_page_level_css`, pas de JS custom, etc.).
 
-> **Origine** : retour reviewer 02/05/2026 — `/impeccable` a donné des principes design cohérents (drop cap, mono fonts, watermarks) mais zéro mapping vers ce que Spectra peut réellement supporter. Résultat : CSS jamais validé Spectra-compatible, drop cap qui foire silencieusement, mono fonts en fallback Courier moche.
+> **Origine** : retour reviewer 02/05/2026 : `/impeccable` a donné des principes design cohérents (drop cap, mono fonts, watermarks) mais zéro mapping vers ce que Spectra peut réellement supporter. Résultat : CSS jamais validé Spectra-compatible, drop cap qui foire silencieusement, mono fonts en fallback Courier moche.
 
 ## Comment utiliser ce fichier
 
@@ -61,7 +61,7 @@ Quand tu invoques `/impeccable` et qu'il te donne un registre (« bold tech », 
 | Primary accent | `var(--ast-global-color-0)` (Astra) ou hex direct | ✅ Supporté |
 | Secondary accent (différente hue) | `var(--ast-global-color-1)` ou hex direct | ✅ Supporté |
 | Neutrals (5 nuances de gris) | hex directs `#0F172A` / `#475569` / `#64748B` / `#E2E8F0` / `#F8FAFC` | ✅ Supporté |
-| « Pas plus de 3 occurrences accent dans une section » | Cf `visual-pitfalls.md` Pitfall #5 — règle skill | ✅ Codé en règle non-négociable |
+| « Pas plus de 3 occurrences accent dans une section » | Cf `visual-pitfalls.md` Pitfall #5 : règle skill | ✅ Codé en règle non-négociable |
 
 ### 3. Hiérarchie visuelle (focal points)
 
@@ -83,9 +83,9 @@ Quand tu invoques `/impeccable` et qu'il te donne un registre (« bold tech », 
 
 | Implémentation | Status |
 |---|---|
-| CSS `::first-letter` dans `_uag_custom_page_level_css` | ⚠️ **Risqué** — Spectra wrap parfois le texte dans des `<span>` internes qui cassent `::first-letter`. Le rendu varie par browser. Voir `visual-pitfalls.md` Pitfall #3 |
+| CSS `::first-letter` dans `_uag_custom_page_level_css` | ⚠️ **Risqué** : Spectra wrap parfois le texte dans des `<span>` internes qui cassent `::first-letter`. Le rendu varie par browser. Voir `visual-pitfalls.md` Pitfall #3 |
 | Pull quote `uagb/blockquote` au milieu du texte | ✅ Alternative recommandée |
-| Eyebrow uppercase au-dessus du paragraphe | ✅ Alternative recommandée — effet éditorial sans risque |
+| Eyebrow uppercase au-dessus du paragraphe | ✅ Alternative recommandée : effet éditorial sans risque |
 
 **Verdict** : ⚠️ Drop cap = ne PAS faire sauf si pattern `article-content-rich.md` le supporte explicitement avec screenshot validé.
 
@@ -99,7 +99,7 @@ Quand tu invoques `/impeccable` et qu'il te donne un registre (« bold tech », 
 |---|---|
 | `font-family: 'JetBrains Mono', monospace` sur `.uagb-block-{slug}-timestamp` | ⛔ **Non recommandé** sauf site dev/tech committed (cf `visual-pitfalls.md` Pitfall #4) |
 | Bloc `core/code` (rendu mono natif géré par le thème) | ✅ Supporté pour code source |
-| `font-variant-numeric: tabular-nums` (chiffres alignés) | ✅ Alternative — tabular nums dans la font système, plus propre |
+| `font-variant-numeric: tabular-nums` (chiffres alignés) | ✅ Alternative : tabular nums dans la font système, plus propre |
 
 ### 6. Watermarks numériques géants
 
@@ -109,9 +109,9 @@ Quand tu invoques `/impeccable` et qu'il te donne un registre (« bold tech », 
 
 | Implémentation | Status |
 |---|---|
-| Pseudo-element `::before` avec `content: "247"` 480px transparent | ⚠️ **Risqué** — sans design global validé, paraît bug. Cf `visual-pitfalls.md` Pitfall #1 |
-| Stats bar avec chiffres 56-72px en row | ✅ Alternative recommandée — pattern `stats-bar-editorial.md` |
-| Numéros 01/02/03 dans features cards | ✅ Alternative — pattern `features-numbered.md` |
+| Pseudo-element `::before` avec `content: "247"` 480px transparent | ⚠️ **Risqué** : sans design global validé, paraît bug. Cf `visual-pitfalls.md` Pitfall #1 |
+| Stats bar avec chiffres 56-72px en row | ✅ Alternative recommandée : pattern `stats-bar-editorial.md` |
+| Numéros 01/02/03 dans features cards | ✅ Alternative : pattern `features-numbered.md` |
 
 ### 7. Asymetric layout (40/30/20/10)
 
@@ -122,8 +122,8 @@ Quand tu invoques `/impeccable` et qu'il te donne un registre (« bold tech », 
 | Implémentation | Status |
 |---|---|
 | `widthDesktop: 40 / 30 / 20 / 10` sur 4 cards | ⚠️ **Risqué** sans calibration typo extrême. Cf `visual-pitfalls.md` Pitfall #2 |
-| Hero asymétrique 60/40 (texte gauche, image droite) | ✅ Supporté — pattern `hero-cta-split.md` |
-| Stats 33/33/33 ou 25/25/25/25 equal | ✅ Alternative recommandée — baseline éprouvée |
+| Hero asymétrique 60/40 (texte gauche, image droite) | ✅ Supporté : pattern `hero-cta-split.md` |
+| Stats 33/33/33 ou 25/25/25/25 equal | ✅ Alternative recommandée : baseline éprouvée |
 
 ### 8. Motion / animations (hover lift, scroll-triggered)
 
@@ -134,9 +134,9 @@ Quand tu invoques `/impeccable` et qu'il te donne un registre (« bold tech », 
 | Implémentation | Status |
 |---|---|
 | Hover simple `transform: translateY(-2px); transition: 0.15s ease;` | ✅ Supporté via `_uag_custom_page_level_css` |
-| Animation infinite (float, pulse) | ⚠️ Cf `visual-pitfalls.md` Pitfall #9 — risqué, distrait |
-| Scroll-triggered animation (parallax, fade-in on scroll) | ⛔ Non supporté natif Spectra — demande JS custom (out of scope skill) |
-| `prefers-reduced-motion` respect | ✅ OBLIGATOIRE — `@media (prefers-reduced-motion: reduce) { animation: none; }` |
+| Animation infinite (float, pulse) | ⚠️ Cf `visual-pitfalls.md` Pitfall #9 : risqué, distrait |
+| Scroll-triggered animation (parallax, fade-in on scroll) | ⛔ Non supporté natif Spectra : demande JS custom (out of scope skill) |
+| `prefers-reduced-motion` respect | ✅ OBLIGATOIRE : `@media (prefers-reduced-motion: reduce) { animation: none; }` |
 | Lottie animation | ✅ Pattern `lottie.md` |
 
 ### 9. Glassmorphism (frosted glass, backdrop-filter)
@@ -165,7 +165,7 @@ Quand tu invoques `/impeccable` et qu'il te donne un registre (« bold tech », 
 
 ## Workflow recommandé : `/impeccable` + skill astra-spectra
 
-### Étape 1 — Demander une direction design à `/impeccable`
+### Étape 1 : Demander une direction design à `/impeccable`
 
 ```
 /impeccable « Page contact pour formation en ligne, registre minimal éditorial,
@@ -174,7 +174,7 @@ Quand tu invoques `/impeccable` et qu'il te donne un registre (« bold tech », 
 
 `/impeccable` te donne 5-10 principes design : palette, ratios typo, focal CTA, motion, hiérarchie sections, etc.
 
-### Étape 2 — Filtrer les principes via ce fichier
+### Étape 2 : Filtrer les principes via ce fichier
 
 Pour chaque principe `/impeccable`, regarder dans la table ci-dessus :
 
@@ -182,15 +182,15 @@ Pour chaque principe `/impeccable`, regarder dans la table ci-dessus :
 - ⚠️ Supporté avec workaround → lire les caveats dans `visual-pitfalls.md` avant d'implémenter
 - ⛔ Non supporté → utiliser l'alternative recommandée OU demander au user de valider
 
-### Étape 3 — Choisir les patterns par tag de registre
+### Étape 3 : Choisir les patterns par tag de registre
 
 Filtrer les patterns sur le tag `/impeccable` (editorial / minimal / bold / SaaS-corporate / luxe / playful).
 
-### Étape 4 — Composer en respectant les baselines
+### Étape 4 : Composer en respectant les baselines
 
 Avant de poser une typo/spacing/couleur, vérifier dans `references/design-baselines.md`.
 
-### Étape 5 — Pre-flight + post-render check
+### Étape 5 : Pre-flight + post-render check
 
 ```bash
 php scripts/pre-flight-check.php --content-file=markup.html --css-file=overrides.css
@@ -201,7 +201,7 @@ php scripts/post-render-check.php --url={URL} --post-id={ID}
 # Si BLOCKED → workaround Quirk #23/#24 si besoin
 ```
 
-### Étape 6 — Screenshot validation OBLIGATOIRE
+### Étape 6 : Screenshot validation OBLIGATOIRE
 
 Avant de claim « impeccable », screenshot de la page rendue (cf `workflows/screenshot-options.md`). Sans screenshot, tu qualifies de « composition non vérifiée visuellement » (cf règle 1 SKILL.md).
 

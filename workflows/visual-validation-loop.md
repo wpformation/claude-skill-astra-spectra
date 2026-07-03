@@ -1,4 +1,4 @@
-# Workflow — Boucle de validation visuelle (auto-retries)
+# Workflow : Boucle de validation visuelle (auto-retries)
 
 > 🔴 **GATE NON-NÉGOCIABLE** : ce workflow est **OBLIGATOIRE** avant de qualifier une page de WOW / impeccable / propre / éditorial / beau / réussi (cf règle 1 SKILL.md). Sans screenshot validé, l'instance Claude **n'a pas le droit** d'utiliser ces qualificatifs dans sa réponse au user.
 
@@ -14,7 +14,7 @@ Garantir qu'une page générée par le skill n'est pas seulement **markup-valide
 
 Avant TOUTE réponse au user qui annonce un succès design, l'instance Claude DOIT avoir :
 
-1. ✅ Screenshot capturé (cf [`screenshot-options.md`](screenshot-options.md) — 5 options)
+1. ✅ Screenshot capturé (cf [`screenshot-options.md`](screenshot-options.md) : 5 options)
 2. ✅ Checklist visuelle minimum passée (10 points dans `screenshot-options.md`)
 3. ✅ Si défaut détecté visuellement : retry markup OU avertir le user explicitement
 
@@ -244,24 +244,24 @@ done
 
 ## 4 pièges critiques détectés et fixés v0.9.1
 
-### Piège 1 — FAQ avec Lorem Ipsum
+### Piège 1 : FAQ avec Lorem Ipsum
 **Symptôme observé** : la FAQ accordéon s'expand mais affiche `Lorem ipsum dolor sit amet, consectetur...` au lieu de la vraie réponse.
 **Cause** : l'attribut Spectra s'appelle **`answer`**, pas `description`. Vérifié via `register_rest_route('/inspect-faq')` qui inspecte `WP_Block_Type_Registry`.
 **Fix** : `<!-- wp:uagb/faq-child {"question":"...", "answer":"<reponse complète>"} -->`. Le inner content (`<p class="uagb-faq-content">`) est secondaire mais doit être présent pour la rendition initiale.
-**Validation** : `screenshots/loginarmor-dev-palette3/v091-iter2-faq-fixed.png` — la première question affiche maintenant la vraie réponse.
+**Validation** : `screenshots/loginarmor-dev-palette3/v091-iter2-faq-fixed.png` : la première question affiche maintenant la vraie réponse.
 
-### Piège 2 — Image about-story qui n'apparaît pas en screenshot fullpage
+### Piège 2 : Image about-story qui n'apparaît pas en screenshot fullpage
 **Symptôme** : screenshot fullpage montre une zone blanche à la place de l'image about-story (mais l'image est présente dans le HTML rendu).
 **Cause** : `loading="lazy"` sur `<img>` + agent-browser screenshot --full ne déclenche pas toujours le lazy loading des images en bas de page.
 **Fix** : avant le screenshot, exécuter `document.querySelectorAll('img[loading=lazy]').forEach(i=>i.loading='eager')` puis scroll bottom + scroll top pour déclencher tous les lazy loaders.
-**Validation** : `screenshots/loginarmor-dev-palette3/v091-iter1-1440-fullpage-eager.png` — l'image apparaît correctement.
+**Validation** : `screenshots/loginarmor-dev-palette3/v091-iter1-1440-fullpage-eager.png` : l'image apparaît correctement.
 
-### Piège 3 — CSS Spectra absent en draft preview
+### Piège 3 : CSS Spectra absent en draft preview
 **Symptôme** : preview anonyme `?preview=true` d'un draft → page rendue sans styles (pas de flex-grid, pas de border-radius, pas de shadow). Le `_uag_page_assets` post_meta existe avec un `css` de 17K+ chars mais le HTML <head> n'a aucun `<style id="uagb-style-frontend-X">`.
 **Cause** : sur Apache mutu (o2switch) + LiteSpeed Cache + plugins de sécurité, le hook `wp_head` n'injecte pas le CSS Spectra inline pour les drafts en preview anonyme. Spectra a un check `is_user_logged_in()` ou `current_user_can('edit_post')` qui filtre.
-**Fix** : `wpf_skill_temp_publish_trick()` dans `scripts/post-page-via-rest.php` v0.9.1 — publish temporaire (~1s) → hit URL frontend (force pipeline complète Astra+Spectra) → revert au statut original. Active par défaut, désactivable via `--no-temp-publish` sur sites live.
+**Fix** : `wpf_skill_temp_publish_trick()` dans `scripts/post-page-via-rest.php` v0.9.1 : publish temporaire (~1s) → hit URL frontend (force pipeline complète Astra+Spectra) → revert au statut original. Active par défaut, désactivable via `--no-temp-publish` sur sites live.
 
-### Piège 4 — Slot color-7 = noir massif sur palette_3
+### Piège 4 : Slot color-7 = noir massif sur palette_3
 **Symptôme** : section testimonials/FAQ apparaît avec **bord noir massif** sur palette_3 (cours-ndrc.fr, palette orange WPF).
 **Cause** : pattern utilise `borderColor: var(--ast-global-color-7)`. Sur palette_3, color-7 vaut `#141006` (presque noir). Sur palette default, color-7 vaut le secondary gris.
 **Fix** : utiliser **hex direct neutre** `borderColor: "#e5e7eb"` ou résoudre via `wpf_skill_resolve_color('border_subtle', $palette)`. Voir `references/semantic-color-roles.md` pour la table GUARANTEED vs VARIABLE slots Astra.

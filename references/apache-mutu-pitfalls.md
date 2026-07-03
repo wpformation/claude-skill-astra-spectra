@@ -2,7 +2,7 @@
 
 > **Lecture obligatoire si tu déploies sur o2switch, OVH mutualisé, 1&1/IONOS, Hostinger, ou tout autre hébergeur WordPress mutualisé.** Ces hébergeurs ont des comportements spécifiques qui font échouer le pipeline standard du skill.
 
-## Bug critique #1 — Authorization header strippé par Apache
+## Bug critique #1 : Authorization header strippé par Apache
 
 **Symptôme** : `curl -u 'user:app-password' /wp-json/wp/v2/users/me` retourne `{"code":"rest_not_logged_in","data":{"status":401}}` malgré des credentials corrects.
 
@@ -32,7 +32,7 @@ curl -u 'user:pass' https://monsite.com/wp-json/wp/v2/users/me
 
 **Note** : si l'utilisateur n'a pas accès au `.htaccess` (rare mais possible), proposer la méthode alternative WP-CLI pour les opérations critiques.
 
-## Bug critique #2 — LiteSpeed Cache sert du cache stale
+## Bug critique #2 : LiteSpeed Cache sert du cache stale
 
 **Symptôme** : tu update une page via REST API. tu hit la URL frontend via curl : la réponse est l'**ancienne version** de la page. Pas de regen Spectra CSS car le HTML cached n'a pas changé.
 
@@ -87,7 +87,7 @@ register_rest_route('skill-test/v1', '/purge-caches', [
 
 **Détection** : modifier le content de la page, hit la frontend, comparer le HTML rendu au content envoyé. Si différence = cache.
 
-## Bug critique #3 — Rate limiting WAF / mod_security
+## Bug critique #3 : Rate limiting WAF / mod_security
 
 **Symptôme** : après 5-10 requêtes API rapides, les suivantes retournent 403 ou 503. Ou le serveur devient lent et timeout.
 
@@ -111,7 +111,7 @@ done
 
 **Détection** : si 403 après plusieurs requêtes, c'est WAF. Si 503 ou timeout, c'est rate limit.
 
-## Bug critique #4 — Application Password désactivés
+## Bug critique #4 : Application Password désactivés
 
 **Symptôme** : `/wp-json/wp/v2/users/me` retourne `{"code":"application_passwords_disabled"}`.
 
@@ -130,7 +130,7 @@ add_filter('wp_is_application_passwords_available', '__return_true');
 
 **Détection** : vérifier `/wp-admin/profile.php` → section « Application Passwords » doit être présente. Si absente, désactivé.
 
-## Bug critique #5 — wp-cron.php désactivé / cron serveur
+## Bug critique #5 : wp-cron.php désactivé / cron serveur
 
 **Symptôme** : les régénérations de Spectra assets en background ne se font pas. Les pages publiées ont du CSS Spectra obsolète.
 
@@ -213,4 +213,4 @@ Si l'utilisateur déploie sur o2switch / OVH mutu :
 - [ ] Endpoint `/skill-test/v1/diagnose-host` qui détecte automatiquement l'hébergeur et flag les pièges connus
 - [ ] Auto-injection du RewriteRule HTTP_AUTHORIZATION dans `.htaccess` via mu-plugin (avec confirmation user)
 - [ ] Détection LiteSpeed installé + auto-purge avant chaque hit frontend dans les workflows
-- [ ] Tests sur Kinsta, WP Engine, Cloudways (managed WP) — souvent sans ces pièges Apache mutu
+- [ ] Tests sur Kinsta, WP Engine, Cloudways (managed WP) : souvent sans ces pièges Apache mutu

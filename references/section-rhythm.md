@@ -1,8 +1,8 @@
-# Convention rhythm sections — alternance bg + dividers
+# Convention rhythm sections : alternance bg + dividers
 
 > **Origine** : rapport visuel cours-ndrc.fr du 02/05/2026. Sur la page démo, 5 sections `alignwide` enchaînées avaient toutes leur padding interne mais aucune marge externe → mur de blocs sans hiérarchie. Pour respirer visuellement entre sections, le skill applique une convention de rhythm.
 
-## Règle 1 — Alternance background section ↔ section
+## Règle 1 : Alternance background section ↔ section
 
 Deux sections consécutives ne doivent **JAMAIS avoir le même `backgroundColor`**. Sinon elles se collent visuellement et l'utilisateur ne perçoit pas le découpage.
 
@@ -30,7 +30,7 @@ Convention dark mode (variante) :
 | 4 | Pricing | `#1e293b` |
 | 5 | FAQ | `#0f172a` |
 
-## Règle 2 — Padding interne généreux + responsive
+## Règle 2 : Padding interne généreux + responsive
 
 Tous les root containers ont :
 
@@ -42,7 +42,7 @@ Tous les root containers ont :
 
 Ces valeurs sont déjà appliquées dans tous les patterns v0.8.3+. La respiration vient du padding interne **ET** de l'alternance bg, pas de la marge externe (qui peut casser le `alignfull`).
 
-## Règle 3 — Dividers Spectra optionnels (effet WOW)
+## Règle 3 : Dividers Spectra optionnels (effet WOW)
 
 Pour transitions élégantes entre sections (use case landing page premium), utiliser un divider Spectra :
 
@@ -59,11 +59,11 @@ Le `topDividerColor` doit matcher le `backgroundColor` de la **section précéde
 
 Voir `modules/spectra/container-wow-recipes.md` recette 4 (« Dividers diagonaux »).
 
-## Règle 4 — Pas de marge externe sur `alignfull`
+## Règle 4 : Pas de marge externe sur `alignfull`
 
 Pour les sections `alignfull` (CTA banner, hero gradient mesh), ne **jamais** ajouter `marginTopDesktop` ou `marginBottomDesktop` externes positifs. La section doit toucher la précédente/suivante pour respecter l'alignement full-width. La respiration vient du padding interne ET du contraste de bg.
 
-Pour les sections `alignwide`, idem — on évite les marges externes pour ne pas créer de gap blanc visible avec le body bg.
+Pour les sections `alignwide`, idem : on évite les marges externes pour ne pas créer de gap blanc visible avec le body bg.
 
 ## Pattern d'usage côté workflow
 

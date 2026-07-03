@@ -1,11 +1,11 @@
 ---
-title: "Le guide complet — Piloter WordPress avec Claude Code (Spectra + Astra)"
+title: "Le guide complet : Piloter WordPress avec Claude Code (Spectra + Astra)"
 subtitle: "30 recettes pour générer, refondre et déployer des pages en moins de 2 minutes"
-author: "Fabrice Ducarme — WPFormation.com"
-edition: "v1.0 — mai 2026"
+author: "Fabrice Ducarme : WPFormation.com"
+edition: "v1.0 : mai 2026"
 pages_target: 32
 audience: "développeurs WordPress, agences, formateurs"
-license: "Lead magnet WPFormation — diffusion gratuite avec inscription newsletter"
+license: "Lead magnet WPFormation : diffusion gratuite avec inscription newsletter"
 ---
 
 # Page de couverture
@@ -19,21 +19,21 @@ Logo WPFormation · titre du guide · sous-titre · édition v1.0 mai 2026 · au
 1. Pourquoi ce guide
 2. Pré-requis et installation
 3. Le routing automatique : comment Claude Code choisit le bon bloc
-4. Recette n°1 — Hero pleine page avec gradient mesh
-5. Recette n°2 — Glassmorphism cards
-6. Recette n°3 — Section avec divider diagonal SVG
-7. Recette n°4 — Background vidéo en boucle
-8. Recette n°5 — Sticky sidebar layout 70/30
-9. Recette n°6 — Pattern repeat + parallax léger
-10. Recette n°7 — Conic gradient (rotation 1deg)
-11. Recette n°8 — Icon list hoverable
-12. Recette n°9 — Stats counters animés au scroll
-13. Recette n°10 — FAQ avec schema FAQPage automatique
-14. Recette n°11 — Témoignages en grille avec photos
-15. Recette n°12 — Pricing 3 tiers avec tier central populaire
+4. Recette n°1 : Hero pleine page avec gradient mesh
+5. Recette n°2 : Glassmorphism cards
+6. Recette n°3 : Section avec divider diagonal SVG
+7. Recette n°4 : Background vidéo en boucle
+8. Recette n°5 : Sticky sidebar layout 70/30
+9. Recette n°6 : Pattern repeat + parallax léger
+10. Recette n°7 : Conic gradient (rotation 1deg)
+11. Recette n°8 : Icon list hoverable
+12. Recette n°9 : Stats counters animés au scroll
+13. Recette n°10 : FAQ avec schema FAQPage automatique
+14. Recette n°11 : Témoignages en grille avec photos
+15. Recette n°12 : Pricing 3 tiers avec tier central populaire
 16. Templates prêts à l'emploi (page formation, landing SaaS, page agence)
-17. Workflow complet — De la page blanche au draft validé
-18. Workflow refonte — Moderniser une page existante
+17. Workflow complet : De la page blanche au draft validé
+18. Workflow refonte : Moderniser une page existante
 19. Le bloc uagb/container expliqué (le bloc-fondation)
 20. Pilotage Astra Customizer (palette, typo, header, footer)
 21. Anti-patterns et pièges courants
@@ -46,7 +46,7 @@ Logo WPFormation · titre du guide · sous-titre · édition v1.0 mai 2026 · au
 
 ---
 
-# Chapitre 1 — Pourquoi ce guide (pages 3-4)
+# Chapitre 1 : Pourquoi ce guide (pages 3-4)
 
 L'IA pilote des sites WordPress depuis 2024. Mais piloter un site WordPress avec **Claude Code**, ça veut dire quoi concrètement ?
 
@@ -63,13 +63,13 @@ Avec ce guide, tu vas pouvoir :
 
 ---
 
-# Chapitre 2 — Pré-requis et installation (pages 5-6)
+# Chapitre 2 : Pré-requis et installation (pages 5-6)
 
 ## Stack minimal
 
 - WordPress 6.6+ (testé jusqu'à 6.9)
 - PHP 8.1+
-- Spectra (ex Ultimate Addons for Gutenberg) — gratuit, plugin namespace `uagb/*`
+- Spectra (ex Ultimate Addons for Gutenberg) : gratuit, plugin namespace `uagb/*`
 - Application Password créé sur `/wp-admin/profile.php`
 - Claude Code installé (CLI ou IDE extension)
 
@@ -96,7 +96,7 @@ Le skill explore automatiquement ton site, vérifie Spectra, Astra, le thème ac
 
 ---
 
-# Chapitre 3 — Le routing automatique (pages 7-9)
+# Chapitre 3 : Le routing automatique (pages 7-9)
 
 Le cœur du skill, c'est sa **table de routing** intent → bloc. 45 entrées qui couvrent 95 % des cas d'usage éditoriaux.
 
@@ -135,7 +135,7 @@ Le cœur du skill, c'est sa **table de routing** intent → bloc. 45 entrées qu
 
 ---
 
-# Chapitres 4 à 15 — Les 12 recettes WOW
+# Chapitres 4 à 15 : Les 12 recettes WOW
 
 Chaque recette occupe 1.5 page : description, captures avant/après, code markup complet, prompt Claude Code à utiliser, anti-patterns spécifiques.
 
@@ -143,11 +143,11 @@ Chaque recette occupe 1.5 page : description, captures avant/après, code markup
 
 ---
 
-# Chapitre 16 — Templates prêts à l'emploi (pages 22-24)
+# Chapitre 16 : Templates prêts à l'emploi (pages 22-24)
 
 3 templates couvrent 80 % des besoins d'agence et de formateur :
 
-## Template 1 — page-formation
+## Template 1 : page-formation
 
 9 sections : hero impact + bénéfices + programme détaillé + formateur + témoignages + tarifs + FAQ + CTA inscription + section OPCO.
 
@@ -160,49 +160,49 @@ Prompt :
   opco=true
 ```
 
-## Template 2 — landing-saas
+## Template 2 : landing-saas
 
 9 sections : hero produit + problème/solution + 3 features clés + démo screenshots + témoignages + pricing 3 tiers + FAQ + CTA inscription + footer-mini.
 
-## Template 3 — page-agence
+## Template 3 : page-agence
 
 10 sections : hero impact + services en grille + processus + équipe + projets case studies + témoignages + tech stack + FAQ + formulaire contact + footer.
 
 ---
 
-# Chapitre 17 — Workflow complet (pages 25-26)
+# Chapitre 17 : Workflow complet (pages 25-26)
 
 8 étapes :
 
-1. **Détection** — Le skill vérifie l'environnement (Spectra OK ? Astra ? thème ?)
-2. **Parsing** — Conversion de ton brief en intent map
-3. **Patterns** — Sélection des patterns adéquats dans la lib
-4. **Markup** — Assemblage du markup Gutenberg avec block_id uniques + tokens Astra
-5. **Validation** — Roundtrip parse/serialize avant POST (anti-crash)
-6. **POST** — Création du draft via REST API
-7. **Validation visuelle** — Screenshot + audit /impeccable + retries (max 3)
-8. **Récap** — URL draft + métriques + audit log
+1. **Détection** : Le skill vérifie l'environnement (Spectra OK ? Astra ? thème ?)
+2. **Parsing** : Conversion de ton brief en intent map
+3. **Patterns** : Sélection des patterns adéquats dans la lib
+4. **Markup** : Assemblage du markup Gutenberg avec block_id uniques + tokens Astra
+5. **Validation** : Roundtrip parse/serialize avant POST (anti-crash)
+6. **POST** : Création du draft via REST API
+7. **Validation visuelle** : Screenshot + audit /impeccable + retries (max 3)
+8. **Récap** : URL draft + métriques + audit log
 
 Si checkpoint visuel KO après 3 retries : rapport détaillé + recommandation manuelle.
 
 ---
 
-# Chapitre 18 — Workflow refonte (pages 27-28)
+# Chapitre 18 : Workflow refonte (pages 27-28)
 
 8 étapes spécifiques :
 
 1. **Détection**
-2. **Snapshot** — `snapshot-page.php` dump JSON de la page existante
-3. **Analyse** — Le skill identifie les sections et leur intent
-4. **Mapping** — Chaque section legacy mappée vers un pattern Spectra
-5. **Reconstruction** — Markup hybride core + Spectra qui préserve le contenu original
-6. **POST clone** — Le draft est créé en clone (`/page-refonte/`), jamais sur l'URL prod
-7. **Diff** — Comparaison contenu original vs reconstruction (tous les paragraphes préservés ?)
-8. **Migration optionnelle** — Quand tu valides, le skill remplace le contenu prod et garde l'ancien en révision
+2. **Snapshot** : `snapshot-page.php` dump JSON de la page existante
+3. **Analyse** : Le skill identifie les sections et leur intent
+4. **Mapping** : Chaque section legacy mappée vers un pattern Spectra
+5. **Reconstruction** : Markup hybride core + Spectra qui préserve le contenu original
+6. **POST clone** : Le draft est créé en clone (`/page-refonte/`), jamais sur l'URL prod
+7. **Diff** : Comparaison contenu original vs reconstruction (tous les paragraphes préservés ?)
+8. **Migration optionnelle** : Quand tu valides, le skill remplace le contenu prod et garde l'ancien en révision
 
 ---
 
-# Chapitre 19 — Le bloc uagb/container (pages 29-30)
+# Chapitre 19 : Le bloc uagb/container (pages 29-30)
 
 Le bloc-fondation. Tout effet WOW passe par lui.
 
@@ -225,7 +225,7 @@ Le bloc-fondation. Tout effet WOW passe par lui.
 
 ---
 
-# Chapitre 20 — Pilotage Astra (pages 31-33)
+# Chapitre 20 : Pilotage Astra (pages 31-33)
 
 ## Update palette
 
@@ -260,29 +260,29 @@ Résultat : 9 variables CSS `--ast-global-color-0..8` régénérées en moins de
 
 ---
 
-# Chapitre 21 — Anti-patterns (pages 34-35)
+# Chapitre 21 : Anti-patterns (pages 34-35)
 
 15 erreurs à ne JAMAIS commettre :
 
-1. ❌ Hex hardcodé dans un attribut couleur — toujours `var(--ast-global-color-X)`
-2. ❌ Oublier `block_id` sur un bloc Spectra — Gutenberg recompute et casse le rendu
-3. ❌ Réutiliser le même `block_id` entre 2 blocs — duplicate fail
-4. ❌ `update_option('astra-settings', $patch)` — écrase les centaines de keys de l'option, désastre
-5. ❌ Modifier le header builder sans Astra Pro actif — fallback widgetisé
-6. ❌ POST sur l'URL prod sans clone — perte du contenu legacy
-7. ❌ Heading H1 multiple sur une page — SEO fail
-8. ❌ Image sans alt — accessibilité fail
-9. ❌ Container sans responsive padding — UX mobile fail
-10. ❌ Effet WOW avec `core/group` — pas de gradient ni divider
-11. ❌ Embed YouTube avec `uagb/lottie` — mauvais bloc
+1. ❌ Hex hardcodé dans un attribut couleur : toujours `var(--ast-global-color-X)`
+2. ❌ Oublier `block_id` sur un bloc Spectra : Gutenberg recompute et casse le rendu
+3. ❌ Réutiliser le même `block_id` entre 2 blocs : duplicate fail
+4. ❌ `update_option('astra-settings', $patch)` : écrase les centaines de keys de l'option, désastre
+5. ❌ Modifier le header builder sans Astra Pro actif : fallback widgetisé
+6. ❌ POST sur l'URL prod sans clone : perte du contenu legacy
+7. ❌ Heading H1 multiple sur une page : SEO fail
+8. ❌ Image sans alt : accessibilité fail
+9. ❌ Container sans responsive padding : UX mobile fail
+10. ❌ Effet WOW avec `core/group` : pas de gradient ni divider
+11. ❌ Embed YouTube avec `uagb/lottie` : mauvais bloc
 12. ❌ Stocker la palette dans `astra-color-palettes` au lieu de `astra-settings.global-color-palette`
-13. ❌ Oublier d'invalider le cache Astra après update palette — CSS périmé 12h
-14. ❌ Faire confiance au markup d'un screenshot LLM — toujours valider roundtrip
-15. ❌ Skip la phase de validation visuelle — bug visible en prod
+13. ❌ Oublier d'invalider le cache Astra après update palette : CSS périmé 12h
+14. ❌ Faire confiance au markup d'un screenshot LLM : toujours valider roundtrip
+15. ❌ Skip la phase de validation visuelle : bug visible en prod
 
 ---
 
-# Chapitre 22 — Troubleshooting (page 36)
+# Chapitre 22 : Troubleshooting (page 36)
 
 10 erreurs résolues :
 
@@ -301,7 +301,7 @@ Résultat : 9 variables CSS `--ast-global-color-0..8` régénérées en moins de
 
 ---
 
-# Chapitre 23 — Prompts optimisés (pages 37-38)
+# Chapitre 23 : Prompts optimisés (pages 37-38)
 
 15 templates à copier-coller dans Claude Code :
 
@@ -331,7 +331,7 @@ Résultat : 9 variables CSS `--ast-global-color-0..8` régénérées en moins de
 
 ---
 
-# Chapitre 24 — Cas d'usage agence (page 39)
+# Chapitre 24 : Cas d'usage agence (page 39)
 
 Comment une agence digitale peut intégrer ce skill dans son workflow client :
 
@@ -345,7 +345,7 @@ ROI estimé : passage d'une page coûtant 8-15h dev à une page produite en 30 m
 
 ---
 
-# Chapitre 25 — FAQ (page 40)
+# Chapitre 25 : FAQ (page 40)
 
 10 questions courantes :
 
@@ -362,7 +362,7 @@ ROI estimé : passage d'une page coûtant 8-15h dev à une page produite en 30 m
 
 ---
 
-# Chapitre 26 — Pour aller plus loin (page 41)
+# Chapitre 26 : Pour aller plus loin (page 41)
 
 - Repo GitHub : https://github.com/wpformation/claude-skill-astra-spectra
 - Article WPFormation : https://wpformation.com/skill-astra-spectra/ [à publier]
@@ -372,9 +372,9 @@ ROI estimé : passage d'une page coûtant 8-15h dev à une page produite en 30 m
 
 ---
 
-# Chapitre 27 — À propos de l'auteur (page 42)
+# Chapitre 27 : À propos de l'auteur (page 42)
 
-Fabrice Ducarme — fondateur de WPFormation.com, formateur WordPress depuis 2012.
+Fabrice Ducarme : fondateur de WPFormation.com, formateur WordPress depuis 2012.
 
 - Co-créateur de WPS Hide Login (2M+ téléchargements WP.org)
 - Co-créateur de WPS Limit Login (100K+ téléchargements)
@@ -394,7 +394,7 @@ CTA :
 - « S'inscrire à la formation WordPress + IA » → /formation-wordpress/
 - « Suivre la veille WPFormation » (newsletter) → encart inscription
 
-Mentions légales : © 2026 WPFormation — Fabrice Ducarme — EI · SIRET 478 478 332 00032 · Qualiopi · Diffusion gratuite avec inscription newsletter, redistribution interdite sans accord.
+Mentions légales : © 2026 WPFormation : Fabrice Ducarme : EI · SIRET 478 478 332 00032 · Qualiopi · Diffusion gratuite avec inscription newsletter, redistribution interdite sans accord.
 
 ---
 

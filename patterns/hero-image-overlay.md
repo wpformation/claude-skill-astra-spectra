@@ -45,7 +45,7 @@
 
 ## Variantes
 
-### Variante 1 — overlay gradient au lieu de color flat
+### Variante 1 : overlay gradient au lieu de color flat
 
 ```json
 {
@@ -61,11 +61,11 @@
 
 Dégradé top-down sombre→clair → améliore lisibilité du texte (en haut) tout en montrant l'image (en bas).
 
-### Variante 2 — Hero court (page interne)
+### Variante 2 : Hero court (page interne)
 
 Réduire `topPaddingDesktop`/`bottomPaddingDesktop` à 112 (au lieu de 225). Pour une page Services, About, Contact où le hero ne doit pas occuper toute la page.
 
-### Variante 3 — Hero avec eyebrow kicker
+### Variante 3 : Hero avec eyebrow kicker
 
 Ajouter un kicker au-dessus du H1 :
 
@@ -90,11 +90,11 @@ Et dans le HTML :
 </div>
 ```
 
-### Variante 4 — Single CTA (sans secondary)
+### Variante 4 : Single CTA (sans secondary)
 
 Retirer simplement le 2e `uagb/buttons-child`. Garder juste le primary.
 
-### Variante 5 — Hero sans image (fallback minimal)
+### Variante 5 : Hero sans image (fallback minimal)
 
 Si pas d'image disponible, remplacer `backgroundType: "image"` par `backgroundType: "gradient"` :
 
@@ -136,4 +136,4 @@ Ouvrir la page dans Gutenberg authentifié. Vérifier :
 
 ## Inspiration
 
-Inspiré du démo officiel **Spectra Natures** (websitedemos.net/natures-01) — Hero des pages Homepage, Services, Contact, About. Voir [`references/spectra-demo-reference.md`](../references/spectra-demo-reference.md) pour l'analyse complète.
+Inspiré du démo officiel **Spectra Natures** (websitedemos.net/natures-01) : Hero des pages Homepage, Services, Contact, About. Voir [`references/spectra-demo-reference.md`](../references/spectra-demo-reference.md) pour l'analyse complète.

@@ -32,7 +32,7 @@
 ## CSS overrides recommandés (`_uag_custom_page_level_css`)
 
 ```css
-/* Map — radius + shadow pour intégration éditoriale */
+/* Map : radius + shadow pour intégration éditoriale */
 .uagb-block-{slug}-map .uagb-google-map__wrap {
   border-radius: 16px !important;
   overflow: hidden !important;
@@ -62,7 +62,7 @@
 
 ## Variantes
 
-### Variante 1 — Map en split avec infos contact (recommandé)
+### Variante 1 : Map en split avec infos contact (recommandé)
 
 Container `direction:row` avec :
 - Colonne gauche (`widthDesktop:50`) : adresse + horaires + téléphone + email (uagb/icon-list)
@@ -76,18 +76,18 @@ uagb/container#contact-row (row, alignItemsDesktop:stretch)
         └─ uagb/google-map
 ```
 
-### Variante 2 — Map alignfull pleine largeur (page contact dramatic)
+### Variante 2 : Map alignfull pleine largeur (page contact dramatic)
 
 Hauteur 600px, alignfull, pas de container parent. Effet « immersion » au-dessus du footer.
 
-### Variante 3 — Plusieurs POI (multi-locations)
+### Variante 3 : Plusieurs POI (multi-locations)
 
 Spectra `uagb/google-map` ne supporte qu'un POI. Pour 2+ POI :
 
 - **Option A** : multiplier les `uagb/google-map` blocs dans un container row (1 par lieu)
 - **Option B** : utiliser un embed Google My Maps custom (URL `mymaps.google.com/.../embed`) collé dans un `core/html` ou `uagb/html`
 
-### Variante 4 — Avec gate consentement RGPD
+### Variante 4 : Avec gate consentement RGPD
 
 Wrapper la map dans un container avec un placeholder texte + bouton « Charger la carte ». Au clic, JS injecte l'iframe.
 

@@ -2,7 +2,7 @@
 
 > **Use case** : page d'accueil d'un site WordPress, quel que soit son secteur (boutique e-commerce, agence, restaurant, formation, SaaS, association, etc.). Structure éprouvée pour conversion : hero promesse + preuves chiffrées + bénéfices + qui-on-est + témoignages + offre/CTA + FAQ + CTA final.
 >
-> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet — il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
+> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet : il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
 
 ## Variables à fournir
 
@@ -16,14 +16,14 @@
 | `{{CTA_SECONDARY_LABEL}}` | Texte CTA secondaire | "Comment on torréfie" |
 | `{{CTA_SECONDARY_URL}}` | URL CTA secondaire | `#story` |
 | `{{HERO_IMAGE}}` | Image hero (héro produit, lieu, équipe) | URL |
-| `{{S1}}–{{S4}}` | 4 stats (chiffre + label) | "200+ cafés référencés" |
-| `{{B1_TITLE}}–{{B3_TITLE}}` | 3 bénéfices clés | "Origine tracée" |
-| `{{B1_DESC}}–{{B3_DESC}}` | 3 descriptions courtes | "Du producteur à votre tasse en 4 étapes" |
+| `{{S1}}-{{S4}}` | 4 stats (chiffre + label) | "200+ cafés référencés" |
+| `{{B1_TITLE}}-{{B3_TITLE}}` | 3 bénéfices clés | "Origine tracée" |
+| `{{B1_DESC}}-{{B3_DESC}}` | 3 descriptions courtes | "Du producteur à votre tasse en 4 étapes" |
 | `{{STORY_TITLE}}` | Titre H2 about | "Pourquoi on fait ça" |
-| `{{STORY_TEXT}}` | 2-3 paragraphes | — |
+| `{{STORY_TEXT}}` | 2-3 paragraphes | : |
 | `{{STORY_IMAGE}}` | Image about (équipe, lieu, processus) | URL |
-| `{{T1}}–{{T3}}` | 3 témoignages (name, meta, quote, avatar) | — |
-| `{{Q1}}–{{Q6}}` | 6 questions FAQ + réponses | — |
+| `{{T1}}-{{T3}}` | 3 témoignages (name, meta, quote, avatar) | : |
+| `{{Q1}}-{{Q6}}` | 6 questions FAQ + réponses | : |
 | `{{CTA_FINAL_HEADING}}` | Titre du CTA final | "Prêt à goûter la différence ?" |
 | `{{CTA_FINAL_DESC}}` | Sous-titre CTA final | "Première commande livrée gratuitement" |
 
@@ -60,7 +60,7 @@
    - 1 ou 2 CTAs
 
 7. FAQ Accordion (6 questions) + schema FAQPage
-   - {{Q1}}–{{Q6}} : adapter selon secteur (livraison, retour, contact, etc.)
+   - {{Q1}}-{{Q6}} : adapter selon secteur (livraison, retour, contact, etc.)
 
 8. CTA Banner Final (dernière conversion)
    - Headline : {{CTA_FINAL_HEADING}}

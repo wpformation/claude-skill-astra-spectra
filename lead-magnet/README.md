@@ -1,4 +1,4 @@
-# Lead magnet — PDF premium
+# Lead magnet : PDF premium
 
 ## Contenu
 

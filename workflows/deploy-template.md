@@ -33,11 +33,11 @@ Remplace le contenu par :
 
 ## Étapes du workflow
 
-### Étape 1 — Détection environnement
+### Étape 1 : Détection environnement
 
 Idem que `new-page-from-brief.md`.
 
-### Étape 2 — Sélection du template
+### Étape 2 : Sélection du template
 
 Lire le fichier `templates/{{TEMPLATE_ID}}.md` pour récupérer :
 
@@ -46,18 +46,18 @@ Lire le fichier `templates/{{TEMPLATE_ID}}.md` pour récupérer :
 3. Le markup pré-assemblé (concaténation de patterns)
 4. Les recommandations design (palette suggérée, images type)
 
-### Étape 3 — Adaptation du contenu
+### Étape 3 : Adaptation du contenu
 
 Si l'utilisateur fournit des inputs (nom formation, prix, etc.), les mapper aux variables du template.
 
 Si certaines variables ne sont pas fournies, le skill peut :
-- **Mode A : « content placeholder »** — remplir avec du contenu type (« Lorem ipsum » ou phrases neutres)
-- **Mode B : interactif** — demander les manquants (« Quel prix pour la formation ? »)
-- **Mode C : intelligent** — déduire du contexte fourni (ex: si « formation WordPress » fourni, FAQ pré-remplie avec questions type formation)
+- **Mode A : « content placeholder »** : remplir avec du contenu type (« Lorem ipsum » ou phrases neutres)
+- **Mode B : interactif** : demander les manquants (« Quel prix pour la formation ? »)
+- **Mode C : intelligent** : déduire du contexte fourni (ex: si « formation WordPress » fourni, FAQ pré-remplie avec questions type formation)
 
 Recommandé : **Mode C** par défaut + **Mode B** pour les variables critiques (prix, CTA URL).
 
-### Étape 4 — Application de la palette
+### Étape 4 : Application de la palette
 
 Si l'utilisateur a précisé une palette (« WPF orange », « corporate blue »), appliquer via `scripts/apply-design-tokens.php` AVANT le POST de la page (sinon les blocs hériteront de la palette par défaut).
 
@@ -69,11 +69,11 @@ php apply-design-tokens.php '["#FF8C00","#E67E00","#0E0E14","#334155","#FFFFFF",
 php apply-design-tokens.php preset_8
 ```
 
-### Étape 5 — Validation roundtrip
+### Étape 5 : Validation roundtrip
 
 Idem que `new-page-from-brief.md` étape 5.
 
-### Étape 6 — POST de la page
+### Étape 6 : POST de la page
 
 Avant le POST, résoudre `{{ASTRA_TEMPLATE}}` via le mapping suivant (selon le `template_name` choisi à l'étape 1) :
 
@@ -103,7 +103,7 @@ Si tu n'es pas certain d'une valeur valide pour le thème actif, **omet le champ
 
 > **Note FSE** : sur les block themes (FSE), le champ `template` est ignoré. Le skill détecte ce cas via `detect-environment.php` (champ `theme.is_block_theme`) et omet le champ automatiquement.
 
-### Étape 7 — Récap
+### Étape 7 : Récap
 
 ```markdown
 ✅ Template `page-formation` déployé

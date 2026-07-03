@@ -60,8 +60,8 @@ team, testimonial, timeline, wp-search
 | Bloc | Rôle | Notes |
 |------|------|-------|
 | `uagb/image` | Image avec design avancé (overlay, hover, animations) | Préférer `core/image` pour image simple |
-| `uagb/image-gallery` | Galerie avec grid/masonry/carousel | — |
-| `uagb/icon` | Icon standalone avec lien optionnel | — |
+| `uagb/image-gallery` | Galerie avec grid/masonry/carousel | : |
+| `uagb/icon` | Icon standalone avec lien optionnel | : |
 | `uagb/icon-list` | Liste avec icônes personnalisées par item | Parent |
 | `uagb/icon-list-child` | Item de liste avec icône | Child of `icon-list` |
 | `uagb/lottie` | Animation Lottie JSON | Nécessite l'URL du fichier .json |
@@ -70,12 +70,12 @@ team, testimonial, timeline, wp-search
 
 | Bloc | Schema généré | Notes |
 |------|---------------|-------|
-| `uagb/faq` | FAQPage JSON-LD | Parent — contient `faq-child` |
+| `uagb/faq` | FAQPage JSON-LD | Parent : contient `faq-child` |
 | `uagb/faq-child` | item FAQPage | Child of `faq` (attrs : `question`, `answer`) |
 | `uagb/how-to` | HowTo JSON-LD | Étapes avec image/desc/duration |
 | `uagb/review` | Review + AggregateRating JSON-LD | Item avec rating, pros/cons |
 | `uagb/star-rating` | Rating | Standalone, pas de schema complet |
-| `uagb/table-of-contents` | — | TOC auto depuis les H2/H3/H4 de la page |
+| `uagb/table-of-contents` | : | TOC auto depuis les H2/H3/H4 de la page |
 
 ### Interactif (8 blocs)
 
@@ -85,9 +85,9 @@ team, testimonial, timeline, wp-search
 | `uagb/tabs-child` | Contenu d'un onglet | Child of `tabs` |
 | `uagb/slider` | Carousel avec auto-play, navigation | Parent |
 | `uagb/slider-child` | Slide individuel | Child of `slider` |
-| `uagb/modal` | Modal popup (trigger click ou load) | — |
-| `uagb/popup-builder` | Popup full-screen avec contenu custom | — |
-| `uagb/countdown` | Compte à rebours (offre limitée, lancement) | — |
+| `uagb/modal` | Modal popup (trigger click ou load) | : |
+| `uagb/popup-builder` | Popup full-screen avec contenu custom | : |
+| `uagb/countdown` | Compte à rebours (offre limitée, lancement) | : |
 | `uagb/counter` | Compteur animé (stats, chiffres clés) | Anime au scroll |
 
 ### Posts dynamiques (1 bloc)
@@ -100,9 +100,9 @@ team, testimonial, timeline, wp-search
 
 | Bloc | Rôle | Notes |
 |------|------|-------|
-| `uagb/team` | Présentation équipe (grid de membres) | — |
-| `uagb/testimonial` | Témoignages (grid ou carousel) | — |
-| `uagb/timeline` | Timeline verticale (chronologie) | — |
+| `uagb/team` | Présentation équipe (grid de membres) | : |
+| `uagb/testimonial` | Témoignages (grid ou carousel) | : |
+| `uagb/timeline` | Timeline verticale (chronologie) | : |
 
 ### Pricing (3 blocs)
 
@@ -131,7 +131,7 @@ team, testimonial, timeline, wp-search
 | Bloc | Rôle | Notes |
 |------|------|-------|
 | `uagb/wp-search` | Search bar stylisée | Préférer à `core/search` |
-| `uagb/taxonomy-list` | Liste des catégories/tags | — |
+| `uagb/taxonomy-list` | Liste des catégories/tags | : |
 
 ### Réseaux sociaux (2 blocs)
 

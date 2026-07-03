@@ -35,11 +35,11 @@
 
 ## Variantes
 
-### Variante 1 — CTA seul (sans secondaire)
+### Variante 1 : CTA seul (sans secondaire)
 
 Supprimer le second `uagb/buttons-child`.
 
-### Variante 2 — Background image avec overlay (effet wow)
+### Variante 2 : Background image avec overlay (effet wow)
 
 Remplacer le `backgroundType: gradient` par :
 
@@ -54,7 +54,7 @@ Remplacer le `backgroundType: gradient` par :
 }
 ```
 
-### Variante 3 — Avec dividers (transitions diagonales)
+### Variante 3 : Avec dividers (transitions diagonales)
 
 Ajouter au container parent :
 
@@ -73,7 +73,7 @@ Ajouter au container parent :
 
 Donne une section qui « flotte » entre 2 sections claires, avec transitions élégantes.
 
-### Variante 4 — Mode minimaliste (couleur unie + headline + 1 CTA)
+### Variante 4 : Mode minimaliste (couleur unie + headline + 1 CTA)
 
 Remplacer le gradient par `backgroundColor: var(--ast-global-color-2)` (dark) ou `var(--ast-global-color-5)` (light). Plus sobre, idéal pour les CTAs « secondaires » entre sections.
 

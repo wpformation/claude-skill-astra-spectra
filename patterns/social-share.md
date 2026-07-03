@@ -70,7 +70,7 @@
 ## CSS overrides recommandés
 
 ```css
-/* Container — gap entre boutons */
+/* Container : gap entre boutons */
 .uagb-block-{slug}-share .uagb-social-share__wrap {
   display: flex !important;
   gap: 12px !important;
@@ -81,7 +81,7 @@
   flex-direction: column !important;
 }
 
-/* Bouton — circle, hover lift */
+/* Bouton : circle, hover lift */
 .uagb-block-{slug}-share a {
   display: inline-flex !important;
   align-items: center !important;
@@ -130,15 +130,15 @@
 
 ## Variantes
 
-### Variante 1 — Bottom-of-article (recommandé)
+### Variante 1 : Bottom-of-article (recommandé)
 
 Layout `horizontal`, position : à la fin de l'article avant la FAQ. Label « Partager cet article » + 4-5 boutons circle.
 
-### Variante 2 — Sticky sidebar (desktop only)
+### Variante 2 : Sticky sidebar (desktop only)
 
 Layout `vertical`, position `sticky`, `top: 100px`. Caché sur mobile (`display: none` < 1024px). Effet médium/Substack.
 
-### Variante 3 — Footer page contact
+### Variante 3 : Footer page contact
 
 Layout `horizontal`, label « Suivez-nous » (pas « Partagez »). Liens vers les profils, pas vers les share intent.
 
@@ -146,7 +146,7 @@ Layout `horizontal`, label « Suivez-nous » (pas « Partagez »). Liens vers le
 <a href="https://twitter.com/wpformation" target="_blank" aria-label="Twitter">
 ```
 
-### Variante 4 — Share AI engines (cf wpformation)
+### Variante 4 : Share AI engines (cf wpformation)
 
 Évolution moderne : ajouter des liens « partager avec ChatGPT / Perplexity / Claude / Mistral / Grok » qui pré-remplissent un prompt résumé. Format des URL :
 
@@ -158,7 +158,7 @@ https://chat.mistral.ai/chat?q=R%C3%A9sume%20{{URL}}
 
 Cf plugin OGEEAT pour implémentation complète (out of scope skill mais cas d'usage moderne).
 
-### Variante 5 — Copy URL button
+### Variante 5 : Copy URL button
 
 Ajouter un bouton « Copier le lien » qui copie l'URL canonique dans le presse-papiers (Clipboard API). Plus pratique que share intent pour Slack/Discord.
 

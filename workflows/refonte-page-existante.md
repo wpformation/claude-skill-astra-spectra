@@ -13,11 +13,11 @@ Style cible : moderne avec glassmorphism, palette WPF orange
 
 ## Étapes du workflow
 
-### Étape 1 — Détection environnement
+### Étape 1 : Détection environnement
 
 Idem que `new-page-from-brief.md`. Vérifier Spectra présent + Astra optionnel.
 
-### Étape 2 — Snapshot de la page existante
+### Étape 2 : Snapshot de la page existante
 
 Exécuter `scripts/snapshot-page.php` avec l'URL ou l'ID :
 
@@ -46,7 +46,7 @@ Résultat :
 }
 ```
 
-### Étape 3 — Analyse sémantique du contenu
+### Étape 3 : Analyse sémantique du contenu
 
 Parser le `content_raw` pour extraire :
 
@@ -77,7 +77,7 @@ page_structure:
       type: "features"  # détecté par enum + court
 ```
 
-### Étape 4 — Mapping sections → patterns Spectra
+### Étape 4 : Mapping sections → patterns Spectra
 
 Pour chaque section, mapper vers le pattern adapté :
 
@@ -93,7 +93,7 @@ Pour chaque section, mapper vers le pattern adapté :
 | Texte long éditorial | `patterns/article-content-rich.md` |
 | CTA conversion | `patterns/cta-banner-fullwidth.md` |
 
-### Étape 5 — Reconstruction du markup
+### Étape 5 : Reconstruction du markup
 
 Pour chaque section, remplir le pattern avec le contenu original :
 
@@ -102,11 +102,11 @@ Pour chaque section, remplir le pattern avec le contenu original :
 - Les liens externes sont préservés
 - La structure des H2/H3 est respectée (mais peut être enrichie)
 
-### Étape 6 — POST en mode CLONE (pas overwrite)
+### Étape 6 : POST en mode CLONE (pas overwrite)
 
 ⚠️ **NE JAMAIS écraser** la page originale. Toujours créer un clone draft :
 
-> ⚠️ **Pré-requis Quirk #25 — OPcache PHP-FPM** : si le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` vient d'être posé dans cette session, attendre 3-5s ou appeler `opcache_invalidate($mu_path, true)` avant POST + screenshot, sinon les workarounds Quirks #23/#24 ne s'activent pas. Cf `references/spectra-attributes-quirks.md` Quirk #25.
+> ⚠️ **Pré-requis Quirk #25 : OPcache PHP-FPM** : si le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` vient d'être posé dans cette session, attendre 3-5s ou appeler `opcache_invalidate($mu_path, true)` avant POST + screenshot, sinon les workarounds Quirks #23/#24 ne s'activent pas. Cf `references/spectra-attributes-quirks.md` Quirk #25.
 
 
 ```bash
@@ -124,7 +124,7 @@ curl -X POST 'https://{{SITE_URL}}/wp-json/wp/v2/pages' \
 
 Le clone hérite du parent (relation page-builder) et est en `status: draft` pour validation.
 
-### Étape 7 — Diff & récap
+### Étape 7 : Diff & récap
 
 Output structuré pour l'utilisateur :
 
@@ -151,7 +151,7 @@ Output structuré pour l'utilisateur :
 3. Si à ajuster : reprends la conversation pour faire évoluer la refonte
 ```
 
-### Étape 8 (optionnelle) — Migration vers original
+### Étape 8 (optionnelle) : Migration vers original
 
 Si l'utilisateur valide la refonte et veut écraser l'original :
 
@@ -189,7 +189,7 @@ curl -X DELETE 'https://{{SITE_URL}}/wp-json/wp/v2/pages/124?force=true' \
 
 ### Page a déjà des blocs Spectra
 
-→ Le snapshot le détecte (`uses_spectra: true`). Ne pas tout refaire — analyser quelles sections peuvent être améliorées (ex: hero pas contemporain, CTA absent, etc.) et proposer un diff ciblé.
+→ Le snapshot le détecte (`uses_spectra: true`). Ne pas tout refaire : analyser quelles sections peuvent être améliorées (ex: hero pas contemporain, CTA absent, etc.) et proposer un diff ciblé.
 
 ### Page a 50+ blocs (très longue)
 

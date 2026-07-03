@@ -45,11 +45,11 @@
 
 ## Variantes
 
-### Variante 1 — Sans image (centré)
+### Variante 1 : Sans image (centré)
 
 Remplacer le `uagb/container` "hero-split-image" par rien et passer le container parent en `directionDesktop: "column"` + `alignItemsDesktop: "center"` + `headingAlign: "center"`.
 
-### Variante 2 — Background image avec overlay
+### Variante 2 : Background image avec overlay
 
 Remplacer le `backgroundColor` du container parent par :
 
@@ -66,7 +66,7 @@ Remplacer le `backgroundColor` du container parent par :
 
 Et ajuster les couleurs heading/desc en `var(--ast-global-color-4)` (white).
 
-### Variante 3 — Hero dark (mode sombre)
+### Variante 3 : Hero dark (mode sombre)
 
 Container parent : `backgroundColor: var(--ast-global-color-2)`.
 Heading : `headingColor: var(--ast-global-color-4)`.

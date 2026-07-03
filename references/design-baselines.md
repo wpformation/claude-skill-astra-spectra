@@ -1,8 +1,8 @@
-# Référence : design baselines — rulers concrets typo/spacing par section
+# Référence : design baselines : rulers concrets typo/spacing par section
 
 > **LECTURE OBLIGATOIRE** avant de poser une valeur de typographie, de spacing, de couleur ou de layout dans un pattern. Le but : éliminer l'improvisation (« 88px ? 76px ? 62px ? »).
 
-> **Origine** : retour reviewer 02/05/2026 — 3 pages contact pour cours-ndrc.fr toutes qualifiées « moches, niveau débutant » par le user. Cause : valeurs typo/spacing inventées sans repère, sortant des conventions implicites du skill.
+> **Origine** : retour reviewer 02/05/2026 : 3 pages contact pour cours-ndrc.fr toutes qualifiées « moches, niveau débutant » par le user. Cause : valeurs typo/spacing inventées sans repère, sortant des conventions implicites du skill.
 
 ## Comment utiliser ces baselines
 
@@ -37,10 +37,10 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **14px** desktop, 13px mobile | 13-16px | 18px max |
-| `font-weight` | **800** | 700-900 | — |
+| `font-weight` | **800** | 700-900 | : |
 | `letter-spacing` | **4px** | 3-5px | 6px max |
-| `text-transform` | uppercase | uppercase only | — |
-| `color` | accent primary (`var(--ast-global-color-0)` ou hex direct) | — | — |
+| `text-transform` | uppercase | uppercase only | : |
+| `color` | accent primary (`var(--ast-global-color-0)` ou hex direct) | : | : |
 | `prefixSpace` (gap eyebrow → H1) | **24px** | 20-28px | 36px max |
 
 ⚠️ **Ne pas descendre sous 13px** sur l'eyebrow (cf quirk #19 : ressemble à un debug tag).
@@ -50,12 +50,12 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` desktop | **20px** | 17-22px | 24px max |
-| `font-size` tablet | **17px** | 16-19px | — |
-| `font-size` mobile | **16px** | 15-17px | — |
-| `line-height` | **1.6** | 1.55-1.7 | — |
-| `color` | gris atténué (`#94A3B8` sur fond sombre, `#475569` sur fond clair) | — | — |
+| `font-size` tablet | **17px** | 16-19px | : |
+| `font-size` mobile | **16px** | 15-17px | : |
+| `line-height` | **1.6** | 1.55-1.7 | : |
+| `color` | gris atténué (`#94A3B8` sur fond sombre, `#475569` sur fond clair) | : | : |
 
-### Hero — padding section
+### Hero : padding section
 
 | Breakpoint | Default | Range éditorial | Hard limit |
 |---|---|---|---|
@@ -65,21 +65,21 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 
 ⚠️ **Padding 200/160 ou 220/220** : éditorial only, justifie. **Hero compact** : 96/96 desktop OK pour landing tech sobre.
 
-### Hero — overlay image background
+### Hero : overlay image background
 
 | Prop | Default | Hard limit |
 |---|---|---|
 | `overlayOpacity` flat | **0.5-0.65** | 0.85 max (cf quirk #9 : >0.85 = image invisible) |
-| Overlay gradient (recommandé) | `rgba(0,0,0,0.7)` → `rgba(0,0,0,0.20)` 110-135deg | — |
-| `overlayOpacity` si gradient avec rgba semi-transparents | **1** OK car la transparence est dans les color stops | — |
+| Overlay gradient (recommandé) | `rgba(0,0,0,0.7)` → `rgba(0,0,0,0.20)` 110-135deg | : |
+| `overlayOpacity` si gradient avec rgba semi-transparents | **1** OK car la transparence est dans les color stops | : |
 
-### Hero — accent line orange après H1
+### Hero : accent line orange après H1
 
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | Width × height | **64×4px** | 48-96 × 3-5px | 120×6px max |
-| Couleur | accent primary | — | — |
-| Position | sous H1, padding-top 24px | — | — |
+| Couleur | accent primary | : | : |
+| Position | sous H1, padding-top 24px | : | : |
 
 ⚠️ **Ne JAMAIS** dépasser 120×6px (devient une banderole, pas un accent).
 
@@ -89,10 +89,10 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 |---|---|---|---|
 | Padding desktop | **20/40** vertical/horizontal | 16-22 / 32-44 | 28/56 max |
 | `font-size` | **16px** | 15-17px | 18px max |
-| `font-weight` primary | **800** | 700-900 | — |
-| `font-weight` secondary | **600** | 500-700 | — |
+| `font-weight` primary | **800** | 700-900 | : |
+| `font-weight` secondary | **600** | 500-700 | : |
 | `border-radius` | **8px** | 6-12px | 999px (pill) accepté pour brand SaaS friendly |
-| `letter-spacing` | **0.3px** | 0-0.5px | — |
+| `letter-spacing` | **0.3px** | 0-0.5px | : |
 | Gap entre les 2 CTAs | **16px** | 12-24px | 32px max |
 
 ⚠️ **Padding < 16/32** = bouton pincé (cf quirk #17). **Padding > 28/56** = bouton qui mange l'écran.
@@ -108,38 +108,38 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | `font-size` desktop | **56px** | 48-72px | 88px max (stat héro unique) |
 | `font-size` tablet | **48px** | 40-56px | 64px max |
 | `font-size` mobile | **40px** | 36-48px | 56px max |
-| `font-weight` | **800** | 700-900 | — |
-| `line-height` | **1** | 0.95-1.05 | — |
-| `letter-spacing` | **-2px à -3px** | — | -4px max |
-| Couleur | accent primary | — | — |
+| `font-weight` | **800** | 700-900 | : |
+| `line-height` | **1** | 0.95-1.05 | : |
+| `letter-spacing` | **-2px à -3px** | : | -4px max |
+| Couleur | accent primary | : | : |
 
 ### Labels stats (« Cours rédigés », etc.)
 
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **13px** | 12-14px | 16px max |
-| `font-weight` | **700** | 600-800 | — |
+| `font-weight` | **700** | 600-800 | : |
 | `letter-spacing` | **2px** | 1.5-2.5px | 3px max |
-| `text-transform` | uppercase | — | — |
-| Couleur | gris atténué (`#475569` sur fond clair, `#94A3B8` sur fond sombre) | — | — |
+| `text-transform` | uppercase | : | : |
+| Couleur | gris atténué (`#475569` sur fond clair, `#94A3B8` sur fond sombre) | : | : |
 
-### Stats — layout
+### Stats : layout
 
 | Style | Recommandation |
 |---|---|
 | **Layout default** | row equal-width 4 colonnes (chacune `widthDesktop:22`, gap 24px) |
-| **Asymetric 40/30/20/10** | ⛔ NE PAS utiliser sauf brand committed avec calibration typo extrême — voir `visual-pitfalls.md` |
+| **Asymetric 40/30/20/10** | ⛔ NE PAS utiliser sauf brand committed avec calibration typo extrême : voir `visual-pitfalls.md` |
 | **Mobile** | 2x2 grid (chaque stat `widthMobile:48`) ou stack 1 col selon densité |
 
-### Stats — section padding
+### Stats : section padding
 
 | Breakpoint | Default compact | Default standard | Hard limit |
 |---|---|---|---|
 | Desktop | **64/64** (compact strip) | **96/96** (standard) | 140/140 max |
-| Tablet | 48/48 | 72/72 | — |
-| Mobile | 40/40 | 56/56 | — |
+| Tablet | 48/48 | 72/72 | : |
+| Mobile | 40/40 | 56/56 | : |
 
-### Stats — accent line sous chaque chiffre
+### Stats : accent line sous chaque chiffre
 
 | Prop | Default | Hard limit |
 |---|---|---|
@@ -155,18 +155,18 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 |---|---|---|---|
 | Padding desktop | **56/44** vertical/horizontal | 40-64 / 32-56 | 80/72 max |
 | `border-radius` | **18px** | 12-24px | 32px max |
-| `border` | **1px solid** `#E2E8F0` (border subtle) | — | — |
-| `box-shadow` | `rgba(15,23,42,0.06) 0 4px 24px` | — | — |
-| Background | `#FFFFFF` (sur section bg `#fafafa`/`#F8FAFC`) | — | — |
-| `widthDesktop` | **31.5%** (3 cols equal-height) | 30-32% | — |
+| `border` | **1px solid** `#E2E8F0` (border subtle) | : | : |
+| `box-shadow` | `rgba(15,23,42,0.06) 0 4px 24px` | : | : |
+| Background | `#FFFFFF` (sur section bg `#fafafa`/`#F8FAFC`) | : | : |
+| `widthDesktop` | **31.5%** (3 cols equal-height) | 30-32% | : |
 
 ### H3 card title
 
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **24-26px** | 22-28px | 32px max |
-| `font-weight` | **800** | 700-900 | — |
-| `line-height` | **1.3** | 1.25-1.4 | — |
+| `font-weight` | **800** | 700-900 | : |
+| `line-height` | **1.3** | 1.25-1.4 | : |
 | `letter-spacing` | **-0.5px** | -0.3 à -1px | -1.5px max |
 
 ### Description card
@@ -174,17 +174,17 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **16px** | 15-17px | 18px max |
-| `line-height` | **1.7** | 1.55-1.75 | — |
-| Couleur | `#475569` (slate body) | — | — |
+| `line-height` | **1.7** | 1.55-1.75 | : |
+| Couleur | `#475569` (slate body) | : | : |
 
 ### Feature numéros (pattern features-numbered)
 
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **56px** | 48-72px | 80px max |
-| `font-weight` | **800** | 700-900 | — |
-| `letter-spacing` | **-2px** | — | — |
-| Couleur | accent primary | — | — |
+| `font-weight` | **800** | 700-900 | : |
+| `letter-spacing` | **-2px** | : | : |
+| Couleur | accent primary | : | : |
 
 ⚠️ **Ne PAS** mettre des numéros 88-120px sur les cards (déséquilibre les cards).
 
@@ -197,36 +197,36 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | Padding | **56/48** | 40-72 / 36-64 | 80/72 max |
-| `border-radius` | **24px** | 16-32px | — |
-| `box-shadow` | `rgba(15,23,42,0.10-0.12) 0 8-12px 40-48px` | — | — |
-| `widthDesktop` | **31.5%** | — | — |
+| `border-radius` | **24px** | 16-32px | : |
+| `box-shadow` | `rgba(15,23,42,0.10-0.12) 0 8-12px 40-48px` | : | : |
+| `widthDesktop` | **31.5%** | : | : |
 
 ### Quote (« en grand format)
 
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **120px** | 100-140px | 180px max |
-| `font-weight` | **800** | — | — |
-| `line-height` | **0.4** (laisse la citation remonter) | 0.4-0.6 | — |
-| Couleur | accent primary | — | — |
-| `margin` | `0 0 -20px` (rapproche la citation du `“`) | — | — |
+| `font-weight` | **800** | : | : |
+| `line-height` | **0.4** (laisse la citation remonter) | 0.4-0.6 | : |
+| Couleur | accent primary | : | : |
+| `margin` | `0 0 -20px` (rapproche la citation du `“`) | : | : |
 
 ### Citation desc
 
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **18px** | 16-20px | 22px max |
-| `line-height` | **1.7** | 1.6-1.75 | — |
-| `font-style` | **italic** OK pour effet éditorial | normal OK aussi | — |
-| Couleur | `#0F172A` (text dark) | — | — |
+| `line-height` | **1.7** | 1.6-1.75 | : |
+| `font-style` | **italic** OK pour effet éditorial | normal OK aussi | : |
+| Couleur | `#0F172A` (text dark) | : | : |
 
 ### Avatar
 
 | Prop | Default | Hard limit |
 |---|---|---|
 | Taille | **64×64** (rond `border-radius:50%`) | 80×80 max |
-| `border` | 2px solid `#fafafa` | — |
-| `box-shadow` | `rgba(15,23,42,0.08) 0 2px 8px` | — |
+| `border` | 2px solid `#fafafa` | : |
+| `box-shadow` | `rgba(15,23,42,0.08) 0 2px 8px` | : |
 
 ⚠️ **Avatars 56×56** : trop petits, perdus visuellement. **Avatars 100×100+** : prennent trop de place vs la citation.
 
@@ -236,8 +236,8 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 |---|---|---|
 | Nom | **16px / weight 700** | 15-18px / 600-800 |
 | Meta sub-info | **13px / weight 500** | 12-14px / 400-600 |
-| Couleur nom | `#0F172A` | — |
-| Couleur meta | `#454F5E` | — |
+| Couleur nom | `#0F172A` | : |
+| Couleur meta | `#454F5E` | : |
 
 ---
 
@@ -248,26 +248,26 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `widthDesktop` | **62%** (centré, anti-quirk #12) | 55-70% | 85% max |
-| `widthTablet` | 90% | 85-95% | — |
-| `widthMobile` | 100% | — | — |
-| `margin-left/right` | `auto` (centré) | — | — |
+| `widthTablet` | 90% | 85-95% | : |
+| `widthMobile` | 100% | : | : |
+| `margin-left/right` | `auto` (centré) | : | : |
 
 ### Question
 
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **17px** | 16-19px | 20px max |
-| `font-weight` | **700** | 600-800 | — |
-| Padding row | **24/28** | 20-28 / 24-32 | — |
-| Active color | accent primary | — | — |
+| `font-weight` | **700** | 600-800 | : |
+| Padding row | **24/28** | 20-28 / 24-32 | : |
+| Active color | accent primary | : | : |
 
 ### Answer
 
 | Prop | Default | Range | Hard limit |
 |---|---|---|---|
 | `font-size` | **15px** | 14-16px | 17px max |
-| `line-height` | **1.7** | 1.6-1.75 | — |
-| Padding | `0 28px 24px` | — | — |
+| `line-height` | **1.7** | 1.6-1.75 | : |
+| Padding | `0 28px 24px` | : | : |
 
 ### Card
 
@@ -287,8 +287,8 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 |---|---|---|
 | Padding | **48px** | 40-56px |
 | `border-radius` | **16px** | 12-20px |
-| `border` | 1px solid `#E2E8F0` | — |
-| `box-shadow` | `rgba(15,23,42,0.08) 0 8px 32px` | — |
+| `border` | 1px solid `#E2E8F0` | : |
+| `box-shadow` | `rgba(15,23,42,0.08) 0 8px 32px` | : |
 
 ### Labels
 
@@ -308,7 +308,7 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | `padding` | **14/16** | 12-16 / 14-20 |
 | `font-size` | **16px** (mobile = pas de zoom iOS) | NE JAMAIS < 16px sur mobile |
 | `border-radius` | **8px** | 6-12px |
-| `border` focus | accent primary 1px + box-shadow `accent rgba .15` 0 0 0 3px | — |
+| `border` focus | accent primary 1px + box-shadow `accent rgba .15` 0 0 0 3px | : |
 
 ### Submit button
 
@@ -328,8 +328,8 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | Breakpoint | Default | Range | Hard limit |
 |---|---|---|---|
 | Desktop | **54px** | 46-62px | 72px max |
-| Tablet | 40px | 36-48px | — |
-| Mobile | 30px | 28-36px | — |
+| Tablet | 40px | 36-48px | : |
+| Mobile | 30px | 28-36px | : |
 
 | Prop | Default |
 |---|---|
@@ -342,8 +342,8 @@ Si tu envisages de sortir du **range**, **demande** au user d'abord. Si tu envis
 | Breakpoint | Default | Hard limit |
 |---|---|---|
 | Desktop | **140/140** | 200/200 max |
-| Tablet | 96/96 | — |
-| Mobile | 72/72 | — |
+| Tablet | 96/96 | : |
+| Mobile | 72/72 | : |
 
 ### CTA primary + secondary final
 
@@ -367,7 +367,7 @@ Idem hero CTAs (cf section Hero CTAs).
 
 ---
 
-## COULEURS ACCENT — palette types
+## COULEURS ACCENT : palette types
 
 Quand tu n'as pas Astra (ou que les slots variables sont risqués), utiliser ces palettes pré-validées par registre :
 

@@ -70,11 +70,11 @@ uagb/container#timeline-section (root, alignfull, padding 120px)
 
 ## Variantes
 
-### Variante 1 — Timeline horizontale
+### Variante 1 : Timeline horizontale
 
 `orientation: "horizontal"` → events disposés sur une ligne horizontale. Utile pour roadmap produit (Q1 → Q2 → Q3 → Q4).
 
-### Variante 2 — Timeline avec icônes custom par event
+### Variante 2 : Timeline avec icônes custom par event
 
 Chaque event peut avoir son icône Spectra (validée via `references/spectra-icons-list.md`). Mapping suggéré :
 - Lancement : `flag-checkered` ou `rocket`
@@ -83,7 +83,7 @@ Chaque event peut avoir son icône Spectra (validée via `references/spectra-ico
 - Reconnaissance : `star` ou `award`
 - Partenariat : `handshake`
 
-### Variante 3 — Timeline avec photos d'archives
+### Variante 3 : Timeline avec photos d'archives
 
 Au lieu d'icônes, mettre une mini-image carrée 80×80 par event. Modifier le markup pour intégrer une core/image dans chaque description.
 

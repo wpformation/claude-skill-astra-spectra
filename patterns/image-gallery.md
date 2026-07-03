@@ -45,7 +45,7 @@
 ## CSS overrides recommandés
 
 ```css
-/* Image — radius + hover zoom subtil */
+/* Image : radius + hover zoom subtil */
 .uagb-block-{slug}-gallery .uagb-image-gallery__figure {
   border-radius: 12px !important;
   overflow: hidden !important;
@@ -88,7 +88,7 @@
 
 ## Variantes
 
-### Variante 1 — Grid uniform (3 cols, ratio 1:1)
+### Variante 1 : Grid uniform (3 cols, ratio 1:1)
 
 Toutes les images en carré 600×600, parfait alignement. Pour Instagram-style ou témoignages photo + nom.
 
@@ -100,15 +100,15 @@ CSS spécifique :
 }
 ```
 
-### Variante 2 — Masonry varied (3 cols, hauteurs libres)
+### Variante 2 : Masonry varied (3 cols, hauteurs libres)
 
 Pour portfolio créatif ou photos lifestyle. Hauteurs variables = effet Pinterest.
 
-### Variante 3 — Carousel horizontal (slider 1-2 visible)
+### Variante 3 : Carousel horizontal (slider 1-2 visible)
 
 Pour landing avec 8-12 photos sans gâcher de hauteur de scroll. Arrows + dots.
 
-### Variante 4 — Tiled (pattern Bento Box)
+### Variante 4 : Tiled (pattern Bento Box)
 
 Layout asymétrique : 1 grosse image à gauche, 4 petites à droite en grille 2×2. Pour homepage hero photo + détails.
 
@@ -125,7 +125,7 @@ Layout asymétrique : 1 grosse image à gauche, 4 petites à droite en grille 2�
 }
 ```
 
-### Variante 5 — Galerie avec captions visibles (style musée)
+### Variante 5 : Galerie avec captions visibles (style musée)
 
 Captions sous chaque image, italique. `captionVisibility: "always"` dans les attrs.
 

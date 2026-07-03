@@ -1,4 +1,4 @@
-# Templates — blueprints d'assemblage
+# Templates : blueprints d'assemblage
 
 ## Qu'est-ce qu'un template dans ce skill ?
 
@@ -17,7 +17,7 @@ Le workflow [`deploy-template.md`](../workflows/deploy-template.md) lit le bluep
 
 | Template | Use case | Patterns assemblés |
 |----------|--------|-------------------|
-| [page-accueil.md](page-accueil.md) | Page d'accueil universelle (e-commerce, restaurant, agence, formation, etc. — variantes par secteur) | hero-cta-split + stats-bar-editorial + features-3-cols + about-story-split + testimonials-cards + cta-banner-fullwidth + faq-accordion + cta final |
+| [page-accueil.md](page-accueil.md) | Page d'accueil universelle (e-commerce, restaurant, agence, formation, etc. : variantes par secteur) | hero-cta-split + stats-bar-editorial + features-3-cols + about-story-split + testimonials-cards + cta-banner-fullwidth + faq-accordion + cta final |
 | [landing-saas.md](landing-saas.md) | Landing page SaaS (acquisition payante) | hero-cta-split + features-3-cols (×2 → 4-cols) + testimonials-grid + pricing-3-tiers + faq-accordion + cta-banner-fullwidth |
 | [page-agence.md](page-agence.md) | Page d'accueil agence créative ou tech | hero-cta-split + features-3-cols + team-grid + stats-counters + testimonials-grid + cta-banner-fullwidth |
 | [page-tarifs.md](page-tarifs.md) | Page tarifs dédiée avec comparateur | hero + pricing-3-tiers + comparateur tableau + faq-accordion + cta |

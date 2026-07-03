@@ -64,7 +64,7 @@ Si `link` non null : l'item devient un lien cliquable.
 ## CSS overrides recommandés
 
 ```css
-/* Layout vertical — items stack verticalement (par défaut Spectra peut casser, voir quirk #11) */
+/* Layout vertical : items stack verticalement (par défaut Spectra peut casser, voir quirk #11) */
 .uagb-block-{slug}-list.uagb-icon-list__layout-vertical .uagb-icon-list__wrap {
   display: flex !important;
   flex-direction: column !important;
@@ -80,7 +80,7 @@ Si `link` non null : l'item devient un lien cliquable.
   gap: 14px !important;
 }
 
-/* Layout horizontal — items en ligne, wrap si dépasse */
+/* Layout horizontal : items en ligne, wrap si dépasse */
 .uagb-block-{slug}-list.uagb-icon-list__layout-horizontal .uagb-icon-list__wrap {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -90,7 +90,7 @@ Si `link` non null : l'item devient un lien cliquable.
   margin: 0 !important;
 }
 
-/* Icon — circle bg subtil pour effet card */
+/* Icon : circle bg subtil pour effet card */
 .uagb-block-{slug}-list .uagb-icon-list__source-icon {
   display: inline-flex !important;
   align-items: center !important;
@@ -104,7 +104,7 @@ Si `link` non null : l'item devient un lien cliquable.
   font-size: 16px !important;
 }
 
-/* Label — taille + couleur */
+/* Label : taille + couleur */
 .uagb-block-{slug}-list .uagb-icon-list__label {
   font-size: 16px !important;
   font-weight: 500 !important;
@@ -132,31 +132,31 @@ Si `link` non null : l'item devient un lien cliquable.
 
 ## Variantes
 
-### Variante 1 — Liste features dans pricing card
+### Variante 1 : Liste features dans pricing card
 
 Layout `vertical`, icône `check-circle` orange, label noir, gap 12px. Le cas d'usage le plus fréquent.
 
-### Variante 2 — Horaires page contact
+### Variante 2 : Horaires page contact
 
 Layout `vertical`, icône `clock` (heure) ou `calendar-alt` (jour). Format :
 - 🕒 Lundi - Vendredi : 9h - 18h
 - 🕒 Samedi : 10h - 17h
 - 🕒 Dimanche : Fermé
 
-### Variante 3 — Coordonnées (téléphone, email, adresse)
+### Variante 3 : Coordonnées (téléphone, email, adresse)
 
 Layout `vertical`, icônes `phone-alt`, `envelope`, `map-marker-alt`. Avec liens cliquables :
 - 📞 +33 1 23 45 67 89 → `tel:+33123456789`
 - ✉️ contact@site.com → `mailto:contact@site.com`
 - 📍 15 rue de la République, 13002 Marseille → `https://maps.google.com/?q=...`
 
-### Variante 4 — Social links horizontaux
+### Variante 4 : Social links horizontaux
 
 Layout `horizontal`, icônes brand (`facebook-f`, `twitter`, `instagram`, `linkedin-in`, `youtube`). Pas de label visible (icon-only). Pour footer ou hero CTA secondaire.
 
 Préférer dans ce cas : `patterns/social-share.md` qui est dédié.
 
-### Variante 5 — Étoiles 5/5 testimonials
+### Variante 5 : Étoiles 5/5 testimonials
 
 Layout `horizontal`, icône `star`, gap 3px, taille 18px, couleur `#FBBF24` (jaune). 5× le même item. Pour testimonials.
 

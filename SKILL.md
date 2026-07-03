@@ -1,10 +1,10 @@
 ---
 name: astra-spectra
-description: Génère des pages WordPress complètes avec Spectra (48 blocs Gutenberg) + Gutenberg core, avec ou sans Astra. Utiliser quand l'utilisateur demande de créer/générer/construire/refondre une page WordPress, une landing page, un site WordPress, ou mentionne Spectra, Astra, Gutenberg blocks, page builder, ou un template de page WP. 3 killer features cumulatives — génération depuis un brief en langage naturel, refonte intelligente d'une page existante, déploiement de templates clic-bouton (page-formation, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence). Spectra obligatoire au runtime, n'importe quel thème WP accepté, Astra optionnel. Toujours invoquer ce skill avant de générer du markup Gutenberg manuel.
+description: Génère des pages WordPress complètes avec Spectra (48 blocs Gutenberg) + Gutenberg core, avec ou sans Astra. Utiliser quand l'utilisateur demande de créer/générer/construire/refondre une page WordPress, une landing page, un site WordPress, ou mentionne Spectra, Astra, Gutenberg blocks, page builder, ou un template de page WP. 3 killer features cumulatives : génération depuis un brief en langage naturel, refonte intelligente d'une page existante, déploiement de templates clic-bouton (page-formation, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence). Spectra obligatoire au runtime, n'importe quel thème WP accepté, Astra optionnel. Toujours invoquer ce skill avant de générer du markup Gutenberg manuel.
 allowed-tools: Bash(curl *), Bash(npx playwright *), Bash(wp *), Read, Write, Edit, Glob, Grep, WebFetch
 ---
 
-# Skill `claude-skill-astra-spectra` — knowledge base v1.0-rc6
+# Skill `claude-skill-astra-spectra` : knowledge base v1.0-rc6
 
 > **Ce skill n'est pas un template. C'est une base de connaissance opérationnelle pour générer des pages WordPress correctes du premier coup.** Il liste les 24 pièges Spectra documentés en production, les workflows validés, les conventions de code et les techniques natives à utiliser.
 
@@ -22,7 +22,7 @@ Le user a explicitement noté la différence entre des sessions qui produisent d
 
 ### Règles non-négociables (anti-désastre)
 
-#### 🔴 Règle 1 — Gate visuel BLOQUANT avant claim
+#### 🔴 Règle 1 : Gate visuel BLOQUANT avant claim
 
 Tu **ne peux pas** qualifier une composition de **« WOW / impeccable / studio editorial / propre / éditorial / beau / réussi / solide »** dans ta réponse au user **tant que tu n'as pas un screenshot validé à montrer**.
 
@@ -34,7 +34,7 @@ Si tu n'as pas de screenshot (tooling absent, pas d'accès agent-browser / Playw
 
 Voir [`workflows/screenshot-options.md`](workflows/screenshot-options.md) pour les 5 options concrètes de capture.
 
-#### 🔴 Règle 2 — Max 3 sections par itération, pas 8
+#### 🔴 Règle 2 : Max 3 sections par itération, pas 8
 
 Tu **ne livres pas** 8 sections d'un coup. Tu livres **3 sections max**, screenshot, validation user OU validation visuelle si tooling, **puis** tu ajoutes les sections suivantes.
 
@@ -42,27 +42,27 @@ Pourquoi : si la 1re section a un défaut design (typo trop petite, accent satur
 
 Exception : pour les **templates committed avec baselines screenshots** (cf `examples/` + `screenshots/`), tu peux livrer le template entier d'un coup car il a déjà été validé.
 
-#### 🔴 Règle 3 — Référencer une baseline, ne pas inventer
+#### 🔴 Règle 3 : Référencer une baseline, ne pas inventer
 
 Avant de poser une valeur de typographie / spacing / couleur / accent, **vérifie qu'elle est dans `references/design-baselines.md`**. Si la valeur n'y est pas, soit tu utilises la valeur recommandée par défaut du baseline, soit tu demandes au user de valider explicitement la valeur custom.
 
 Pourquoi : « inventer 76px ou 88px en hero » sans repère = roulette russe. Le baseline donne la valeur fiable + le range acceptable.
 
-#### 🔴 Règle 4 — Pas de 2e attempt avant que le user ait vu le 1er
+#### 🔴 Règle 4 : Pas de 2e attempt avant que le user ait vu le 1er
 
 Tu **ne proposes pas** « v2 » / « refonte » / « amélioration » d'une composition tant que le user n'a pas explicitement vu et commenté la v1. Sinon tu accumules du custom non-validé empilé sur du custom non-validé.
 
-#### 🔴 Règle 5 — Pas d'images partagées entre 2 pages du même site
+#### 🔴 Règle 5 : Pas d'images partagées entre 2 pages du même site
 
 Tu **n'utilises PAS la même image** (même URL, même ID média) dans 2 pages différentes du même site sauf si le user l'a demandé. Réutiliser une image entre `/contact/` et `/a-propos/` cliente = signe de paresse, le user le voit immédiatement.
 
-#### 🔴 Règle 6 — Pas plus de 3 accents couleur dans une même section
+#### 🔴 Règle 6 : Pas plus de 3 accents couleur dans une même section
 
 Watermark numérique géant `#FF8C00` + accent line orange `#FF8C00` + barre eyebrow `::before` orange `#FF8C00` = **3 accents identiques dans le même bloc** = saturation visuelle + perception « overdose orange » = section ratée.
 
 Règle : 1 accent dominant par section + 1 accent secondaire max + (optionnel) 1 accent tertiaire **différent en hue** (pas la même couleur trois fois). Voir [`references/visual-pitfalls.md`](references/visual-pitfalls.md) pour les patterns à éviter.
 
-### Anti-patterns instance Claude — ❌/✅ liste
+### Anti-patterns instance Claude : ❌/✅ liste
 
 À garder en tête tout au long de la session :
 
@@ -73,12 +73,12 @@ Règle : 1 accent dominant par section + 1 accent secondaire max + (optionnel) 1
 - ❌ NE JAMAIS réutiliser la MÊME image entre 2 pages du même site
 - ❌ NE JAMAIS empiler 3+ accents couleur identiques dans la même section (saturation)
 - ❌ NE JAMAIS utiliser CSS `::first-letter` (drop cap) sans avoir vérifié qu'il rend correctement (pas garanti dans `_uag_custom_page_level_css`)
-- ❌ NE JAMAIS poser font `monospace` isolé sur 1 élément (ex: timestamp) sans cohérence thème — c'est perçu comme un bug
+- ❌ NE JAMAIS poser font `monospace` isolé sur 1 élément (ex: timestamp) sans cohérence thème : c'est perçu comme un bug
 - ❌ NE JAMAIS coller des moves design « créatifs » sans avoir lu `references/visual-pitfalls.md`
 - ✅ TOUJOURS commencer par 1 section minimal viable, screenshot, valide, ajoute
 - ✅ TOUJOURS demander au user de fournir le screenshot si tooling absent
 - ✅ TOUJOURS référencer une baseline documentée plutôt qu'inventer
-- ✅ TOUJOURS prefix block_id par version + slug page (ex: `cdc-v1-`, `cdc-v2-`) si tu refais la page après une critique user — évite les conflits CSS scope `body.page-id-{ID}`
+- ✅ TOUJOURS prefix block_id par version + slug page (ex: `cdc-v1-`, `cdc-v2-`) si tu refais la page après une critique user : évite les conflits CSS scope `body.page-id-{ID}`
 - ✅ TOUJOURS lire `references/visual-pitfalls.md` AVANT d'oser un move créatif (watermark, drop cap, asymetric layout, mono fonts, etc.)
 - ✅ TOUJOURS lire `references/design-baselines.md` AVANT de poser typo/spacing
 - ✅ TOUJOURS lire `references/impeccable-bridge.md` si tu veux composer avec un principe `/impeccable`
@@ -100,11 +100,11 @@ Pour passer en mode strict explicite, dis au user : « Je n'ai pas de tooling de
 
 **Lire AVANT de toucher un seul caractère de markup `uagb/*`** :
 
-1. [`references/spectra-attributes-quirks.md`](references/spectra-attributes-quirks.md) — les **24 pièges** Spectra qui font échouer du markup techniquement valide
-2. [`references/i18n-rules.md`](references/i18n-rules.md) — règles strictes pour le français (HTML entities, espaces insécables typo)
-3. [`references/persistent-css-overrides.md`](references/persistent-css-overrides.md) — comment styler durablement via `_uag_custom_page_level_css` (le seul moyen pour que ça survive aux éditions Gutenberg)
-4. [`references/design-baselines.md`](references/design-baselines.md) — ⭐ **rulers concrets** typo/spacing par section (anti-improvisation)
-5. [`references/visual-pitfalls.md`](references/visual-pitfalls.md) — ⭐ **moves design qui sonnent créatifs mais foirent en pratique**
+1. [`references/spectra-attributes-quirks.md`](references/spectra-attributes-quirks.md) : les **24 pièges** Spectra qui font échouer du markup techniquement valide
+2. [`references/i18n-rules.md`](references/i18n-rules.md) : règles strictes pour le français (HTML entities, espaces insécables typo)
+3. [`references/persistent-css-overrides.md`](references/persistent-css-overrides.md) : comment styler durablement via `_uag_custom_page_level_css` (le seul moyen pour que ça survive aux éditions Gutenberg)
+4. [`references/design-baselines.md`](references/design-baselines.md) : ⭐ **rulers concrets** typo/spacing par section (anti-improvisation)
+5. [`references/visual-pitfalls.md`](references/visual-pitfalls.md) : ⭐ **moves design qui sonnent créatifs mais foirent en pratique**
 
 Sans ces 5 lectures, tu vas reproduire les mêmes erreurs que les versions 0.8.x à 0.9.4 du skill, **plus** les désastres design des sessions reviewer 02/05/2026 sur cours-ndrc.fr (3 pages contact qualifiées « moches, niveau débutant » par le user, supprimées). C'est documenté, c'est connu, c'est évitable.
 
@@ -279,54 +279,54 @@ Workflow : [`workflows/refonte-page-existante.md`](workflows/refonte-page-exista
 ## Workflow type pour générer une page
 
 ```
-ÉTAPE 1 — Détecter l'environnement
+ÉTAPE 1 : Détecter l'environnement
   scripts/detect-environment.php
     → Spectra version, Astra version, palette active, thème, hébergeur, mu-plugin présent
 
-ÉTAPE 2 — Lire la knowledge base critique
+ÉTAPE 2 : Lire la knowledge base critique
   references/spectra-attributes-quirks.md  (les 17 pièges)
   references/i18n-rules.md                 (FR si applicable)
   references/persistent-css-overrides.md   (technique de styling)
 
-ÉTAPE 3 — Choisir les patterns selon le brief
+ÉTAPE 3 : Choisir les patterns selon le brief
   Brief utilisateur → mapper vers patterns dans patterns/
   Lire chaque pattern utilisé pour comprendre sa structure + ses pièges
 
-ÉTAPE 4 — Récupérer les variables utilisateur
+ÉTAPE 4 : Récupérer les variables utilisateur
   Pour chaque pattern, demander les variables manquantes
   Vérifier ratios images attendus via references/images-ratios.md
 
-ÉTAPE 5 — Générer le markup
+ÉTAPE 5 : Générer le markup
   Composer en assemblant les patterns
   Utiliser HTML entities pour le français (cf i18n-rules)
   Appliquer conventions block_id : {slug}-{section}-{element}
   Wrapper info-box dans containers pour width responsive (cf quirk #2)
   Utiliser numéros 01/02/03 si features (anti-piège #8 icônes)
 
-ÉTAPE 6 — Valider le markup
+ÉTAPE 6 : Valider le markup
   scripts/validate-block-markup.php
     → roundtrip parse → serialize : doit être 0 char diff
     → block_id uniques
     → no missing required attrs
 
-ÉTAPE 7 — Générer le CSS overrides
+ÉTAPE 7 : Générer le CSS overrides
   Cibler les .uagb-block-{slug}-* avec font-size !important
   Inclure media queries responsive (1024 / 600 px)
   Encapsuler entre balises /* === skill-generated v1.0 START === */ et END
 
-ÉTAPE 8 — POST + meta + regen
+ÉTAPE 8 : POST + meta + regen
   scripts/post-page-via-rest.php  (POST page + Astra meta config)
   scripts/update-page-meta-css.php (tag-aware update _uag_custom_page_level_css)
   scripts/regen-spectra.php       (force régénération assets)
 
-ÉTAPE 9 — Validation visuelle
+ÉTAPE 9 : Validation visuelle
   workflows/visual-validation-loop.md
     → screenshot agent-browser
     → audit visuel (3-cols vs stack, accents OK, no mojibake, etc.)
     → si défaut : itérer markup → re-publish → re-screenshot
     → max 3 itérations
 
-ÉTAPE 10 — Livrer à l'utilisateur
+ÉTAPE 10 : Livrer à l'utilisateur
   URL frontend de la page
   URL admin Gutenberg pour édition
   Screenshots des sections
@@ -342,8 +342,8 @@ Workflow : [`workflows/refonte-page-existante.md`](workflows/refonte-page-exista
 | Slug page | kebab-case | `page-tarifs`, `formation-bts-ndrc` |
 | block_id | `{slug-page}-{section}-{element}` | `formation-bts-ndrc-hero-text`, `formation-bts-ndrc-stat-1` |
 | Classes CSS générées Spectra | `.uagb-block-{block_id}` | `.uagb-block-formation-bts-ndrc-hero-text` |
-| Variables CSS Astra | `var(--ast-global-color-X)` UNIQUEMENT pour slots GARANTIS (0,1,2,3,5) | — |
-| Hex direct | Pour rôles VARIABLES (#fafafa, #ffffff, #e5e7eb) | — |
+| Variables CSS Astra | `var(--ast-global-color-X)` UNIQUEMENT pour slots GARANTIS (0,1,2,3,5) | : |
+| Hex direct | Pour rôles VARIABLES (#fafafa, #ffffff, #e5e7eb) | : |
 
 ### Conventions de style
 

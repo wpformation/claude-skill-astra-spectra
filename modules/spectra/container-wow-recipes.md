@@ -1,6 +1,6 @@
-# `uagb/container` — Recettes WOW
+# `uagb/container` : Recettes WOW
 
-> **Le bloc `uagb/container` est le bloc le plus puissant et le plus utilisé du skill.** Toutes les mises en forme « effet wow » sortent de ce bloc — pas de `core/group` ni de `core/columns` ni de `core/cover` quand on peut faire mieux. C'est le vrai différenciateur Spectra vs Gutenberg core.
+> **Le bloc `uagb/container` est le bloc le plus puissant et le plus utilisé du skill.** Toutes les mises en forme « effet wow » sortent de ce bloc : pas de `core/group` ni de `core/columns` ni de `core/cover` quand on peut faire mieux. C'est le vrai différenciateur Spectra vs Gutenberg core.
 
 ## Pourquoi `uagb/container` est la fondation du skill
 
@@ -22,7 +22,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 ## 12 recettes WOW prêtes à l'emploi
 
-### Recette 1 — Hero pleine page avec background image + overlay sombre
+### Recette 1 : Hero pleine page avec background image + overlay sombre
 
 ```json
 {
@@ -50,7 +50,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Image full-screen avec parallax fixed, overlay sombre 55%, contenu centré verticalement et horizontalement, hauteur 100vh.
 
-### Recette 2 — Section avec gradient diagonal animé
+### Recette 2 : Section avec gradient diagonal animé
 
 ```json
 {
@@ -73,7 +73,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Section pleine largeur avec gradient diagonal entre couleur primaire et primaire darker. Si on fait varier `backgroundCustomSize` au scroll via CSS personnalisé, on obtient un effet de respiration.
 
-### Recette 3 — Card avec glassmorphism (effet glass moderne)
+### Recette 3 : Card avec glassmorphism (effet glass moderne)
 
 ```json
 {
@@ -109,7 +109,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Card translucide blanche avec backdrop-filter blur 16px, bordure subtile, border-radius 24px, ombre douce. Idéal posé sur un background coloré ou image.
 
-### Recette 4 — Section diagonale (skew)
+### Recette 4 : Section diagonale (skew)
 
 ```json
 {
@@ -133,7 +133,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Section pleine largeur avec dividers en haut et en bas (tilt), couleur de fond contrastante. Crée des transitions visuelles élégantes entre sections.
 
-### Recette 5 — Container avec background video
+### Recette 5 : Container avec background video
 
 ```json
 {
@@ -155,7 +155,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Vidéo en boucle full-screen en fond, fallback image, overlay sombre. Pour un hero immersif (formation, agence, lifestyle).
 
-### Recette 6 — 3 colonnes alignées avec gap large
+### Recette 6 : 3 colonnes alignées avec gap large
 
 ```json
 {
@@ -180,7 +180,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Layout 3 colonnes desktop, 1 colonne tablet/mobile (responsive automatique), gap large, fond clair. Classique pour features ou pricing tiers.
 
-### Recette 7 — Card hover avec scale + shadow
+### Recette 7 : Card hover avec scale + shadow
 
 ```json
 {
@@ -212,7 +212,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Card blanche avec ombre douce. Au hover, l'ombre s'intensifie. Combinable avec un transform: scale(1.02) via CSS custom pour effet 3D.
 
-### Recette 8 — Section split (50/50) image + texte
+### Recette 8 : Section split (50/50) image + texte
 
 ```json
 {
@@ -230,7 +230,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Inner blocks** : 2× `uagb/container` enfants, chacun à 50% de width. Le premier avec `backgroundType: image`, le second avec contenu texte. Mieux que `core/media-text` qui est plus rigide.
 
-### Recette 9 — Hero avec décoration géométrique
+### Recette 9 : Hero avec décoration géométrique
 
 ```json
 {
@@ -257,7 +257,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Hero sombre avec divider curve coloré en haut et wave clair en bas. Effet visuel marqué pour un site moderne.
 
-### Recette 10 — Container animé au scroll (fade + slide)
+### Recette 10 : Container animé au scroll (fade + slide)
 
 ```json
 {
@@ -279,7 +279,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : La section apparaît avec un fade + glissement vers le haut quand elle entre dans le viewport. Ajouté un sentiment de fluidité au scroll.
 
-### Recette 11 — Section avec mesh gradient (Web 3 / SaaS)
+### Recette 11 : Section avec mesh gradient (Web 3 / SaaS)
 
 ```json
 {
@@ -302,7 +302,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 **Effet** : Gradient radial complexe (mesh-like). Très utilisé sur les landing pages SaaS et Web 3 modernes.
 
-### Recette 12 — Section avec sticky element
+### Recette 12 : Section avec sticky element
 
 ```json
 {
@@ -320,7 +320,7 @@ Le bloc `uagb/container` couvre TOUT ce que font `core/group`, `core/columns`, `
 
 ## Combos puissants à mémoriser
 
-### Combo 1 — Hero immersif full-impact
+### Combo 1 : Hero immersif full-impact
 
 ```
 uagb/container (hero-bg-image, recette 1)
@@ -331,7 +331,7 @@ uagb/container (hero-bg-image, recette 1)
   └── uagb/separator (style: image, décoratif)
 ```
 
-### Combo 2 — Section features cards hoverables
+### Combo 2 : Section features cards hoverables
 
 ```
 uagb/container (3-cols, recette 6, fond clair)
@@ -343,7 +343,7 @@ uagb/container (3-cols, recette 6, fond clair)
   └── uagb/container (card-hover, ...)
 ```
 
-### Combo 3 — Section split CTA premium
+### Combo 3 : Section split CTA premium
 
 ```
 uagb/container (alignfull, gradient mesh, recette 11)
@@ -354,7 +354,7 @@ uagb/container (alignfull, gradient mesh, recette 11)
   └── uagb/container (50% droite, image full bleed)
 ```
 
-### Combo 4 — Article avec sidebar sticky
+### Combo 4 : Article avec sidebar sticky
 
 ```
 uagb/container (sticky parent, recette 12)

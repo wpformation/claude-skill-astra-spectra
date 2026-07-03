@@ -6,20 +6,20 @@
 
 ## Sections incluses (dans l'ordre)
 
-1. **Hero overlay** — image background pleine page + overlay gradient sombre + eyebrow kicker + H1 + sous-titre + 2 CTAs
-2. **Stats bar** — barre sombre full-width avec 4 stats (#0F172A bg, accent_primary)
-3. **3 Features 3-cols** — section bg #fafafa + heading + 3 cards (white bg, border subtle, shadow douce, icône orange en haut)
-4. **About-story-split** — section bg #ffffff + image éditoriale paysage 1200×380 + heading + desc en 2 colonnes
-5. **Testimonials 3-cols** — section bg #fafafa + heading + 3 cards (white bg, border-radius 16px, shadow plus marquée, citation italique avec guillemet `&ldquo;` orange + auteur en gras + sub-info)
-6. **FAQ accordéon** — section bg #ffffff + heading + 4 questions (uagb/faq avec layout:accordion, première ouverte, autres collapsées)
-7. **CTA banner final** — image background + overlay gradient sombre + eyebrow + H2 + desc + 2 CTAs
+1. **Hero overlay** : image background pleine page + overlay gradient sombre + eyebrow kicker + H1 + sous-titre + 2 CTAs
+2. **Stats bar** : barre sombre full-width avec 4 stats (#0F172A bg, accent_primary)
+3. **3 Features 3-cols** : section bg #fafafa + heading + 3 cards (white bg, border subtle, shadow douce, icône orange en haut)
+4. **About-story-split** : section bg #ffffff + image éditoriale paysage 1200×380 + heading + desc en 2 colonnes
+5. **Testimonials 3-cols** : section bg #fafafa + heading + 3 cards (white bg, border-radius 16px, shadow plus marquée, citation italique avec guillemet `&ldquo;` orange + auteur en gras + sub-info)
+6. **FAQ accordéon** : section bg #ffffff + heading + 4 questions (uagb/faq avec layout:accordion, première ouverte, autres collapsées)
+7. **CTA banner final** : image background + overlay gradient sombre + eyebrow + H2 + desc + 2 CTAs
 
 ## Variables d'entrée
 
 | Variable | Description | Exemple |
 |----------|-------------|---------|
 | `{{HERO_IMG_URL}}` + `{{HERO_IMG_ID}}` | Image background hero (1920×1080+) | `https://exemple.com/hero.jpg`, `23` |
-| `{{HERO_EYEBROW}}` | Kicker uppercase au-dessus du H1 | `PROMOTION 2026 — DERNIERES PLACES` |
+| `{{HERO_EYEBROW}}` | Kicker uppercase au-dessus du H1 | `PROMOTION 2026 : DERNIERES PLACES` |
 | `{{HERO_HEADLINE}}` | Titre H1 (3-5 mots punchy) | `Réussir ton BTS NDRC en 2026 sans te noyer dans 800 pages de cours` |
 | `{{HERO_SUBHEADLINE}}` | Sous-titre 1-2 phrases | `227 cours rédigés, 33 exercices types épreuve...` |
 | `{{HERO_CTA1_LABEL}}` + `{{HERO_CTA1_LINK}}` | CTA primary | `Réviser maintenant`, `#cours` |
@@ -33,7 +33,7 @@
 | `{{STORY_IMG_URL}}` + `{{STORY_IMG_ID}}` | Image éditoriale 1200×380 | `https://exemple.com/team.jpg`, `24` |
 | `{{STORY_EYEBROW}}` + `{{STORY_HEADING}}` + `{{STORY_DESC}}` | About story split | `Notre approche`, `Le BTS NDRC explique comme un ami qui l'a déjà eu`, `Tu n'es pas là pour relire...` |
 | `{{TESTI_EYEBROW}}` + `{{TESTI_HEADING}}` | Intro testimonials | `Ils ont décroché leur BTS`, `3 anciens étudiants...` |
-| `{{TESTI_1_QUOTE}}` + `{{TESTI_1_AUTHOR}}` + `{{TESTI_1_INFO}}` | Testi 1 (idem 2 et 3) | `Les fiches synthèses...`, `Lea — BTS NDRC obtenu 2025`, `Promotion CFA Marseille — mention bien` |
+| `{{TESTI_1_QUOTE}}` + `{{TESTI_1_AUTHOR}}` + `{{TESTI_1_INFO}}` | Testi 1 (idem 2 et 3) | `Les fiches synthèses...`, `Lea : BTS NDRC obtenu 2025`, `Promotion CFA Marseille : mention bien` |
 | `{{FAQ_HEADING}}` + `{{FAQ_DESC}}` | Intro FAQ | `Questions fréquentes`, `Tout ce que les élèves nous demandent...` |
 | `{{FAQ_1_Q}}` + `{{FAQ_1_A}}` | Question + Réponse (idem 2, 3, 4) | `Le site est-il vraiment gratuit ?`, `Oui, totalement...` |
 | `{{CTA_FINAL_IMG_URL}}` + `{{CTA_FINAL_IMG_ID}}` | Image bg CTA final | `https://exemple.com/students.jpg`, `28` |
@@ -115,7 +115,7 @@ Voir [`workflows/visual-validation-loop.md`](../workflows/visual-validation-loop
 
 ## Conseils production
 
-- **Images** : choisir des photos cohérentes thématiquement (la démo utilise une image fruits/légumes pour l'about-story qui ne match pas BTS NDRC — c'est un placeholder, à remplacer par une vraie photo équipe/cours/étudiants)
+- **Images** : choisir des photos cohérentes thématiquement (la démo utilise une image fruits/légumes pour l'about-story qui ne match pas BTS NDRC : c'est un placeholder, à remplacer par une vraie photo équipe/cours/étudiants)
 - **uagb/faq attribute critique** : le contenu de la réponse DOIT être dans l'attribut JSON `answer` (PAS `description`, ce piège a coûté une itération). Sans ça, Spectra affiche un Lorem Ipsum placeholder
 - **lazy loading** : agent-browser screenshot full ne déclenche pas toujours le lazy loading si l'image est en bas de page. Pour reproduire le screenshot baseline, force `loading="eager"` via JS avant capture
 - **block_id unique** : chaque bloc uagb DOIT avoir un block_id unique. Le validateur (`validate-block-markup.php`) le vérifie. Sans block_id, Gutenberg recompute et casse le rendu
@@ -123,6 +123,6 @@ Voir [`workflows/visual-validation-loop.md`](../workflows/visual-validation-loop
 
 ## Inspiration directe
 
-Inspiré du démo officiel **Spectra Natures** (websitedemos.net/natures-01) — assemblage des sections Homepage + About + Services + Contact réelles importées le 02/05/2026. Voir [`references/spectra-demo-reference.md`](../references/spectra-demo-reference.md) pour l'analyse design system détaillée.
+Inspiré du démo officiel **Spectra Natures** (websitedemos.net/natures-01) : assemblage des sections Homepage + About + Services + Contact réelles importées le 02/05/2026. Voir [`references/spectra-demo-reference.md`](../references/spectra-demo-reference.md) pour l'analyse design system détaillée.
 
 Validation visuelle finale baseline : `screenshots/loginarmor-dev-palette3/v091-iter3-WOW-fullpage.png` (Astra 4.13.1 + Spectra 2.19.25 + palette_3 orange WPF, 02/05/2026).

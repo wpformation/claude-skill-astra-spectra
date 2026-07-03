@@ -1,4 +1,4 @@
-# Référence : Astra page templates — règles obligatoires
+# Référence : Astra page templates : règles obligatoires
 
 > **Lecture obligatoire avant de POST une page sur un site Astra.** Sans ces règles, ton hero avec H1 sera **doublé** par le post_title affiché par défaut → SEO cassé + rendu visuel raté.
 
@@ -23,7 +23,7 @@ Sans ça, Astra applique son template default qui :
 
 Conséquence : ton hero dramatique est précédé d'un titre de page par défaut, et la page entière paraît bricolée.
 
-## Méthode 1 — via REST API meta update
+## Méthode 1 : via REST API meta update
 
 Au moment de POST la page, inclure le meta dans le payload :
 
@@ -46,7 +46,7 @@ curl -X POST -u "user:pass" /wp-json/wp/v2/pages \
 
 **Limite** : `meta` accepte uniquement les meta_keys déclarés en `show_in_rest: true`. Astra le fait pour ses meta principaux, mais si ça ne passe pas, utiliser méthode 2.
 
-## Méthode 2 — via mu-plugin compagnon
+## Méthode 2 : via mu-plugin compagnon
 
 Dans `scripts/mu-plugin-skill-test.php`, ajouter un endpoint `/skill-test/v1/configure-page` :
 
@@ -181,7 +181,7 @@ Pour un hero avec image bg, on peut vouloir un header transparent overlay. Astra
 }
 ```
 
-Sans Astra Pro, le header reste opaque par-dessus le hero — moins joli mais OK.
+Sans Astra Pro, le header reste opaque par-dessus le hero : moins joli mais OK.
 
 ## Validation
 

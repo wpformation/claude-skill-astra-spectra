@@ -89,15 +89,15 @@ Validation : test avec [Google Rich Results Test](https://search.google.com/test
 
 ## Variantes
 
-### Variante 1 — Sans supplies/tools (recipe simple)
+### Variante 1 : Sans supplies/tools (recipe simple)
 
 `showSupplies: false`, `showTools: false`. Juste les étapes.
 
-### Variante 2 — Steps avec images
+### Variante 2 : Steps avec images
 
 Chaque step.image = URL d'une mini-illustration de l'étape. Layout devient plus visuel mais nécessite des images.
 
-### Variante 3 — Avec result (résultat final)
+### Variante 3 : Avec result (résultat final)
 
 Activer `showResult: true` avec `resultHeading` + `resultDesc`. Spectra ajoute une carte « Tu es prêt » à la fin.
 

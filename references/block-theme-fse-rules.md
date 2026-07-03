@@ -23,7 +23,7 @@ Côté skill : `scripts/detect-environment.php` retourne `theme.is_block_theme: 
 
 Les **thèmes classiques** suivants restent NON-FSE et n'imposent pas ces contraintes : Astra, GeneratePress, Kadence, Hello Elementor, Blocksy.
 
-## Règle #1 — `wp:post-title` automatique = double H1 garanti
+## Règle #1 : `wp:post-title` automatique = double H1 garanti
 
 Les block themes FSE rendent leurs templates HTML depuis `/wp-content/themes/{theme}/templates/` (e.g. `single.html`, `page.html`). Ces templates contiennent des blocs `<!-- wp:post-title /-->` hardcodés qui injectent automatiquement un `<h1 class="wp-block-post-title">` à partir du `post_title`.
 
@@ -34,9 +34,9 @@ Les block themes FSE rendent leurs templates HTML depuis `/wp-content/themes/{th
 <h1 class="uagb-ifb-title">{{ headline_hero }}</h1>
 ```
 
-Tu **ne peux pas** désactiver ce comportement via post_meta comme tu le fais sur Astra (`update_post_meta($pid, 'ast-title-bar-display', 'disabled')` est ignoré sur les block themes — option Astra-spécifique).
+Tu **ne peux pas** désactiver ce comportement via post_meta comme tu le fais sur Astra (`update_post_meta($pid, 'ast-title-bar-display', 'disabled')` est ignoré sur les block themes : option Astra-spécifique).
 
-### Fix v1.0-rc4 — meta `_skill_hide_post_title` + hook mu-plugin
+### Fix v1.0-rc4 : meta `_skill_hide_post_title` + hook mu-plugin
 
 Le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` ajoute :
 
@@ -67,7 +67,7 @@ ou directement dans le payload de création :
 
 **Avantage** : universel (fonctionne sur tous les block themes), persistant à travers les éditions Gutenberg, ne casse pas si l'utilisateur change de thème (le post_title sera juste réaffiché normalement).
 
-### Fallback option B — CSS scope dans `_uag_custom_page_level_css`
+### Fallback option B : CSS scope dans `_uag_custom_page_level_css`
 
 Si le mu-plugin compagnon n'est pas installé, fallback CSS scopé sur `body.page-id-{ID}` directement dans le meta CSS :
 
@@ -80,7 +80,7 @@ body.page-id-{ID} .wp-block-post-title,
 
 Inconvénient : tu dois connaître l'ID de la page **après** son POST (donc en 2 étapes : POST page → récupère ID → re-update meta CSS avec scope). Le mu-plugin évite ce round-trip.
 
-## Règle #2 — `entry-content` padding
+## Règle #2 : `entry-content` padding
 
 Les block themes FSE appliquent souvent un padding-left/right sur `.wp-block-post-content` ou `.entry-content` pour la lisibilité éditoriale (40-80px). Pour les blocs `alignfull` (qui doivent toucher les bords), c'est un problème : le full-width est compressé.
 
@@ -96,22 +96,22 @@ body.page-id-{ID} .entry-content {
 }
 ```
 
-## Règle #3 — Pas de `template_redirect` ni `single.php`
+## Règle #3 : Pas de `template_redirect` ni `single.php`
 
 Les block themes n'ont pas de fichiers `single.php` / `page.php` PHP. Tout passe par les templates `.html` FSE. Conséquence : les hooks PHP traditionnels comme `template_redirect`, `the_content` filter, `wp_template_part` ne se déclenchent pas dans le même ordre.
 
 **Implication skill** : les techniques d'injection CSS via `the_content` (parfois utilisées dans des skills d'autres frameworks) ne marchent pas. **Toujours passer par `wp_head` ou par le post_meta `_uag_custom_page_level_css`** (ce que le skill fait déjà).
 
-## Règle #4 — Templates configurables via `wp_template`
+## Règle #4 : Templates configurables via `wp_template`
 
 L'utilisateur peut éditer ses templates via WP Admin > Apparence > Éditeur. Il peut donc :
 - Supprimer le bloc `wp:post-title` du template `page.html` (auquel cas le quirk #24 disparaît)
 - Ajouter des blocs custom au template (header, footer, sidebar)
 - Créer un template page sans titre dédié à appliquer aux pages skill
 
-**Implication skill** : ne PAS supposer que le template par défaut est intact. Toujours appliquer le workaround `_skill_hide_post_title` même si le template a été édité — au pire, le CSS hide une classe qui n'existe plus, c'est inoffensif.
+**Implication skill** : ne PAS supposer que le template par défaut est intact. Toujours appliquer le workaround `_skill_hide_post_title` même si le template a été édité : au pire, le CSS hide une classe qui n'existe plus, c'est inoffensif.
 
-## Règle #5 — Global styles via `theme.json`
+## Règle #5 : Global styles via `theme.json`
 
 Les block themes définissent leurs couleurs, fonts, spacings dans `theme.json` (à la racine du thème). Les variables sont exposées en CSS via `--wp--preset--color-{slug}`, `--wp--preset--font-size-{slug}`, etc.
 
@@ -125,7 +125,7 @@ et les utiliser à la place des `var(--ast-global-color-X)` Astra. **TODO v1.1+*
 
 En l'état (v1.0-rc4), le skill utilise des **hex directs** (`#2563EB`, `#0F172A`, etc.) en mode block theme, ce qui marche partout mais perd l'intégration palette du thème. C'est un trade-off acceptable pour la v1.0.
 
-## Règle #6 — Taille `wp_template_part` header/footer
+## Règle #6 : Taille `wp_template_part` header/footer
 
 Les block themes FSE utilisent `wp:template-part {"slug":"header"}` et `{"slug":"footer"}` qui rendent automatiquement le header / footer global. Tu **ne peux pas** les désactiver à la pièce sur une page (sauf via template page custom).
 
@@ -136,7 +136,7 @@ Les block themes FSE utilisent `wp:template-part {"slug":"header"}` et `{"slug":
 
 Sur les thèmes classiques (Astra), cette feature est native via `update_post_meta($pid, 'site-content-layout', 'page-builder')`. Sur les block themes, non.
 
-## Règle #7 — Block patterns natifs vs Spectra
+## Règle #7 : Block patterns natifs vs Spectra
 
 Les block themes proposent leurs propres « block patterns » (compositions pré-faites accessibles via le bouton « + Patterns » dans Gutenberg). Twenty Twenty-Five fournit ~30 patterns hero / about / pricing / faq.
 
@@ -158,7 +158,7 @@ Quand `detect-environment.php` retourne `theme.is_block_theme: true` :
 
 Avant de déclarer le skill « stable » sur les block themes, tester sur ces 3 :
 
-- ✅ **Twenty Twenty-Five** (default WP 6.7+) — testé 02/05/2026 sur loginarmor-dev (page 59)
+- ✅ **Twenty Twenty-Five** (default WP 6.7+) : testé 02/05/2026 sur loginarmor-dev (page 59)
 - ⏳ Twenty Twenty-Four
 - ⏳ Frost (premium, populaire pour les thèmes éditoriaux)
 

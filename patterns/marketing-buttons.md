@@ -37,7 +37,7 @@
 ## CSS overrides recommandés
 
 ```css
-/* Marketing button primary — pleine couleur orange WPF dramatique */
+/* Marketing button primary : pleine couleur orange WPF dramatique */
 .uagb-block-{slug}-mb-cta .uagb-marketing-btn__link {
   display: inline-flex !important;
   align-items: center !important;
@@ -53,7 +53,7 @@
   box-shadow: 0 12px 32px rgba(15,23,42,0.30) !important;
 }
 
-/* Prefix — uppercase tracking petit */
+/* Prefix : uppercase tracking petit */
 .uagb-block-{slug}-mb-cta .uagb-marketing-btn__prefix {
   text-transform: uppercase !important;
   letter-spacing: 1.5px !important;
@@ -61,19 +61,19 @@
   opacity: 0.9 !important;
 }
 
-/* Label — gros et bold */
+/* Label : gros et bold */
 .uagb-block-{slug}-mb-cta .uagb-marketing-btn__title {
   margin: 0 !important;
   line-height: 1 !important;
 }
 
-/* Sub-text — petit gris clair */
+/* Sub-text : petit gris clair */
 .uagb-block-{slug}-mb-cta .uagb-marketing-btn__sub-text {
   margin: 4px 0 0 !important;
   opacity: 0.85 !important;
 }
 
-/* Icon — flèche / play à droite */
+/* Icon : flèche / play à droite */
 .uagb-block-{slug}-mb-cta .uagb-marketing-btn__icon-wrap {
   flex-shrink: 0 !important;
   display: inline-flex !important;
@@ -104,7 +104,7 @@
 
 ## Variantes
 
-### Variante 1 — Pricing CTA (cas d'usage le plus fréquent)
+### Variante 1 : Pricing CTA (cas d'usage le plus fréquent)
 
 Pour pricing card, le marketing-button remplace avantageusement un simple bouton :
 
@@ -115,7 +115,7 @@ Pour pricing card, le marketing-button remplace avantageusement un simple bouton
 
 L'œil voit immédiatement le prix mensuel + le commitment annuel, en 1 seul bouton.
 
-### Variante 2 — Hero CTA dramatic (formation, SaaS)
+### Variante 2 : Hero CTA dramatic (formation, SaaS)
 
 - Prefix : `Promotion -30%`
 - Label : `Réserve ta place`
@@ -124,14 +124,14 @@ L'œil voit immédiatement le prix mensuel + le commitment annuel, en 1 seul bou
 
 L'eyebrow promotion + label action + suffix scarcity = trio classique de conversion.
 
-### Variante 3 — Download / lead magnet
+### Variante 3 : Download / lead magnet
 
 - Prefix : `Téléchargement gratuit`
 - Label : `Récupérer le PDF`
 - Suffix : `38 pages · sans email requis`
 - Icon : `file-pdf`
 
-### Variante 4 — App store / play store
+### Variante 4 : App store / play store
 
 - Prefix : `Disponible sur`
 - Label : `App Store`

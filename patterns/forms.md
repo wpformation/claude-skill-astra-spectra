@@ -24,7 +24,7 @@
 | Inscription newsletter | `email` (req), `firstname` (text), `consent_rgpd` (checkbox req) |
 | Réservation restaurant | `name` (req), `phone` (req), `email`, `date` (date), `time` (time), `guests` (number 1-20), `notes` (textarea) |
 
-## Block markup — Variante A : `uagb/forms` natif Spectra
+## Block markup : Variante A : `uagb/forms` natif Spectra
 
 ```html
 <!-- wp:uagb/forms {"block_id":"{slug}-form","formLabel":"{{FORM_HEADING}}","formstyling":"boxed","afterSubmitToEmail":"{{FORM_TARGET_EMAIL}}","successMessage":"{{FORM_SUCCESS_MESSAGE}}","afterSubmitBehaviour":"message","buttonAlign":"center","buttonText":"{{FORM_SUBMIT_LABEL}}","buttonAlignment":"left","submitColor":"#FFFFFF","submitBgColor":"var(--ast-global-color-0)","submitTextHoverColor":"#FFFFFF","submitBgHoverColor":"var(--ast-global-color-1)","submitFontSize":16,"submitFontWeight":"700","submitPaddingTopBottom":16,"submitPaddingLeftRight":36,"submitBorderRadius":8,"hPaddingField":16,"vPaddingField":14,"borderRadiusField":8,"borderColorField":"#e5e7eb"} -->
@@ -54,7 +54,7 @@
 <!-- /wp:uagb/forms -->
 ```
 
-## Block markup — Variante B : Contact Form 7 designer
+## Block markup : Variante B : Contact Form 7 designer
 
 Si CF7 est installé, créer le formulaire dans CF7 admin (récupère un shortcode `[contact-form-7 id="123" title="..."]`), puis :
 
@@ -64,7 +64,7 @@ Si CF7 est installé, créer le formulaire dans CF7 admin (récupère un shortco
 <!-- /wp:uagb/cf7-designer -->
 ```
 
-## Block markup — Variante C : Gravity Forms designer
+## Block markup : Variante C : Gravity Forms designer
 
 Si GF est installé, créer le formulaire dans GF admin (récupère un ID), puis :
 
@@ -77,7 +77,7 @@ Si GF est installé, créer le formulaire dans GF admin (récupère un ID), puis
 ## CSS overrides recommandés
 
 ```css
-/* Container formulaire — fond blanc, padding éditorial, shadow */
+/* Container formulaire : fond blanc, padding éditorial, shadow */
 .uagb-block-{slug}-form,
 .uagb-block-{slug}-cf7,
 .uagb-block-{slug}-gf {
@@ -88,7 +88,7 @@ Si GF est installé, créer le formulaire dans GF admin (récupère un ID), puis
   border: 1px solid #e5e7eb !important;
 }
 
-/* Labels — uppercase tracking petit */
+/* Labels : uppercase tracking petit */
 .uagb-block-{slug}-form label,
 .uagb-block-{slug}-cf7 label,
 .uagb-block-{slug}-gf label {
@@ -101,7 +101,7 @@ Si GF est installé, créer le formulaire dans GF admin (récupère un ID), puis
   display: block !important;
 }
 
-/* Inputs — bordure subtile, focus orange */
+/* Inputs : bordure subtile, focus orange */
 .uagb-block-{slug}-form input[type="text"],
 .uagb-block-{slug}-form input[type="email"],
 .uagb-block-{slug}-form input[type="tel"],
@@ -133,7 +133,7 @@ Si GF est installé, créer le formulaire dans GF admin (récupère un ID), puis
   box-shadow: 0 0 0 3px rgba(253,152,0,0.15) !important;
 }
 
-/* Submit button — primary CTA */
+/* Submit button : primary CTA */
 .uagb-block-{slug}-form .uagb-forms__submit-button,
 .uagb-block-{slug}-cf7 input[type="submit"],
 .uagb-block-{slug}-gf input[type="submit"] {
@@ -156,7 +156,7 @@ Si GF est installé, créer le formulaire dans GF admin (récupère un ID), puis
   transform: translateY(-1px) !important;
 }
 
-/* Required asterisk — rouge subtil */
+/* Required asterisk : rouge subtil */
 .uagb-block-{slug}-form .required-mark,
 .uagb-block-{slug}-cf7 .wpcf7-not-valid-tip {
   color: #DC2626 !important;
@@ -181,7 +181,7 @@ Si GF est installé, créer le formulaire dans GF admin (récupère un ID), puis
 
 ## Variantes
 
-### Variante 1 — Contact split avec map (recommandé pour page contact)
+### Variante 1 : Contact split avec map (recommandé pour page contact)
 
 Container `direction:row` :
 - Colonne gauche (`widthDesktop:50`) : le formulaire
@@ -189,7 +189,7 @@ Container `direction:row` :
 
 Cf `templates/page-contact.md`.
 
-### Variante 2 — Newsletter inline minimaliste (footer / hero CTA)
+### Variante 2 : Newsletter inline minimaliste (footer / hero CTA)
 
 Pour newsletter, on ne fait pas un formulaire avec heading + 5 champs. On fait un simple `email + bouton` inline :
 
@@ -202,7 +202,7 @@ Pour newsletter, on ne fait pas un formulaire avec heading + 5 champs. On fait u
 
 CSS minimal pour effet inline pill. Voir `patterns/newsletter-inline.md` (à créer si fréquemment utilisé) ou simplement composer en flat.
 
-### Variante 3 — Devis multi-étapes (wizard)
+### Variante 3 : Devis multi-étapes (wizard)
 
 Pour formulaire long (10+ champs), découper en 3 étapes :
 1. Coordonnées (nom, email, tel)
@@ -211,7 +211,7 @@ Pour formulaire long (10+ champs), découper en 3 étapes :
 
 Spectra `uagb/forms` natif ne supporte pas le wizard. Utiliser **Gravity Forms** ou **Forminator** (multi-step natif).
 
-### Variante 4 — Embed dans modal
+### Variante 4 : Embed dans modal
 
 Wrapper le formulaire dans un `uagb/modal` (cf `patterns/modal.md`). Trigger « Demander un devis » → modal avec le formulaire compact.
 

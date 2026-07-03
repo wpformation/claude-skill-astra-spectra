@@ -1,4 +1,4 @@
-# Référence : règles i18n — français correct (et autres langues)
+# Référence : règles i18n : français correct (et autres langues)
 
 > **Lecture obligatoire si tu génères du contenu en français.** Mes 4 premiers tests de skill ont produit du français sans accents (« Reussir », « rediges », « eleves »), faute considérée par l'utilisateur comme « inacceptable, niveau amateur ». Cette doc liste les règles strictes pour ne plus jamais reproduire ça.
 
@@ -60,7 +60,7 @@ Gutenberg parse les blocs avec un parser tolérant. Mais quand tu envoies du mar
 |   | `&nbsp;` | espace insécable |
 |   | `&thinsp;` | espace fine (avant `%`) |
 
-## Espace insécable français — règle stricte
+## Espace insécable français : règle stricte
 
 En typographie française, **espace insécable obligatoire** avant ces caractères :
 
@@ -80,9 +80,9 @@ Le site est-il vraiment gratuit&nbsp;?
 30&nbsp;€ par module
 ```
 
-Sans `&nbsp;`, le `?` peut wrapper sur la ligne suivante isolé du mot précédent — disgracieux et incorrect typographiquement.
+Sans `&nbsp;`, le `?` peut wrapper sur la ligne suivante isolé du mot précédent : disgracieux et incorrect typographiquement.
 
-## Guillemets — choisir le bon style
+## Guillemets : choisir le bon style
 
 Pour citations dans testimonials :
 
@@ -91,7 +91,7 @@ Pour citations dans testimonials :
 
 Pour les guillemets display 100-120px en haut de card testimonials, préférer `&ldquo;` (forme géométrique plus dense, meilleur effet visuel à grosse taille).
 
-## Apostrophes — typographique vs droite
+## Apostrophes : typographique vs droite
 
 **Convention skill par défaut : typographique** dans le contenu rédactionnel (Académie française, manuels, presse écrite) :
 
@@ -105,7 +105,7 @@ J&rsquo;avais 2 mois pour r&eacute;viser
 
 L'apostrophe droite `'` est seulement pour le code (URLs, JSON keys).
 
-### Cas particulier — convention site cible vs convention typographique
+### Cas particulier : convention site cible vs convention typographique
 
 Certains sites ont une convention webdev pragmatique opposée : **apostrophe droite ASCII partout** (`'` U+0027, pas `’` U+2019). Raisons techniques :
 
@@ -131,7 +131,7 @@ Cas concret rencontré : site `cours-ndrc.fr` a la convention « apostrophes ASC
 | Caractère | Entity | Usage |
 |---|---|---|
 | `-` (hyphen) | direct | mots composés (ex-employé, sub-info, BTS-NDRC) |
-| `–` (en-dash) | `&ndash;` | plages numériques (2018–2024, pages 12–18) |
+| `-` (en-dash) | `&ndash;` | plages numériques (2018-2024, pages 12-18) |
 | `—` (em-dash) | `&mdash;` | incise/parenthèse stylée (« Paris &mdash; ville lumière ») |
 
 **Convention française classique** : tiret demi-cadratin `–` pour les incises, em-dash `—` plutôt anglo-saxon. Mais en design web moderne, les deux passent. Le skill utilise `&mdash;` par cohérence.
@@ -158,13 +158,13 @@ Si mojibake détecté : revérifier que le markup utilise bien HTML entities (pa
 
 ## Cas particulier : eyebrows uppercase
 
-Les eyebrows comme `PROMOTION 2026 — DERNIÈRES PLACES` doivent garder leurs accents en majuscule. CSS `text-transform:uppercase` préserve les accents (Ê, È, À, etc.).
+Les eyebrows comme `PROMOTION 2026 : DERNIÈRES PLACES` doivent garder leurs accents en majuscule. CSS `text-transform:uppercase` préserve les accents (Ê, È, À, etc.).
 
 ```html
 <p class="uagb-ifb-title-prefix" style="letter-spacing:4px;text-transform:uppercase">Promotion 2026 &mdash; Derni&egrave;res places</p>
 ```
 
-Au rendu : `PROMOTION 2026 — DERNIÈRES PLACES` avec `È` correctement majusculisé par CSS.
+Au rendu : `PROMOTION 2026 : DERNIÈRES PLACES` avec `È` correctement majusculisé par CSS.
 
 ## Cas particulier : noms propres
 

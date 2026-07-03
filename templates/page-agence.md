@@ -2,7 +2,7 @@
 
 > **Use case** : Site vitrine d'une agence digitale, marketing, design, dev, ou freelance solo positionné en agence. Conversion via prise de RDV ou demande de devis.
 >
-> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet — il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
+> **Type** : blueprint d'assemblage. Ce template ne contient pas le markup Gutenberg complet : il indique l'ordre des patterns à assembler, les variables à remplir et les effets WOW recommandés. L'assemblage final est produit par le workflow [`deploy-template.md`](../workflows/deploy-template.md). Voir [`templates/README.md`](README.md) pour comprendre cette architecture.
 
 ## Structure (ordre des patterns)
 
@@ -22,7 +22,7 @@
    - Web design / Dev / SEO / Marketing / etc.
    - Icônes ou pictos métier
 
-4. Section "Pourquoi nous" — 3 piliers de valeur
+4. Section "Pourquoi nous" : 3 piliers de valeur
    - Container split avec image illustrative
    - 3 features uagb/info-box minimaliste
 
@@ -70,10 +70,10 @@ CONTACT_FORM_URL: "/contact/"
 
 ## Palette suggérée
 
-- **wpf-minimal** (#18181B noir + accents) — agences premium / luxe
-- **wpf-creative** (#8B5CF6 violet) — agences créatives / design studios
-- **preset_8** (#FD9800 orange) — agences friendly / startup
-- **wpf-dark** (background #0F172A + accent #FF8C00) — tech / bold positioning
+- **wpf-minimal** (#18181B noir + accents) : agences premium / luxe
+- **wpf-creative** (#8B5CF6 violet) : agences créatives / design studios
+- **preset_8** (#FD9800 orange) : agences friendly / startup
+- **wpf-dark** (background #0F172A + accent #FF8C00) : tech / bold positioning
 
 ## Effet wow recommandé
 

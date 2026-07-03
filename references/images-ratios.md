@@ -24,13 +24,13 @@ Solution : documenter pour chaque pattern le ratio attendu, et le communiquer à
 | `testimonials-cards` (avatar) | 1:1 | 400×400 | Portrait recadré |
 | `team-grid` (membre) | 4:5 | 400×500 | Portrait équipe |
 | `features-numbered` (illustration optionnelle) | 1:1 | 600×600 | Illustration carrée |
-| `pricing-3-tiers` | pas d'image | — | — |
-| `faq-accordion` | pas d'image | — | — |
-| `stats-bar-editorial` | pas d'image | — | — |
+| `pricing-3-tiers` | pas d'image | : | : |
+| `faq-accordion` | pas d'image | : | : |
+| `stats-bar-editorial` | pas d'image | : | : |
 | `services-cards-with-images` | 4:3 | 600×450 | Photo service |
 | `blog-post-grid` (featured image) | 16:9 | 1200×675 | Image article cover |
-| `tabs-section` | optionnel 16:9 | 800×450 par tab | — |
-| `slider-carousel` | 16:9 ou 1:1 | 1200×675 ou 800×800 | — |
+| `tabs-section` | optionnel 16:9 | 800×450 par tab | : |
+| `slider-carousel` | 16:9 ou 1:1 | 1200×675 ou 800×800 | : |
 | `timeline-vertical` (étape image) | 1:1 | 200×200 | Mini icône/photo |
 | `how-to-steps` (illustration step) | 4:3 ou 1:1 | 600×450 ou 400×400 | Photo de l'étape |
 | `review-product` (cover) | 1:1 | 800×800 | Produit sur fond uni |
@@ -48,13 +48,13 @@ Pour les avatars testimonials :
 
 ## Stratégies si l'utilisateur n'a pas la bonne image
 
-### Stratégie A — Adapter le pattern au ratio fourni
+### Stratégie A : Adapter le pattern au ratio fourni
 
 Si l'utilisateur ne peut fournir qu'une image portrait pour le hero, adapter le pattern :
 - Hero avec image side (au lieu de hero overlay full-width)
 - Layout 60/40 texte | image au lieu de hero alignfull
 
-### Stratégie B — Image stock par défaut
+### Stratégie B : Image stock par défaut
 
 Maintenir une bibliothèque d'images stock libres de droits (Unsplash, Pexels) catégorisées par thème + ratio :
 
@@ -71,7 +71,7 @@ images/stock/
 Suggestions à l'utilisateur :
 > Pour le hero, je peux utiliser une image stock business landscape par défaut (depuis Unsplash). Tu pourras la remplacer après par ta propre photo.
 
-### Stratégie C — Génération AI
+### Stratégie C : Génération AI
 
 Pour les patterns nécessitant une image très spécifique (e.g. illustration de feature), générer via DALL-E / Midjourney / Stable Diffusion avec un prompt qui force le bon ratio :
 

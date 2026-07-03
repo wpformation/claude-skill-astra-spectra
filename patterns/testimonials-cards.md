@@ -102,7 +102,7 @@ uagb/container#testimonials (root, alignfull, bg #fafafa, padding 140px)
 ## CSS overrides obligatoires (`_uag_custom_page_level_css`)
 
 ```css
-/* Quote — guillemet 120px orange display */
+/* Quote : guillemet 120px orange display */
 .uagb-block-{slug}-testi-1-quote .uagb-ifb-title,
 .uagb-block-{slug}-testi-2-quote .uagb-ifb-title,
 .uagb-block-{slug}-testi-3-quote .uagb-ifb-title {
@@ -123,7 +123,7 @@ uagb/container#testimonials (root, alignfull, bg #fafafa, padding 140px)
   color: #0F172A !important;
 }
 
-/* Nom auteur — bold */
+/* Nom auteur : bold */
 .uagb-block-{slug}-testi-1-meta .uagb-ifb-title,
 .uagb-block-{slug}-testi-2-meta .uagb-ifb-title,
 .uagb-block-{slug}-testi-3-meta .uagb-ifb-title {
@@ -132,7 +132,7 @@ uagb/container#testimonials (root, alignfull, bg #fafafa, padding 140px)
   color: #0F172A !important;
 }
 
-/* Meta sub-info — gris léger */
+/* Meta sub-info : gris léger */
 .uagb-block-{slug}-testi-1-meta .uagb-ifb-desc,
 .uagb-block-{slug}-testi-2-meta .uagb-ifb-desc,
 .uagb-block-{slug}-testi-3-meta .uagb-ifb-desc {
@@ -141,7 +141,7 @@ uagb/container#testimonials (root, alignfull, bg #fafafa, padding 140px)
   color: #454F5E !important;
 }
 
-/* Avatars circulaires — border subtle */
+/* Avatars circulaires : border subtle */
 .uagb-block-{slug}-testi-1-avatar img,
 .uagb-block-{slug}-testi-2-avatar img,
 .uagb-block-{slug}-testi-3-avatar img {
@@ -171,7 +171,7 @@ uagb/container#testimonials (root, alignfull, bg #fafafa, padding 140px)
 
 ## Variantes
 
-### Variante 1 — Avec note 5 étoiles (RECOMMANDÉE pour testimonials)
+### Variante 1 : Avec note 5 étoiles (RECOMMANDÉE pour testimonials)
 
 Renforce la crédibilité visuelle. Ajouter au-dessus du quote, un `uagb/icon-list` horizontal avec 5 icônes star jaunes (FA `star` est dans la whitelist `references/spectra-icons-list.md`) :
 
@@ -207,7 +207,7 @@ CSS overrides associé :
 
 Pour 4.5 ⭐, remplacer la dernière icône par `fa-star-half-alt`.
 
-### Variante 1.b — Watermark guillemet en background
+### Variante 1.b : Watermark guillemet en background
 
 Au lieu d'un guillemet display 120px en haut de card, mettre un guillemet ÉNORME (180px) en watermark transparent en arrière-plan de la card. Plus subtil, plus éditorial.
 
@@ -223,7 +223,7 @@ CSS overrides :
 .uagb-block-{slug}-testi-1::before,
 .uagb-block-{slug}-testi-2::before,
 .uagb-block-{slug}-testi-3::before {
-  content: "“"; /* U+201C littéral, file CSS DOIT être UTF-8 sans BOM. NE PAS utiliser "\201C" — strippé par sanitize_inline_css() de Spectra (cf quirk #21). */
+  content: "“"; /* U+201C littéral, file CSS DOIT être UTF-8 sans BOM. NE PAS utiliser "\201C" : strippé par sanitize_inline_css() de Spectra (cf quirk #21). */
   position: absolute;
   top: -40px;
   right: -10px;
@@ -245,15 +245,15 @@ CSS overrides :
 
 Permet de retirer le `uagb/info-box quote` titre `&ldquo;` et garder seulement la citation desc + auteur. Plus minimaliste.
 
-### Variante 2 — Avec logo de l'entreprise (B2B)
+### Variante 2 : Avec logo de l'entreprise (B2B)
 
 Remplacer l'avatar circulaire par un logo client (ratio rectangle, e.g. 120×40). Utile pour testimonials B2B où la marque > la personne.
 
-### Variante 3 — Slider au lieu de grid
+### Variante 3 : Slider au lieu de grid
 
 Si > 6 témoignages, remplacer le row container par un `uagb/slider` qui paginé.
 
-### Variante 4 — Citation longue + photo cover
+### Variante 4 : Citation longue + photo cover
 
 Pour 1 seul témoignage hero (au lieu de 3 cards), pleine largeur :
 - Photo couverture 16:9 à gauche

@@ -96,19 +96,19 @@ uagb/container#countdown-section (root, alignfull, image bg + overlay, padding 1
 
 ## Variantes
 
-### Variante 1 — Countdown sans secondes
+### Variante 1 : Countdown sans secondes
 
 `layout: "day-hour-minute"`. Plus calme, pas de second qui s'incrémente. Utile si le countdown est long (>1 mois).
 
-### Variante 2 — Compteur inline (sans cards)
+### Variante 2 : Compteur inline (sans cards)
 
 `timerType: "label"` → digits inline avec separator `:`. Plus discret, OK pour ribbon top de page.
 
-### Variante 3 — Avec image side au lieu d'image bg
+### Variante 3 : Avec image side au lieu d'image bg
 
 Utiliser un container row 50/50 image | countdown+CTA. Plus éditorial.
 
-### Variante 4 — Auto-hide après expiration
+### Variante 4 : Auto-hide après expiration
 
 Spectra a `messageOnExpiration: "Inscriptions cl&ocirc;tur&eacute;es"`. À la fin du countdown, affiche ce message au lieu des 0 0 0 0.
 

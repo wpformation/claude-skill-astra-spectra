@@ -1,6 +1,6 @@
-# Référence design system — démos officiels Spectra (Natures, Astra Sites)
+# Référence design system : démos officiels Spectra (Natures, Astra Sites)
 
-> **Origine** : analyse de 4 pages réelles importées du démo officiel Spectra **Natures** (websitedemos.net/natures-01) sur cours-ndrc.fr en mai 2026 : Homepage, Services, Contact, About. Le user a fourni les markups bruts en session — ces fichiers font office de **gold reference visuelle** pour les patterns du skill.
+> **Origine** : analyse de 4 pages réelles importées du démo officiel Spectra **Natures** (websitedemos.net/natures-01) sur cours-ndrc.fr en mai 2026 : Homepage, Services, Contact, About. Le user a fourni les markups bruts en session : ces fichiers font office de **gold reference visuelle** pour les patterns du skill.
 
 > **Pourquoi cette référence** : la v0.8.x du skill produisait du markup techniquement valide mais visuellement raté sur palette_3. Le démo Natures, lui, est **éprouvé en prod** sur des dizaines de milliers de sites. C'est notre boussole de qualité visuelle.
 
@@ -92,7 +92,7 @@ Le démo Natures utilise systématiquement `var(--ast-global-color-4)` comme fon
 
 L'image en haut a `imageBorderTopLeftRadius: 6` + `imageBorderBottomLeftRadius: 0` (radius haut seulement) pour épouser le radius du container.
 
-**ATTENTION COMPATIBILITÉ** : `containerBorderColor: var(--ast-global-color-7)` est le piège classique — sur palette_3 = noir massif. Notre fix : utiliser `#e5e7eb` (hex neutre) ou résoudre via `wpf_skill_resolve_color('border_subtle', $palette)`.
+**ATTENTION COMPATIBILITÉ** : `containerBorderColor: var(--ast-global-color-7)` est le piège classique : sur palette_3 = noir massif. Notre fix : utiliser `#e5e7eb` (hex neutre) ou résoudre via `wpf_skill_resolve_color('border_subtle', $palette)`.
 
 ### 5. Bouton secondary ghost avec icône chevron
 
@@ -233,7 +233,7 @@ Cassure dure (50/50 stop) au lieu d'un fade → visuel "split horizontal" édito
 
 Les démos Spectra (Natures, Astra Sites en général) sont distribués sous **GPL** et accessibles publiquement sur [websitedemos.net](https://websitedemos.net). On peut s'inspirer de leur **structure** (composition de blocs, attributs Spectra) librement.
 
-Les **images** des démos viennent d'unsplash/pexels via Brainstorm Force et sont libres pour usage en démo. Le skill ne fournit pas d'image — c'est à l'utilisateur d'uploader les siennes.
+Les **images** des démos viennent d'unsplash/pexels via Brainstorm Force et sont libres pour usage en démo. Le skill ne fournit pas d'image : c'est à l'utilisateur d'uploader les siennes.
 
 ## Aller plus loin
 

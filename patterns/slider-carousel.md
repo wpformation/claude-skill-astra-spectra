@@ -73,15 +73,15 @@ uagb/container#slider-section (root, alignfull, padding 120px)
 
 ## Variantes
 
-### Variante 1 — Carousel multi-slides desktop (3 visible)
+### Variante 1 : Carousel multi-slides desktop (3 visible)
 
 `slidesToShow: 3` desktop, `slidesToShowTablet: 2`, `slidesToShowMobile: 1`. Utile pour gallery produits.
 
-### Variante 2 — Hero slider full-screen
+### Variante 2 : Hero slider full-screen
 
 Slide-content full-width + image bg + overlay. Padding 0. Slides à 100vh height. Utile pour homepage.
 
-### Variante 3 — Logos clients en boucle infinie
+### Variante 3 : Logos clients en boucle infinie
 
 Variante simplifiée : slides = juste un logo. `slidesToShow: 5`. `autoplay: true`. `arrowDots: "none"`. Effect ribbon de logos.
 

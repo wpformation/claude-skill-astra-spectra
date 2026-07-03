@@ -31,7 +31,7 @@ Application Password : xxxx xxxx xxxx xxxx
 
 ## Étapes du workflow
 
-### Étape 1 — Détection environnement (5-15s)
+### Étape 1 : Détection environnement (5-15s)
 
 Exécuter `scripts/detect-environment.php` sur le site cible (via REST API ou one-shot PHP) :
 
@@ -56,7 +56,7 @@ Résultat attendu :
 
 Si `verdict: "BLOCKED"` → afficher les blockers et arrêter. Lien d'install si Spectra manquant.
 
-### Étape 2 — Parsing du brief (10s)
+### Étape 2 : Parsing du brief (10s)
 
 Tokeniser la demande en intentions identifiables. Pour chaque intention :
 
@@ -75,7 +75,7 @@ Exemple de mapping pour le prompt ci-dessus :
 | « FAQ avec 5 questions » | `patterns/faq-accordion.md` | Q1-5/A1-5 |
 | « CTA final » | `patterns/cta-banner-fullwidth.md` | HEADLINE, SUBLINE, CTAs |
 
-### Étape 3 — Remplissage du contenu (30-60s)
+### Étape 3 : Remplissage du contenu (30-60s)
 
 Pour chaque pattern sélectionné :
 
@@ -99,7 +99,7 @@ F3_TITLE: "Certification reconnue"
 F3_DESC: "Examen final + certificat à ajouter à ton LinkedIn et ton CV."
 ```
 
-### Étape 4 — Assemblage du markup (15s)
+### Étape 4 : Assemblage du markup (15s)
 
 Concaténer tous les patterns remplis dans l'ordre logique :
 
@@ -114,7 +114,7 @@ Concaténer tous les patterns remplis dans l'ordre logique :
 
 Vérifier les `block_id` : tous doivent être uniques. Si deux patterns utilisent le même bloc (ex: `cta-primary`), renommer en `hero-cta-primary` et `final-cta-primary`.
 
-### Étape 5 — Validation roundtrip (5s)
+### Étape 5 : Validation roundtrip (5s)
 
 Critique. Exécuter `scripts/validate-block-markup.php` sur le markup final :
 
@@ -130,9 +130,9 @@ Résultat attendu : `valid: true`, `diff_size: 0`. Si non :
 
 Re-itérer jusqu'à validation 100 %.
 
-### Étape 6 — POST sur l'API REST (5-10s)
+### Étape 6 : POST sur l'API REST (5-10s)
 
-> ⚠️ **Pré-requis Quirk #25 — OPcache PHP-FPM** : si tu viens d'installer le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` dans cette session (via `file_put_contents` ou copie filesystem), **attends 3-5 secondes ou appelle `opcache_invalidate($mu_path, true)`** AVANT de POST + screenshot. Sinon, OPcache PHP-FPM (revalidate_freq 2-3s par défaut) sert l'ancienne version du fichier (souvent inexistante) et les workarounds Quirks #23 (CSS Spectra dans `<head>`) et #24 (hide double H1) ne s'activent pas. Symptôme : screenshot post-POST sans CSS Spectra ni hide H1, alors que le mu-plugin existe sur le disque. Cf `references/spectra-attributes-quirks.md` Quirk #25 pour les 3 stratégies de fix cumulables. Le mu-plugin v1.0-rc6+ s'auto-invalide à la pose, mais un sleep de sécurité reste recommandé.
+> ⚠️ **Pré-requis Quirk #25 : OPcache PHP-FPM** : si tu viens d'installer le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` dans cette session (via `file_put_contents` ou copie filesystem), **attends 3-5 secondes ou appelle `opcache_invalidate($mu_path, true)`** AVANT de POST + screenshot. Sinon, OPcache PHP-FPM (revalidate_freq 2-3s par défaut) sert l'ancienne version du fichier (souvent inexistante) et les workarounds Quirks #23 (CSS Spectra dans `<head>`) et #24 (hide double H1) ne s'activent pas. Symptôme : screenshot post-POST sans CSS Spectra ni hide H1, alors que le mu-plugin existe sur le disque. Cf `references/spectra-attributes-quirks.md` Quirk #25 pour les 3 stratégies de fix cumulables. Le mu-plugin v1.0-rc6+ s'auto-invalide à la pose, mais un sleep de sécurité reste recommandé.
 
 ```bash
 curl -X POST 'https://{{SITE_URL}}/wp-json/wp/v2/pages' \
@@ -150,7 +150,7 @@ curl -X POST 'https://{{SITE_URL}}/wp-json/wp/v2/pages' \
 
 Récupérer l'`id` de la page créée dans la réponse.
 
-### Étape 7 — Récap utilisateur
+### Étape 7 : Récap utilisateur
 
 Output structuré :
 
@@ -183,7 +183,7 @@ Output structuré :
 5. Publie quand prêt
 ```
 
-### Étape 8 (optionnelle) — Validation visuelle automatique
+### Étape 8 (optionnelle) : Validation visuelle automatique
 
 Si le skill `/screenshot-loop` est disponible :
 
@@ -197,7 +197,7 @@ Vérifie que :
 - Couleurs cohérentes (palette respectée)
 - Padding/margin OK sur les 3 breakpoints
 
-### Étape 9 (optionnelle) — Audit design `/impeccable`
+### Étape 9 (optionnelle) : Audit design `/impeccable`
 
 ```
 /impeccable audit "https://{{SITE_URL}}/?page_id={{PAGE_ID}}&preview=true"
@@ -205,7 +205,7 @@ Vérifie que :
 
 Note : `/impeccable` est en **lecture seule** sur WPFormation (la palette orange #FF8C00 est verrouillée). Ici, sur un site client neutre, les commandes `colorize|bolder|typeset` peuvent être autorisées.
 
-### Étape 10 — Cleanup des pages de test
+### Étape 10 : Cleanup des pages de test
 
 Si le titre de la page commence par `TEST `, `POC `, `DEMO ` ou `[skill]`, **proposer la suppression à l'utilisateur** après validation visuelle :
 
@@ -228,27 +228,27 @@ Sinon, sur un site de prod testé itérativement, l'utilisateur se retrouve avec
 
 ## Cas d'erreurs courants
 
-### Erreur 1 — REST API 401 Unauthorized
+### Erreur 1 : REST API 401 Unauthorized
 
 → Application Password invalide ou expiré. Demander à l'utilisateur de regénérer dans WP admin.
 
-### Erreur 2 — REST API 403 Forbidden
+### Erreur 2 : REST API 403 Forbidden
 
 → L'utilisateur n'a pas les droits d'édition. Vérifier le rôle WordPress (doit être au minimum `editor`).
 
-### Erreur 3 — Validation roundtrip diff > 0
+### Erreur 3 : Validation roundtrip diff > 0
 
 → Un attribut JSON est cassé. Le validator log l'attribut fautif. Re-checker l'apostrophe / la virgule / l'échappement.
 
-### Erreur 4 — Block parse warning « invalid content » dans Gutenberg
+### Erreur 4 : Block parse warning « invalid content » dans Gutenberg
 
 → Le HTML rendu dans `<!-- wp:* --> ... <!-- /wp:* -->` ne correspond pas aux attrs. Re-checker le pattern (voir `references/block-markup-syntax.md` règle 4).
 
-### Erreur 5 — block_id dupliqué
+### Erreur 5 : block_id dupliqué
 
 → Deux blocs ont le même `block_id`. Renommer pour rendre unique.
 
-### Erreur 6 — Spectra absent ou outdated
+### Erreur 6 : Spectra absent ou outdated
 
 → Détection environnement aurait dû bloquer. Vérifier que detect-environment.php a tourné.
 

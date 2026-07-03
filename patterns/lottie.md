@@ -31,7 +31,7 @@
 ## CSS overrides recommandés
 
 ```css
-/* Lottie container — centré, padding optionnel */
+/* Lottie container : centré, padding optionnel */
 .uagb-block-{slug}-lottie {
   display: flex !important;
   justify-content: center !important;
@@ -75,13 +75,13 @@
 
 ## Variantes
 
-### Variante 1 — Hero illustration animée (autoplay loop)
+### Variante 1 : Hero illustration animée (autoplay loop)
 
 Animation full largeur dans un hero, à côté du texte H1 + CTA. Format 16:10 ou 1:1, taille 500×500 desktop. Autoplay + loop infini.
 
 Cas d'usage : SaaS landing avec illustration produit, formation avec mascotte explicative.
 
-### Variante 2 — Success animation post-form (autoplay no-loop)
+### Variante 2 : Success animation post-form (autoplay no-loop)
 
 Après soumission de formulaire, afficher une animation succès (cocher animé, fusée qui décolle, confettis). 2-3 secondes, ne boucle pas.
 
@@ -93,7 +93,7 @@ Après soumission de formulaire, afficher une animation succès (cocher animé, 
 }
 ```
 
-### Variante 3 — Hover-to-play icon (hover trigger)
+### Variante 3 : Hover-to-play icon (hover trigger)
 
 Icône statique au repos, animation au hover. Pour cards features.
 
@@ -107,7 +107,7 @@ Icône statique au repos, animation au hover. Pour cards features.
 
 Composer 3-4 icon Lottie côte à côte dans un container row pour effet « features 3-cols animées ».
 
-### Variante 4 — Scroll-triggered (au scroll-into-view)
+### Variante 4 : Scroll-triggered (au scroll-into-view)
 
 Animation déclenchée quand le bloc entre dans le viewport. Utile pour explainer scroll-driven.
 
@@ -119,7 +119,7 @@ Animation déclenchée quand le bloc entre dans le viewport. Utile pour explaine
 }
 ```
 
-### Variante 5 — Background ambient loop
+### Variante 5 : Background ambient loop
 
 Animation ambient en background d'une section (particules, vagues, gradient animé). Trop coûteux ? Préférer un MP4 transparent (`.webm` avec alpha) ou un CSS gradient animé.
 

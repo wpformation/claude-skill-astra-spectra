@@ -78,15 +78,15 @@ JSON-LD Review généré par Spectra :
 
 ## Variantes
 
-### Variante 1 — Multiple reviews comparatives
+### Variante 1 : Multiple reviews comparatives
 
 3 blocs `uagb/review` côte à côte dans un container row pour comparer 3 produits. Width 32% chacun.
 
-### Variante 2 — Verdict mini
+### Variante 2 : Verdict mini
 
 Sans pros/cons détaillés, juste : image + nom + note + 1 phrase verdict + CTA. Plus compact.
 
-### Variante 3 — Review avec galerie
+### Variante 3 : Review avec galerie
 
 Au lieu d'une image principale, intégrer un `uagb/image-gallery` avant la review pour montrer plusieurs angles du produit.
 

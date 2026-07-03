@@ -77,9 +77,9 @@ Chaque card mentionne « J'ai choisi {{TIER}} parce que... ».
 ### 5. Garanties (3 features-numbered)
 
 Pattern `features-numbered.md` adapté :
-- 01 — REMBOURSEMENT « 30 jours satisfait ou remboursé »
-- 02 — SUPPORT « Réponse en 24h ouvrées »
-- 03 — MISES À JOUR « Inclues à vie sur tous les tiers »
+- 01 : REMBOURSEMENT « 30 jours satisfait ou remboursé »
+- 02 : SUPPORT « Réponse en 24h ouvrées »
+- 03 : MISES À JOUR « Inclues à vie sur tous les tiers »
 
 ### 6. FAQ tarifs
 

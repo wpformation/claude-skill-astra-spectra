@@ -37,13 +37,13 @@
 ## CSS overrides recommandés
 
 ```css
-/* Sommaire — fond gris clair, padding éditorial */
+/* Sommaire : fond gris clair, padding éditorial */
 .uagb-block-{slug}-toc .uagb-toc__wrap {
   border-radius: 12px !important;
   border: 1px solid #e5e7eb !important;
 }
 
-/* Titre sommaire — uppercase tracking */
+/* Titre sommaire : uppercase tracking */
 .uagb-block-{slug}-toc .uagb-toc__title {
   font-size: 14px !important;
   font-weight: 800 !important;
@@ -53,7 +53,7 @@
   margin: 0 0 16px !important;
 }
 
-/* Liste — bullets none, espacement éditorial */
+/* Liste : bullets none, espacement éditorial */
 .uagb-block-{slug}-toc .uagb-toc__list {
   list-style: none !important;
   padding-left: 0 !important;
@@ -73,7 +73,7 @@
   font-weight: 700 !important;
 }
 
-/* Liens — sans soulignement, color hover */
+/* Liens : sans soulignement, color hover */
 .uagb-block-{slug}-toc a {
   color: #0F172A !important;
   text-decoration: none !important;
@@ -84,7 +84,7 @@
   color: var(--ast-global-color-0) !important;
 }
 
-/* Niveau 2 — sub-list indentée */
+/* Niveau 2 : sub-list indentée */
 .uagb-block-{slug}-toc ol ol {
   margin-top: 4px !important;
   padding-left: 16px !important;
@@ -109,7 +109,7 @@
 
 ## Variantes
 
-### Variante 1 — TOC inline horizontal (article court)
+### Variante 1 : TOC inline horizontal (article court)
 
 Pour un article 800-1200 mots avec 3-4 H2 seulement, un TOC vertical fait trop. Préférer un horizontal :
 
@@ -130,7 +130,7 @@ Pour un article 800-1200 mots avec 3-4 H2 seulement, un TOC vertical fait trop. 
 
 Effet : pills cliquables comme un breadcrumb sommaire.
 
-### Variante 2 — TOC sidebar sticky (article très long, 3000+ mots)
+### Variante 2 : TOC sidebar sticky (article très long, 3000+ mots)
 
 Wrapper l'article dans un container `directionDesktop:row` avec :
 - Sidebar gauche (`widthDesktop:25`) : le TOC avec `position: sticky; top: 100px;`
@@ -151,7 +151,7 @@ Wrapper l'article dans un container `directionDesktop:row` avec :
 
 Sur mobile/tablette, le TOC redevient inline en haut.
 
-### Variante 3 — TOC collapsible (mobile-first)
+### Variante 3 : TOC collapsible (mobile-first)
 
 Sur mobile, un TOC long mange l'écran. Le rendre collapsible :
 
@@ -164,7 +164,7 @@ Sur mobile, un TOC long mange l'écran. Le rendre collapsible :
 
 Le user clique sur « Sommaire » pour expand. Recommandé pour 8+ items.
 
-### Variante 4 — TOC avec scroll progress
+### Variante 4 : TOC avec scroll progress
 
 Ajouter une barre de progression qui se remplit au scroll de l'article. CSS + JS minimal :
 

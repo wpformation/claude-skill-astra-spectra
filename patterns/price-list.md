@@ -61,14 +61,14 @@
 ## CSS overrides recommandés
 
 ```css
-/* Container — espacement éditorial entre items */
+/* Container : espacement éditorial entre items */
 .uagb-block-{slug}-price-list {
   display: flex !important;
   flex-direction: column !important;
   gap: 28px !important;
 }
 
-/* Item — flex avec image gauche, titre+desc+prix droite */
+/* Item : flex avec image gauche, titre+desc+prix droite */
 .uagb-block-{slug}-price-list .wp-block-uagb-price-list-child {
   display: flex !important;
   gap: 20px !important;
@@ -84,7 +84,7 @@
   flex-shrink: 0 !important;
 }
 
-/* Title row — titre à gauche, séparateur dotted, prix à droite */
+/* Title row : titre à gauche, séparateur dotted, prix à droite */
 .uagb-block-{slug}-price-list .uagb-pl__title-row {
   display: flex !important;
   align-items: baseline !important;
@@ -115,7 +115,7 @@
   white-space: nowrap !important;
 }
 
-/* Description — italic petit gris */
+/* Description : italic petit gris */
 .uagb-block-{slug}-price-list .uagb-pl__description {
   font-size: 14px !important;
   color: #454F5E !important;
@@ -150,19 +150,19 @@
 
 ## Variantes
 
-### Variante 1 — Menu restaurant (cas d'usage principal)
+### Variante 1 : Menu restaurant (cas d'usage principal)
 
 Layout `1-col`, image cercle 80×80, séparateur dotted, prix orange. Plusieurs `uagb/price-list` pour les sections.
 
-### Variante 2 — Carte des vins (sans images)
+### Variante 2 : Carte des vins (sans images)
 
 Layout `1-col`, `showImage: false`, séparateur en pointillés. Description = région + cépage + millésime.
 
-### Variante 3 — Liste prestations agence
+### Variante 3 : Liste prestations agence
 
 Layout `1-col`, image rectangulaire 120×80 (logo prestation), description = bullet list de ce qui est inclus.
 
-### Variante 4 — Grid 2-col (carte spa avec photos)
+### Variante 4 : Grid 2-col (carte spa avec photos)
 
 Layout `2-col`, images plus grandes 200×130, format catalogue. Pour soins esthétiques avec photo d'ambiance.
 
@@ -181,7 +181,7 @@ Layout `2-col`, images plus grandes 200×130, format catalogue. Pour soins esth�
 }
 ```
 
-### Variante 5 — Pricing one-shot avec features
+### Variante 5 : Pricing one-shot avec features
 
 Pas vraiment un price-list, plutôt un container avec gros prix + icon-list features. Voir `templates/page-tarifs.md` ou `patterns/pricing-3-tiers.md`.
 

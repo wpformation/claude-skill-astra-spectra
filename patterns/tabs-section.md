@@ -74,15 +74,15 @@ uagb/container#tabs-section (root, alignfull, padding 120px)
 
 ## Variantes
 
-### Variante 1 — Tabs vertical (sidebar layout)
+### Variante 1 : Tabs vertical (sidebar layout)
 
 `tabsStyle: "vertical"` → onglets en colonne gauche, content en colonne droite. Utile pour FAQ longues ou comparaison features.
 
-### Variante 2 — Tabs avec icônes
+### Variante 2 : Tabs avec icônes
 
 Ajouter `iconColor`, `iconActiveColor`, `icon` dans chaque tabs-child. Validés via `references/spectra-icons-list.md`.
 
-### Variante 3 — Tabs auto-rotate
+### Variante 3 : Tabs auto-rotate
 
 Ajouter `autoRotateTabs: true` + `rotateInterval: 5000` (ms). Les onglets s'animent automatiquement.
 

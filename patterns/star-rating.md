@@ -44,7 +44,7 @@
 ## CSS overrides recommandés
 
 ```css
-/* Container — flex inline */
+/* Container : flex inline */
 .uagb-block-{slug}-rating {
   display: inline-flex !important;
   align-items: center !important;
@@ -52,7 +52,7 @@
   flex-wrap: wrap !important;
 }
 
-/* Title — uppercase tracking petit */
+/* Title : uppercase tracking petit */
 .uagb-block-{slug}-rating .uagb-star-rating__title {
   font-size: 12px !important;
   font-weight: 700 !important;
@@ -61,7 +61,7 @@
   color: #454F5E !important;
 }
 
-/* Stars — gap entre étoiles */
+/* Stars : gap entre étoiles */
 .uagb-block-{slug}-rating .uagb-star-rating__stars {
   display: inline-flex !important;
   gap: 2px !important;
@@ -97,22 +97,22 @@
 
 | # | Quirk |
 |---|---|
-| **Half-star** | Pour score `.5` (4.5, 3.5), Spectra utilise `fa-star-half-alt`. Pour score `.3`, `.7`, etc. — pas de demi-étoile précise. Arrondir à `.5` ou afficher juste `4.3 / 5` numérique sans visuel demi |
+| **Half-star** | Pour score `.5` (4.5, 3.5), Spectra utilise `fa-star-half-alt`. Pour score `.3`, `.7`, etc. : pas de demi-étoile précise. Arrondir à `.5` ou afficher juste `4.3 / 5` numérique sans visuel demi |
 | **Schema fake** | NE JAMAIS générer un `aggregateRating` schema.org si tu n'as pas de vraies reviews. Google peut sanctionner (SEO penalty) pour fake ratings. Mettre `schema: false` si pas de count réel |
-| **Couleur jaune** | `#FBBF24` (amber-400) est le standard universel des étoiles. Éviter de remplacer par une couleur de palette (orange palette) — le user attend du jaune |
+| **Couleur jaune** | `#FBBF24` (amber-400) est le standard universel des étoiles. Éviter de remplacer par une couleur de palette (orange palette) : le user attend du jaune |
 | **Stars empty** | Pour 4/5 étoiles, afficher 4 pleines + 1 vide grise (`#cbd5e1`). NE PAS masquer la 5e (UX cassée, l'utilisateur ne sait pas que le max est 5) |
 | **a11y** | `role="img"` + `aria-label="4.5 sur 5 étoiles"` sur le wrapper. Sinon les screen readers lisent juste « étoile étoile étoile » sans contexte |
 | **Lien vers reviews** | Si la note est cliquable (lien vers la page des avis), wrapper le tout dans `<a href="#reviews">`, pas juste le score |
 
 ## Variantes
 
-### Variante 1 — Inline avec témoignage (testimonials-cards)
+### Variante 1 : Inline avec témoignage (testimonials-cards)
 
 Au-dessus de chaque card de testimonial, 5 étoiles jaunes pleine note. Pour renforcer la crédibilité.
 
 Cf `patterns/testimonials-cards.md` variante 1 (déjà documenté avec `uagb/icon-list` + `fa-star`).
 
-### Variante 2 — Aggregate rating en haut de page produit
+### Variante 2 : Aggregate rating en haut de page produit
 
 ```
 NOTE MOYENNE
@@ -121,7 +121,7 @@ NOTE MOYENNE
 
 Lien vers `#reviews` ancre. Schema.org `aggregateRating` activé. Ce cas d'usage est le plus rentable en SEO (rich snippet Google avec étoiles dans la SERP).
 
-### Variante 3 — Note formation / cours
+### Variante 3 : Note formation / cours
 
 ```
 NOTE DES APPRENANTS
@@ -130,7 +130,7 @@ NOTE DES APPRENANTS
 
 Schema `Course` + `aggregateRating` imbriqué. Pour landing formation.
 
-### Variante 4 — Note service (Trustpilot-style)
+### Variante 4 : Note service (Trustpilot-style)
 
 Si tu intègres Trustpilot ou Google Reviews via API, afficher le score live + lien vers la source :
 
@@ -140,7 +140,7 @@ Si tu intègres Trustpilot ou Google Reviews via API, afficher le score live + l
 
 Lien vers la fiche Google Business. Pas de schema fake (Google détecte si le score ne correspond pas au cumul réel).
 
-### Variante 5 — Rating interactif (user vote)
+### Variante 5 : Rating interactif (user vote)
 
 Pour permettre à l'utilisateur de noter (cliquable étoiles), il faut :
 - JS pour capter le clic

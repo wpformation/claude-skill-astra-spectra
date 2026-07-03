@@ -1,4 +1,4 @@
-# Référence : visual pitfalls — moves design qui sonnent créatifs mais foirent en pratique
+# Référence : visual pitfalls : moves design qui sonnent créatifs mais foirent en pratique
 
 > **LECTURE OBLIGATOIRE** avant d'oser un move design « créatif » (watermark, drop cap, asymetric layout, mono fonts, neon glow, etc.). Ce fichier liste les patterns qui paraissent malins dans l'abstrait mais qui foirent visuellement quand combinés à Spectra + un thème WP standard.
 
@@ -12,7 +12,7 @@ Si tu envisages un move design qui ressemble à un de ces patterns, **lis l'entr
 
 ---
 
-## Pitfall #1 — Watermark numérique géant en deco isolée
+## Pitfall #1 : Watermark numérique géant en deco isolée
 
 ### Symptôme
 
@@ -23,7 +23,7 @@ Tu mets un grand chiffre `247` ou `12+` à 480px de font-size en watermark trans
 - Sans le **reste du design global** déjà committed (typo extreme, palette restreinte, alignements millimetrés), le watermark paraît être un **bug d'affichage**
 - Sur mobile, le watermark déborde ou écrase le contenu
 - Si la section a déjà un H1 + un eyebrow + un accent line orange + un CTA fort, le watermark devient un **5e élément graphique** = saturation visuelle
-- En général, **le user ne demande pas** ça — c'est l'instance Claude qui se croit créative
+- En général, **le user ne demande pas** ça : c'est l'instance Claude qui se croit créative
 
 ### Quand c'est OK
 
@@ -33,12 +33,12 @@ Tu mets un grand chiffre `247` ou `12+` à 480px de font-size en watermark trans
 
 ### Alternative recommandée
 
-- **Numéros 01/02/03** dans des features cards (pattern `features-numbered.md`) — effet éditorial sans le risque watermark
-- **Stats bar avec chiffres 56-72px** alignés en row — clarté + impact, baseline éprouvée
+- **Numéros 01/02/03** dans des features cards (pattern `features-numbered.md`) : effet éditorial sans le risque watermark
+- **Stats bar avec chiffres 56-72px** alignés en row : clarté + impact, baseline éprouvée
 
 ---
 
-## Pitfall #2 — Stats asymetric 40/30/20/10 sans calibration
+## Pitfall #2 : Stats asymetric 40/30/20/10 sans calibration
 
 ### Symptôme
 
@@ -47,7 +47,7 @@ Tu fais 4 stats en row mais tu mets `widthDesktop: 40 / 30 / 20 / 10` pour un ef
 ### Pourquoi ça foire
 
 - Demande une **calibration typo extrême** (la stat 1 doit avoir font-size 80px+ vs stat 4 à 36px) sinon ça paraît cassé
-- Sur tablet et mobile, l'asymétrie devient incompréhensible — les colonnes se réorganisent et la hiérarchie disparaît
+- Sur tablet et mobile, l'asymétrie devient incompréhensible : les colonnes se réorganisent et la hiérarchie disparaît
 - L'œil cherche une grille régulière par défaut, l'asymétrie demande un effort cognitif que la majorité des sites ne mérite pas
 
 ### Quand c'est OK
@@ -58,12 +58,12 @@ Tu fais 4 stats en row mais tu mets `widthDesktop: 40 / 30 / 20 / 10` pour un ef
 
 ### Alternative recommandée
 
-- **Row equal-width 4 cols** (`widthDesktop:22` chacune, gap 24px) — 99 % des cas
+- **Row equal-width 4 cols** (`widthDesktop:22` chacune, gap 24px) : 99 % des cas
 - Si vraiment besoin de hiérarchie, **3 cols égales avec un H1 stat dominant au-dessus** : le H1 fait la hiérarchie, pas la grid
 
 ---
 
-## Pitfall #3 — Drop cap orange `::first-letter` sur paragraphe
+## Pitfall #3 : Drop cap orange `::first-letter` sur paragraphe
 
 ### Symptôme
 
@@ -99,7 +99,7 @@ Effet « magazine éditorial ». Tu trouves ça beau dans ta tête.
 
 ---
 
-## Pitfall #4 — Mono fonts isolés (timestamps, badges, codes)
+## Pitfall #4 : Mono fonts isolés (timestamps, badges, codes)
 
 ### Symptôme
 
@@ -124,7 +124,7 @@ Tu mets `font-family: 'JetBrains Mono', 'Fira Code', monospace` sur un timestamp
 
 ---
 
-## Pitfall #5 — 3+ accents couleur identiques dans la même section (saturation orange)
+## Pitfall #5 : 3+ accents couleur identiques dans la même section (saturation orange)
 
 ### Symptôme
 
@@ -158,7 +158,7 @@ L'œil humain cherche des **points de focus**. S'il y a 4 accents identiques, **
 
 ---
 
-## Pitfall #6 — Padding « éditorial extrême » 220/220 sur toutes les sections
+## Pitfall #6 : Padding « éditorial extrême » 220/220 sur toutes les sections
 
 ### Symptôme
 
@@ -184,7 +184,7 @@ Pour faire « rendu studio editorial », tu mets `topPadding/bottomPadding: 220`
 
 ---
 
-## Pitfall #7 — `border-radius` extrêmes (0px ou 32px+)
+## Pitfall #7 : `border-radius` extrêmes (0px ou 32px+)
 
 ### Symptôme
 
@@ -209,7 +209,7 @@ Pour faire « rendu studio editorial », tu mets `topPadding/bottomPadding: 220`
 
 ---
 
-## Pitfall #8 — Box-shadows over-the-top
+## Pitfall #8 : Box-shadows over-the-top
 
 ### Symptôme
 
@@ -242,7 +242,7 @@ Triple shadow + colored shadow + inset highlight. Tu te crois designer Stripe.
 
 ---
 
-## Pitfall #9 — Animations CSS « subtiles » (hover lift, floating, pulse)
+## Pitfall #9 : Animations CSS « subtiles » (hover lift, floating, pulse)
 
 ### Symptôme
 
@@ -279,7 +279,7 @@ Tu testes sur ton dev local, ça fait wow. En prod, le user trouve ça « épile
 
 ---
 
-## Pitfall #10 — Hero overlay opacity 0.92 (image background invisible)
+## Pitfall #10 : Hero overlay opacity 0.92 (image background invisible)
 
 ### Symptôme
 
@@ -300,7 +300,7 @@ Cf quirk #9 dans `references/spectra-attributes-quirks.md`. Au-delà de 0.85, l'
 
 ---
 
-## Pitfall #11 — Réutiliser la même image entre 2 pages du même site
+## Pitfall #11 : Réutiliser la même image entre 2 pages du même site
 
 ### Symptôme
 
@@ -313,7 +313,7 @@ Tu as utilisé l'image stock `coffee-shop-hero.jpg` pour la page `/` (accueil), 
 
 ### Quand c'est OK
 
-- **Logo / brand asset** (logo, favicon, Open Graph image) — réutilisation OK
+- **Logo / brand asset** (logo, favicon, Open Graph image) : réutilisation OK
 - Image héro brand committed identique sur toutes les pages (cas rare, brand monolithique)
 
 ### Alternative recommandée
@@ -323,7 +323,7 @@ Tu as utilisé l'image stock `coffee-shop-hero.jpg` pour la page `/` (accueil), 
 
 ---
 
-## Pitfall #12 — Trop de sections (8+) en 1 livraison
+## Pitfall #12 : Trop de sections (8+) en 1 livraison
 
 ### Symptôme
 
@@ -331,7 +331,7 @@ Tu livres une page avec hero + stats + features + about + testimonials + pricing
 
 ### Pourquoi ça foire
 
-- Si la 1re section a un défaut design, **les 7 autres ont le même défaut** (typo/spacing/accent) — tu accumules le défaut sur toute la page
+- Si la 1re section a un défaut design, **les 7 autres ont le même défaut** (typo/spacing/accent) : tu accumules le défaut sur toute la page
 - Le user doit donner des feedbacks sur 8 sections d'un coup, c'est cognitivement lourd
 - Si la page est rejetée, **8 sections de travail perdues**
 
@@ -348,7 +348,7 @@ Tu livres une page avec hero + stats + features + about + testimonials + pricing
 
 ---
 
-## Pitfall #13 — Auto-claim « WOW / impeccable / éditorial » sans screenshot
+## Pitfall #13 : Auto-claim « WOW / impeccable / éditorial » sans screenshot
 
 ### Symptôme
 

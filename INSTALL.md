@@ -1,4 +1,4 @@
-# Installation — claude-skill-astra-spectra
+# Installation : claude-skill-astra-spectra
 
 Guide pas-à-pas pour installer le skill et générer ta première page WordPress en moins de 5 minutes.
 
@@ -17,7 +17,7 @@ Guide pas-à-pas pour installer le skill et générer ta première page WordPres
 - (Optionnel) **Astra theme** activé pour bénéficier du module Customizer
 - Permaliens en `/%postname%/` (Réglages > Permaliens)
 
-## Étape 1 — Installer le skill (2 minutes)
+## Étape 1 : Installer le skill (2 minutes)
 
 ### Option A : via git clone (recommandé)
 
@@ -51,7 +51,7 @@ ln -s /path/to/your/clone ~/.claude/skills/astra-spectra
 New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.claude\skills\astra-spectra" -Target "C:\path\to\your\clone"
 ```
 
-## Étape 2 — Générer une Application Password (1 minute)
+## Étape 2 : Générer une Application Password (1 minute)
 
 L'Application Password permet au skill de communiquer avec ton site sans utiliser ton mot de passe principal.
 
@@ -64,18 +64,18 @@ L'Application Password permet au skill de communiquer avec ton site sans utilise
 
 ⚠️ Cette valeur ne sera plus visible après la fermeture de la fenêtre. Note-la dans ton gestionnaire de password.
 
-## Étape 3 — Tester la connexion (30 secondes)
+## Étape 3 : Tester la connexion (30 secondes)
 
 Tu as deux façons d'invoquer le skill :
 
-### Option A — Invocation explicite (recommandée pour test reproductible)
+### Option A : Invocation explicite (recommandée pour test reproductible)
 
 ```
 > /astra-spectra
 > détecte mon site https://monsite.com user=admin app-password="abcd 1234 efgh 5678"
 ```
 
-### Option B — Langage naturel (Claude Code détecte le skill)
+### Option B : Langage naturel (Claude Code détecte le skill)
 
 ```
 > Détecte mon site https://monsite.com avec ce password : abcd 1234 efgh 5678
@@ -123,7 +123,7 @@ Si tu obtiens **HTTP 401** :
 
   Test rapide : `curl -u 'admin:xxxx xxxx xxxx xxxx' https://monsite.com/wp-json/wp/v2/users/me` doit renvoyer un objet utilisateur, pas `{"code":"rest_not_logged_in"}`.
 
-## Étape 4 — Générer ta première page (2 minutes)
+## Étape 4 : Générer ta première page (2 minutes)
 
 ```
 > Crée-moi une page de test simple avec :
@@ -150,7 +150,7 @@ URL de prévisualisation : https://monsite.com/?page_id=42&preview=true
 Composition : 12 blocs (8 uagb + 4 core), 0 erreur de parsing.
 ```
 
-## Étape 5 — Vérifier dans Gutenberg (1 minute)
+## Étape 5 : Vérifier dans Gutenberg (1 minute)
 
 1. Ouvre l'URL d'édition fournie
 2. Tu devrais voir la page complète dans Gutenberg
@@ -205,7 +205,7 @@ Pour SEO : ce n'est pas un problème, Google rend JavaScript depuis 2018+ et voi
 
 ## Pour aller plus loin
 
-- 📚 [Guide PDF premium](https://wpformation.com/skill-astra-spectra/) — 25-40 pages avec recettes avancées
+- 📚 [Guide PDF premium](https://wpformation.com/skill-astra-spectra/) : 25-40 pages avec recettes avancées
 - 🎨 [Patterns disponibles](patterns/)
 - 🎨 [Templates de pages complètes](templates/)
 - 💬 Discord WPFormation (lien dans le PDF premium)

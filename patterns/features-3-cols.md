@@ -24,7 +24,7 @@ Spectra **n'utilise pas** FontAwesome via `<i class="fa-...">`. Il a sa propre l
 
 ### Noms courts d'icônes Spectra utilisables
 
-Catégories (extraits — voir `references/spectra-icons-list.md` pour la liste exhaustive) :
+Catégories (extraits : voir `references/spectra-icons-list.md` pour la liste exhaustive) :
 - **Tech** : `rocket`, `lightbulb`, `code`, `desktop`, `mobile`, `terminal`, `cog`, `database`
 - **Business** : `chart-pie`, `chart-line`, `chart-bar`, `briefcase`, `building`, `dollar-sign`
 - **Social** : `users`, `user`, `user-plus`, `comment`, `comments`, `heart`, `thumbs-up`
@@ -66,19 +66,19 @@ Catégories (extraits — voir `references/spectra-icons-list.md` pour la liste 
 
 ## Variantes
 
-### Variante 1 — 4 colonnes
+### Variante 1 : 4 colonnes
 
 Remplacer `widthDesktop: 33.33` par `widthDesktop: 24`. Ajouter une 4e info-box.
 
-### Variante 2 — Layout vertical (1 col)
+### Variante 2 : Layout vertical (1 col)
 
 `directionDesktop: "column"`, retirer `widthDesktop` des info-box.
 
-### Variante 3 — Sans icônes (mode minimaliste)
+### Variante 3 : Sans icônes (mode minimaliste)
 
 Remplacer chaque info-box par un `uagb/container` enfant avec juste heading + paragraph. Plus typographique.
 
-### Variante 4 — Background dark
+### Variante 4 : Background dark
 
 Container parent : `backgroundColor: var(--ast-global-color-3)`. Cards : `backgroundColor: var(--ast-global-color-2)`. Heading des cards : `var(--ast-global-color-7)`.
 

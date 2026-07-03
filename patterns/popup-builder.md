@@ -132,7 +132,7 @@
 
 ## Variantes
 
-### Variante 1 — Newsletter capture (exit-intent desktop)
+### Variante 1 : Newsletter capture (exit-intent desktop)
 
 ```json
 {
@@ -145,7 +145,7 @@
 
 Body : H2 « Reste au courant » + paragraphe « 1 article par mois, anti-spam, désinscription en 1 clic » + formulaire newsletter inline + bouton.
 
-### Variante 2 — Promo flash bottom-right (slide-in)
+### Variante 2 : Promo flash bottom-right (slide-in)
 
 ```json
 {
@@ -159,11 +159,11 @@ Body : H2 « Reste au courant » + paragraphe « 1 article par mois, anti-spam, 
 
 Body : badge « -30% », heading « Promo Black Friday », CTA « En profiter ». Slide-in discret depuis bas-droit.
 
-### Variante 3 — Cookie consent banner (RGPD)
+### Variante 3 : Cookie consent banner (RGPD)
 
 ⚠️ Pour cookie consent, préférer un plugin dédié (Complianz, CookieYes, Real Cookie Banner) qui gère mieux les opt-in granulaires + multi-langue + intégrations GTM. Pas un cas d'usage popup-builder.
 
-### Variante 4 — Welcome popup (page d'accueil first visit)
+### Variante 4 : Welcome popup (page d'accueil first visit)
 
 ```json
 {
@@ -178,7 +178,7 @@ Body : H2 « Bienvenue sur {{BRAND_NAME}} », image lifestyle, paragraphe brand 
 
 ⚠️ Risque UX : popup au load = friction immédiate. Préférer trigger `scroll: 30%` pour laisser l'utilisateur découvrir d'abord.
 
-### Variante 5 — Fallback core (sans Spectra Pro)
+### Variante 5 : Fallback core (sans Spectra Pro)
 
 Si Spectra free, le popup-builder n'existe pas. Fallback : `core/group` + JS minimal :
 

@@ -1,4 +1,4 @@
-# Module Astra — Customizer Map exhaustif
+# Module Astra : Customizer Map exhaustif
 
 > Cartographie complète des options `astra-settings` pilotables par le skill quand le thème Astra est actif. Sans Astra MCP officiel, on passe par `update_option('astra-settings', $merged)` après lecture-modification-écriture.
 
@@ -41,15 +41,15 @@
 ```php
 'global-color-palette' => [
   'palette' => [
-    '#0274be',  // 0 — primary (CTA, links)
-    '#3a3a3a',  // 1 — secondary (text body)
-    '#0a0a0a',  // 2 — heading text
-    '#0a0a0a',  // 3 — heading dark
-    '#0274be',  // 4 — accent (hover)
-    '#ffffff',  // 5 — body bg
-    '#f5f5f5',  // 6 — alt bg (sections grises)
-    '#fafafa',  // 7 — off-white (cards)
-    '#e7e7e7',  // 8 — border / dividers
+    '#0274be',  // 0 : primary (CTA, links)
+    '#3a3a3a',  // 1 : secondary (text body)
+    '#0a0a0a',  // 2 : heading text
+    '#0a0a0a',  // 3 : heading dark
+    '#0274be',  // 4 : accent (hover)
+    '#ffffff',  // 5 : body bg
+    '#f5f5f5',  // 6 : alt bg (sections grises)
+    '#fafafa',  // 7 : off-white (cards)
+    '#e7e7e7',  // 8 : border / dividers
   ],
 ]
 ```
@@ -211,7 +211,7 @@ Section dédiée `astra-settings.shop-*`, voir `references/astra-woocommerce-map
 
 Astra ajoute automatiquement ce CSS dans `<head>` via `wp_add_inline_style`.
 
-## Workflow type — Modifier la palette
+## Workflow type : Modifier la palette
 
 ```php
 $current = get_option('astra-settings');
@@ -233,7 +233,7 @@ delete_transient('astra_dynamic_css');
 wp_cache_flush();
 ```
 
-## Workflow type — Configurer un header complet
+## Workflow type : Configurer un header complet
 
 ```php
 $current = get_option('astra-settings');
@@ -260,8 +260,8 @@ astra_clear_all_assets_cache();
 
 ## Anti-patterns
 
-- ❌ `update_option('astra-settings', ['global-color-palette' => [...]])` — écrase les centaines de keys de l'option (200+ top-level, 800-2000+ leaves selon ta config Astra Pro)
-- ❌ Modifier `astra-color-palettes` au lieu de `astra-settings.global-color-palette` — la 1re option pilote l'UI Customizer, la 2e pilote le **frontend**
+- ❌ `update_option('astra-settings', ['global-color-palette' => [...]])` : écrase les centaines de keys de l'option (200+ top-level, 800-2000+ leaves selon ta config Astra Pro)
+- ❌ Modifier `astra-color-palettes` au lieu de `astra-settings.global-color-palette` : la 1re option pilote l'UI Customizer, la 2e pilote le **frontend**
 - ❌ Oublier d'invalider les caches → CSS périmé pendant 12h
 - ❌ Toucher à `astra_addons_options` (Astra Pro) sans connaître la clé exacte
 - ❌ Modifier le footer-builder sans Astra Pro actif → fallback widgetisé legacy s'affiche

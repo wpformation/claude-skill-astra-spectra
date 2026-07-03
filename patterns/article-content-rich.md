@@ -6,21 +6,21 @@
 
 ```
 1. Container (alignwide, max 800px) avec direction column
-   ├── core/heading (H1) — Titre article
-   ├── core/paragraph — Lead (2-3 phrases accrocheuses)
-   ├── uagb/table-of-contents — Sommaire auto depuis H2/H3
-   ├── core/heading (H2) — Section 1
-   │   ├── core/paragraph — Texte
-   │   ├── core/image — Illustration
-   │   ├── uagb/inline-notice — Callout important
-   │   └── core/list — Liste à puces
-   ├── core/heading (H2) — Section 2
+   ├── core/heading (H1) : Titre article
+   ├── core/paragraph : Lead (2-3 phrases accrocheuses)
+   ├── uagb/table-of-contents : Sommaire auto depuis H2/H3
+   ├── core/heading (H2) : Section 1
+   │   ├── core/paragraph : Texte
+   │   ├── core/image : Illustration
+   │   ├── uagb/inline-notice : Callout important
+   │   └── core/list : Liste à puces
+   ├── core/heading (H2) : Section 2
    │   ├── core/paragraph
-   │   ├── core/embed — Vidéo YouTube
-   │   └── core/heading (H3) — Sous-section
+   │   ├── core/embed : Vidéo YouTube
+   │   └── core/heading (H3) : Sous-section
    │       └── core/paragraph
-   ├── uagb/info-box — Récap encadré
-   ├── core/heading (H2) — FAQ
+   ├── uagb/info-box : Récap encadré
+   ├── core/heading (H2) : FAQ
    ├── uagb/faq + N× uagb/faq-child
    └── uagb/container (CTA fin d'article)
 ```

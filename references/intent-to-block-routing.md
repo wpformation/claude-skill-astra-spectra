@@ -17,32 +17,32 @@
 
 | Intention éditoriale | Bloc recommandé | Alternative / fallback |
 |----------------------|-----------------|------------------------|
-| Paragraphe texte courant | `core/paragraph` | — |
+| Paragraphe texte courant | `core/paragraph` | : |
 | Titre H1 stylé (animation, soulignement, gradient) | `uagb/advanced-heading` | `core/heading` (level 1) |
 | Titre H2 avec sous-titre | `uagb/advanced-heading` | `core/heading` + `core/paragraph` |
-| Titre H3-H6 simple | `core/heading` | — |
+| Titre H3-H6 simple | `core/heading` | : |
 | Citation simple | `core/quote` | `uagb/blockquote` (plus de design) |
 | Citation visuelle / pull quote | `uagb/blockquote` | `core/pullquote` |
-| Liste à puces simple | `core/list` | — |
+| Liste à puces simple | `core/list` | : |
 | Liste avec icônes personnalisées | `uagb/icon-list` | `core/list` + emojis Unicode |
-| Code source affiché | `core/code` | — |
-| HTML custom | `core/html` | — |
-| Shortcode legacy | `core/shortcode` | — |
+| Code source affiché | `core/code` | : |
+| HTML custom | `core/html` | : |
+| Shortcode legacy | `core/shortcode` | : |
 
 ### Images et médias
 
 | Intention éditoriale | Bloc recommandé | Alternative / fallback |
 |----------------------|-----------------|------------------------|
-| Image décorative isolée | `core/image` | — |
+| Image décorative isolée | `core/image` | : |
 | Galerie d'images | `uagb/image-gallery` | `core/gallery` |
-| Vidéo uploadée (mp4) | `core/video` | — |
-| Audio uploadé (mp3) | `core/audio` | — |
-| Embed YouTube | `core/embed` (provider youtube) | — |
-| Embed Twitter / X | `core/embed` (provider twitter) | — |
-| Embed Spotify / SoundCloud | `core/embed` (provider spotify) | — |
-| Embed Vimeo | `core/embed` (provider vimeo) | — |
-| Lottie animation | `uagb/lottie` | — |
-| Fichier téléchargeable | `core/file` | — |
+| Vidéo uploadée (mp4) | `core/video` | : |
+| Audio uploadé (mp3) | `core/audio` | : |
+| Embed YouTube | `core/embed` (provider youtube) | : |
+| Embed Twitter / X | `core/embed` (provider twitter) | : |
+| Embed Spotify / SoundCloud | `core/embed` (provider spotify) | : |
+| Embed Vimeo | `core/embed` (provider vimeo) | : |
+| Lottie animation | `uagb/lottie` | : |
+| Fichier téléchargeable | `core/file` | : |
 
 ### Sections de mise en page
 
@@ -65,7 +65,7 @@
 | How-to step-by-step | `uagb/how-to` | HowTo JSON-LD |
 | Review d'un produit | `uagb/review` | Review + AggregateRating JSON-LD |
 | Star rating standalone | `uagb/star-rating` | Rating |
-| Table de matières (TOC) | `uagb/table-of-contents` | — |
+| Table de matières (TOC) | `uagb/table-of-contents` | : |
 
 ### Blocs interactifs
 
@@ -84,7 +84,7 @@
 |----------------------|-----------------|-------------|
 | Présentation équipe / membres | `uagb/team` | `uagb/container` + `uagb/info-box` |
 | Présentation auteur | `uagb/info-box` | `uagb/container` custom |
-| Speakers d'un événement | `uagb/team` (variation gallery) | — |
+| Speakers d'un événement | `uagb/team` (variation gallery) | : |
 
 ### Blog / Posts dynamiques
 
@@ -92,9 +92,9 @@
 |----------------------|-----------------|-------------|
 | Grille d'articles récents | `uagb/post` (post grid) | `core/latest-posts` |
 | Liste posts d'une catégorie | `uagb/post` (filtré par taxonomy) | `core/query-loop` |
-| Article carousel | `uagb/post` (layout: carousel) | — |
-| Timeline blog (chronologique) | `uagb/post` (layout: timeline) | — |
-| Pagination de posts | `uagb/post` (avec pagination) | — |
+| Article carousel | `uagb/post` (layout: carousel) | : |
+| Timeline blog (chronologique) | `uagb/post` (layout: timeline) | : |
+| Pagination de posts | `uagb/post` (avec pagination) | : |
 
 ### Forms
 
@@ -102,8 +102,8 @@
 |----------------------|-----------------|-------------|
 | Formulaire de contact simple | `uagb/forms` (mode: contact) | Contact Form 7 + `uagb/cf7-designer` |
 | Formulaire newsletter | `uagb/forms` (mode: subscribe) | Brevo plugin + shortcode `core/shortcode` |
-| Formulaire CF7 stylisé | `uagb/cf7-designer` | — |
-| Formulaire Gravity Forms stylisé | `uagb/gf-designer` | — |
+| Formulaire CF7 stylisé | `uagb/cf7-designer` | : |
+| Formulaire Gravity Forms stylisé | `uagb/gf-designer` | : |
 | Search bar | `uagb/wp-search` | `core/search` |
 
 ### Maps et géolocalisation
@@ -123,7 +123,7 @@
 | Intention éditoriale | Bloc recommandé | Alternative |
 |----------------------|-----------------|-------------|
 | Séparateur visuel | `uagb/separator` | `core/separator` |
-| Espace vertical | `core/spacer` | — |
+| Espace vertical | `core/spacer` | : |
 | Boutons (1 ou +) | `uagb/buttons` (avec `uagb/buttons-child`) | `core/buttons` (plus simple, moins de design) |
 | Bouton CTA standalone | `uagb/marketing-button` | `core/button` |
 
@@ -131,28 +131,28 @@
 
 | Intention éditoriale | Bloc recommandé | Alternative |
 |----------------------|-----------------|-------------|
-| Menu de navigation | `core/navigation` | — |
+| Menu de navigation | `core/navigation` | : |
 | Liste de pages enfants | `core/page-list` | `uagb/post` (filtré) |
-| Breadcrumbs | (utiliser le breadcrumb du thème) | — |
+| Breadcrumbs | (utiliser le breadcrumb du thème) | : |
 
 ### Timeline
 
 | Intention éditoriale | Bloc recommandé | Alternative |
 |----------------------|-----------------|-------------|
 | Timeline / chronologie verticale | `uagb/timeline` | `core/list` numérotée |
-| Roadmap produit | `uagb/timeline` (variation roadmap) | — |
+| Roadmap produit | `uagb/timeline` (variation roadmap) | : |
 
 ### Réseaux sociaux
 
 | Intention éditoriale | Bloc recommandé | Alternative |
 |----------------------|-----------------|-------------|
-| Boutons partage social | `uagb/social-share` (avec `uagb/social-share-child`) | — |
+| Boutons partage social | `uagb/social-share` (avec `uagb/social-share-child`) | : |
 
 ### Cas avancés
 
 | Intention éditoriale | Bloc recommandé | Notes |
 |----------------------|-----------------|-------|
-| Popup builder (full screen modal) | `uagb/popup-builder` | — |
+| Popup builder (full screen modal) | `uagb/popup-builder` | : |
 | Liste taxonomies (catégories) | `uagb/taxonomy-list` | `core/categories` |
 | Promote cross products | `uagb/promote-cross-products` | Use case agence/marketplace |
 

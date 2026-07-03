@@ -1,4 +1,4 @@
-# Référence : Spectra attributs — pièges connus et fixes
+# Référence : Spectra attributs : pièges connus et fixes
 
 > **Lecture obligatoire avant de générer du markup `uagb/*`.** Spectra a des comportements non-documentés qui font échouer du markup techniquement valide. Ce fichier liste les pièges détectés en production et les fixes validés.
 
@@ -346,7 +346,7 @@ Pour vraiment renforcer, ajouter une **barre 32×3px orange** avant le texte (vi
 
 ## 20. `uag_enable_on_page_css_button` doit être `yes` sinon meta `_uag_custom_page_level_css` ignoré
 
-**Symptôme** : tu déploies markup + CSS overrides via `_uag_custom_page_level_css`, tu force `regen-spectra`. Le `_uag_page_assets['css']` ne contient PAS ton CSS. Tous les overrides (entry-content padding-bottom, watermark, accent line, etc.) sont absents du rendu. **Aucune erreur, aucun warning** — le meta est bien sauvegardé en BDD, il n'est juste jamais lu.
+**Symptôme** : tu déploies markup + CSS overrides via `_uag_custom_page_level_css`, tu force `regen-spectra`. Le `_uag_page_assets['css']` ne contient PAS ton CSS. Tous les overrides (entry-content padding-bottom, watermark, accent line, etc.) sont absents du rendu. **Aucune erreur, aucun warning** : le meta est bien sauvegardé en BDD, il n'est juste jamais lu.
 
 **Cause** : Spectra a un toggle global `uag_enable_on_page_css_button` (default `yes`, mais peut être désactivé par sécurité sur Spectra Pro / sites multi-auteurs / hardening). Code source [`class-uagb-post-assets.php:1432-1440`](https://github.com/brainstormforce/wp-spectra/blob/main/classes/class-uagb-post-assets.php) :
 
@@ -420,7 +420,7 @@ Caractères concernés (les plus fréquents en design éditorial) :
 | `\00AB` | `«` | guillemet ouvrant français (laquo) |
 | `\00BB` | `»` | guillemet fermant français (raquo) |
 | `\2014` | `—` | em-dash (mdash) |
-| `\2013` | `–` | en-dash (ndash) |
+| `\2013` | `-` | en-dash (ndash) |
 | `\00A9` | `©` | copyright |
 | `\2026` | `…` | hellip |
 
@@ -456,7 +456,7 @@ Au roundtrip `parse_blocks() → serialize_blocks()`, on a un `diff_size > 0` et
 
 **Fix** : sur chaque `uagb/image`, choisir UNE convention par breakpoint :
 
-**Option A — image fixed-size px** (recommandé pour avatars, icônes) :
+**Option A : image fixed-size px** (recommandé pour avatars, icônes) :
 
 ```json
 {
@@ -468,7 +468,7 @@ Au roundtrip `parse_blocks() → serialize_blocks()`, on a un `diff_size > 0` et
 }
 ```
 
-**Option B — image % container** (pour images responsive en grid) :
+**Option B : image % container** (pour images responsive en grid) :
 
 ```json
 {
@@ -527,9 +527,9 @@ Ce workaround est **safe à coexister** avec le hook Spectra natif : si Spectra 
 - Côté skill : après POST + regen, fetch l'URL frontend, grep `uagb-style-frontend-{post_id}`. Si retourne 0, quirk #23 actif → installer le workaround mu-plugin.
 - Pre-flight check post-render : `scripts/post-render-check.php` peut être appelé après POST + regen pour valider que le CSS est bien dans le HTML.
 
-**Stratégie skill** : depuis v1.0-rc4, le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` inclut **par défaut** ce hook `wp_head` workaround. Plus besoin d'investiguer si Spectra hook ou non — le mu-plugin garantit l'injection.
+**Stratégie skill** : depuis v1.0-rc4, le mu-plugin compagnon `scripts/mu-plugin-skill-test.php` inclut **par défaut** ce hook `wp_head` workaround. Plus besoin d'investiguer si Spectra hook ou non : le mu-plugin garantit l'injection.
 
-**Confirmé sur** : loginarmor-dev.local + Twenty Twenty-Five (block theme FSE) + Spectra v2.19 — page 59 du test 02/05/2026.
+**Confirmé sur** : loginarmor-dev.local + Twenty Twenty-Five (block theme FSE) + Spectra v2.19 : page 59 du test 02/05/2026.
 
 ---
 
@@ -538,7 +538,7 @@ Ce workaround est **safe à coexister** avec le hook Spectra natif : si Spectra 
 **Symptôme** : tu génères un hero avec un H1 `uagb/info-box` propre. Au rendu, le HTML contient **2 `<h1>`** :
 
 ```html
-<h1 class="wp-block-post-title">claude-skill-astra-spectra — knowledge base Spectra v1.0</h1>
+<h1 class="wp-block-post-title">claude-skill-astra-spectra : knowledge base Spectra v1.0</h1>
 <h1 class="uagb-ifb-title">La knowledge base Spectra que personne n'a jamais écrite.</h1>
 ```
 
@@ -556,7 +556,7 @@ Différent du quirk #13 qui parle du cas Astra (page template + meta). Ici c'est
 
 **Fix** : 3 options selon la robustesse souhaitée.
 
-### Option A — CSS scope (plus simple, robuste, recommandé)
+### Option A : CSS scope (plus simple, robuste, recommandé)
 
 Dans `_uag_custom_page_level_css`, ajouter un sélecteur scopé sur l'ID de la page :
 
@@ -571,7 +571,7 @@ WordPress génère automatiquement la classe `body.page-id-{ID}` sur les pages s
 
 **Avantage** : pas de modification de template, persistant à travers les éditions Gutenberg, fonctionne sur tout block theme.
 
-### Option B — Custom template via mu-plugin
+### Option B : Custom template via mu-plugin
 
 Filter `template_include` pour utiliser un template custom sans `wp:post-title` :
 
@@ -587,7 +587,7 @@ add_filter('template_include', function ($template) {
 
 Plus invasif, demande un fichier template custom, casse si l'utilisateur change de thème.
 
-### Option C — Hook `block_core_post_title_render` (pas dispo en core, ignore)
+### Option C : Hook `block_core_post_title_render` (pas dispo en core, ignore)
 
 Pas de filtre core officiel pour disable wp:post-title à la pièce. Skip cette option.
 
@@ -599,11 +599,11 @@ Pas de filtre core officiel pour disable wp:post-title à la pièce. Skip cette 
 - Block theme actif (`wp_is_block_theme() === true`)
 - Au moins un H1 dans le markup généré
 
-Cas confirmé sur : loginarmor-dev.local + **Twenty Twenty-Five** (block theme FSE) + Spectra v2.19 — page 59 du test 02/05/2026. La règle CSS scope `body.page-id-59 .wp-block-post-title { display: none !important; }` masque correctement le double H1 sans affecter les autres pages.
+Cas confirmé sur : loginarmor-dev.local + **Twenty Twenty-Five** (block theme FSE) + Spectra v2.19 : page 59 du test 02/05/2026. La règle CSS scope `body.page-id-59 .wp-block-post-title { display: none !important; }` masque correctement le double H1 sans affecter les autres pages.
 
 ---
 
-## 25. Mu-plugin compagnon nouvellement écrit pas chargé au prochain HTTP — OPcache PHP-FPM
+## 25. Mu-plugin compagnon nouvellement écrit pas chargé au prochain HTTP : OPcache PHP-FPM
 
 **Symptôme** : la session Claude exécute `scripts/mu-plugin-skill-test.php` (auto-installation du mu-plugin compagnon) puis enchaîne **immédiatement** sur :
 - POST de la page draft via `scripts/post-page-via-rest.php`

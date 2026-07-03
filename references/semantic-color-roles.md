@@ -1,4 +1,4 @@
-# Convention couleur — slots Astra GARANTIS vs hex neutres
+# Convention couleur : slots Astra GARANTIS vs hex neutres
 
 > **Origine** : rapport visuel cours-ndrc.fr du 02/05/2026. La v0.8.2 supposait que tous les slots `--ast-global-color-X` avaient une sémantique stable d'une palette à l'autre (ex : `color-7` = off-white). C'est faux. Sur palette_3 d'Astra, `color-7 = #141006` (presque noir). Tous les patterns qui utilisaient `color-7` comme fond clair produisaient des sections noires illisibles.
 

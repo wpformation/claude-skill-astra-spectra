@@ -31,7 +31,7 @@
 ## CSS overrides recommandés (5 variantes par type)
 
 ```css
-/* Container — radius + border-left accent */
+/* Container : radius + border-left accent */
 .uagb-block-{slug}-notice {
   border-radius: 12px !important;
   border-left: 4px solid !important;
@@ -42,7 +42,7 @@
   margin: 24px 0 !important;
 }
 
-/* Icône — taille + couleur synchro avec type */
+/* Icône : taille + couleur synchro avec type */
 .uagb-block-{slug}-notice .uagb-notice-icon {
   flex-shrink: 0 !important;
   font-size: 24px !important;
@@ -50,7 +50,7 @@
   margin-top: 2px !important;
 }
 
-/* Title — bold uppercase tracking petit */
+/* Title : bold uppercase tracking petit */
 .uagb-block-{slug}-notice .uagb-notice-title {
   font-size: 14px !important;
   font-weight: 800 !important;
@@ -59,7 +59,7 @@
   margin: 0 0 6px !important;
 }
 
-/* Body — readable, line-height généreux */
+/* Body : readable, line-height généreux */
 .uagb-block-{slug}-notice .uagb-notice-text p {
   font-size: 15px !important;
   line-height: 1.6 !important;
@@ -68,7 +68,7 @@
 
 /* === Variantes par type === */
 
-/* INFO — bleu */
+/* INFO : bleu */
 .uagb-inline-notice-info {
   background: #EFF6FF !important;
   border-left-color: #3B82F6 !important;
@@ -76,7 +76,7 @@
 }
 .uagb-inline-notice-info .uagb-notice-icon { color: #3B82F6 !important; }
 
-/* SUCCESS — vert */
+/* SUCCESS : vert */
 .uagb-inline-notice-success {
   background: #F0FDF4 !important;
   border-left-color: #16A34A !important;
@@ -84,7 +84,7 @@
 }
 .uagb-inline-notice-success .uagb-notice-icon { color: #16A34A !important; }
 
-/* WARNING — orange */
+/* WARNING : orange */
 .uagb-inline-notice-warning {
   background: #FFFBEB !important;
   border-left-color: #F59E0B !important;
@@ -92,7 +92,7 @@
 }
 .uagb-inline-notice-warning .uagb-notice-icon { color: #F59E0B !important; }
 
-/* ERROR — rouge */
+/* ERROR : rouge */
 .uagb-inline-notice-error {
   background: #FEF2F2 !important;
   border-left-color: #DC2626 !important;
@@ -100,7 +100,7 @@
 }
 .uagb-inline-notice-error .uagb-notice-icon { color: #DC2626 !important; }
 
-/* NEUTRAL — gris */
+/* NEUTRAL : gris */
 .uagb-inline-notice-neutral {
   background: #F9FAFB !important;
   border-left-color: #9CA3AF !important;
@@ -131,14 +131,14 @@
 | # | Quirk |
 |---|---|
 | **Type sans CSS** | Le `noticeType` dans les attrs Spectra ne change pas automatiquement la couleur. Tu DOIS écrire le CSS de chaque variante (cf section précédente) sinon toutes les notices ont le même style |
-| **Couleurs hardcodées** | Les couleurs des notices (bleu info, vert success, etc.) sont des **conventions universelles** — pas de palette Astra. Garder `#3B82F6` blue-500 / `#16A34A` green-600 / `#F59E0B` amber-500 / `#DC2626` red-600 partout |
+| **Couleurs hardcodées** | Les couleurs des notices (bleu info, vert success, etc.) sont des **conventions universelles** : pas de palette Astra. Garder `#3B82F6` blue-500 / `#16A34A` green-600 / `#F59E0B` amber-500 / `#DC2626` red-600 partout |
 | **Dismissible cookie** | Si `noticeDismiss: true`, Spectra pose un cookie pour mémoriser que l'utilisateur a fermé la notice. Sur GDPR strict (sans consentement préalable), c'est illégal. Soit ne pas activer, soit attendre le consent |
 | **Inline dans paragraphe** | `uagb/inline-notice` est un bloc full-width par défaut. Pas pour insérer en milieu de paragraphe. Pour highlight inline, utiliser `<mark>` ou un `<span class="highlight">` |
 | **Markdown body** | Le body accepte du HTML mais pas du markdown. Si le contenu source est en markdown (`**bold**`), le convertir en HTML (`<strong>bold</strong>`) avant injection |
 
 ## Variantes
 
-### Variante 1 — Astuce pédagogique (info)
+### Variante 1 : Astuce pédagogique (info)
 
 ```
 ℹ️ ASTUCE
@@ -146,7 +146,7 @@ Tu peux gagner 30 minutes par semaine en automatisant la sauvegarde
 de tes brouillons avec un cron Vercel.
 ```
 
-### Variante 2 — Avertissement sécurité (warning)
+### Variante 2 : Avertissement sécurité (warning)
 
 ```
 ⚠️ ATTENTION
@@ -154,7 +154,7 @@ Cette commande supprime définitivement la base de données. Toujours
 faire un backup avant.
 ```
 
-### Variante 3 — Confirmation succès (success)
+### Variante 3 : Confirmation succès (success)
 
 ```
 ✅ MIS À JOUR LE 02/05/2026
@@ -162,7 +162,7 @@ Cet article a été refondu avec les dernières informations Spectra
 v2.19.25.
 ```
 
-### Variante 4 — Erreur connue (error)
+### Variante 4 : Erreur connue (error)
 
 ```
 ❌ BUG CONNU
@@ -170,7 +170,7 @@ Cette technique ne fonctionne pas avec Spectra < 2.10. Vérifie ta
 version dans WP Admin > Plugins.
 ```
 
-### Variante 5 — Note de l'auteur (neutral)
+### Variante 5 : Note de l'auteur (neutral)
 
 ```
 ✏️ NOTE DE L'AUTEUR

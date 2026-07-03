@@ -165,19 +165,19 @@ Dupliquer le bloc `uagb/icon-list-child` en incrémentant le block_id et le num�
 <!-- /wp:uagb/icon-list-child -->
 ```
 
-`block_id` doit RESTER UNIQUE dans toute la page. Pas seulement dans le tier — globalement.
+`block_id` doit RESTER UNIQUE dans toute la page. Pas seulement dans le tier : globalement.
 
 ## Variantes
 
-### Variante 1 — 4 plans (Free + 3 paid)
+### Variante 1 : 4 plans (Free + 3 paid)
 
 Réduire `widthDesktop` à 24% et ajouter un 4e tier identique au tier 1.
 
-### Variante 2 — Pricing avec toggle Mensuel/Annuel
+### Variante 2 : Pricing avec toggle Mensuel/Annuel
 
 Livrer 2 sections (mensuelle + annuelle) avec un `uagb/buttons` toggle au-dessus. La logique d'affichage requiert du JS custom non couvert par le markup statique.
 
-### Variante 3 — Mode dark
+### Variante 3 : Mode dark
 
 Section parent : `backgroundColor: var(--ast-global-color-3)`. Cards 1 et 3 : `backgroundColor: var(--ast-global-color-2)`. Card 2 (mise en avant) : `backgroundColor: var(--ast-global-color-7)` (off-white sur fond dark = très contraste).
 

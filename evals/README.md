@@ -1,4 +1,4 @@
-# Evals — Suite de tests automatisés
+# Evals : Suite de tests automatisés
 
 ## Lancer les évals
 

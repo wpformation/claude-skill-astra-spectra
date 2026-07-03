@@ -40,7 +40,7 @@
 ## CSS overrides recommandés
 
 ```css
-/* Bouton trigger — style par défaut harmonisé */
+/* Bouton trigger : style par défaut harmonisé */
 .uagb-block-{slug}-modal .uagb-modal__trigger {
   background-color: var(--ast-global-color-0) !important;
   color: var(--ast-global-color-5) !important;
@@ -65,7 +65,7 @@
   box-shadow: 0 24px 64px rgba(0,0,0,0.30) !important;
 }
 
-/* Close button — top-right */
+/* Close button : top-right */
 .uagb-block-{slug}-modal .uagb-modal__close {
   position: absolute !important;
   top: 16px !important;
@@ -105,7 +105,7 @@
 
 ## Variantes
 
-### Variante 1 — Modal vidéo (démo produit)
+### Variante 1 : Modal vidéo (démo produit)
 
 Trigger = bouton « Voir la démo en vidéo » avec icône play. Modal contient un embed YouTube/Vimeo plein largeur.
 
@@ -118,15 +118,15 @@ Trigger = bouton « Voir la démo en vidéo » avec icône play. Modal contient 
 <!-- /wp:core/embed -->
 ```
 
-### Variante 2 — Modal formulaire devis rapide
+### Variante 2 : Modal formulaire devis rapide
 
 Trigger = bouton « Demander un devis ». Modal contient un `uagb/forms` avec 4-5 champs (nom, email, téléphone, projet, budget).
 
-### Variante 3 — Modal CGV / Politique de confidentialité (legal)
+### Variante 3 : Modal CGV / Politique de confidentialité (legal)
 
 Trigger = lien texte « Lire les CGV » dans un footer. Modal contient un long texte scrollable. CSS spécifique : `max-height: 80vh; overflow-y: auto;` sur `.uagb-modal__inner`.
 
-### Variante 4 — Modal image plein écran (lightbox simple)
+### Variante 4 : Modal image plein écran (lightbox simple)
 
 Trigger = clic sur image. Modal contient l'image en grand. Préférer `uagb/image-gallery` qui a sa propre lightbox pour des galleries entières.
 
