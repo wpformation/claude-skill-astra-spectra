@@ -27,7 +27,7 @@ Ce skill documente ce que personne d'autre n'a documenté pour Spectra :
 - **Validateur post-render** qui fetch l'URL frontend après POST et vérifie que `<style id="uagb-style-frontend-X">` est bien injecté + pas de double H1
 - **35+ patterns** documentés au format « comment construire » (pas du copier-coller) : couvre les 49 blocs Spectra principaux
 - **8 templates** blueprints : compositions de patterns avec variables, schema SEO, configurations Astra
-- **14 scripts** PHP utilitaires (POST tag-aware, regen Spectra 4 stratégies, validate roundtrip, pre-flight, audit, resolve palette)
+- **15 scripts** PHP utilitaires (POST tag-aware, regen Spectra 4 stratégies, validate roundtrip, pre-flight, audit, resolve palette)
 - **Whitelist d'icônes** Font Awesome 5 Free validées (anti-piège fallback identique sur 3 cards)
 - **Règles i18n FR** strictes (HTML entities, espaces insécables typo, em-dash, apostrophe typographique avec table de décision typo vs ASCII selon convention site cible)
 - **Mécanique palette Astra** : slots GARANTIS vs VARIABLES (pour ne pas tomber sur color-7 = noir massif sur certaines palettes preset)

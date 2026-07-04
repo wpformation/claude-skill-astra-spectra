@@ -408,7 +408,7 @@ Cf `scripts/update-page-meta-css.php` pour la logique tag-aware.
 
 ## Versions du skill
 
-- **v1.0** (actuelle) : knowledge base complète + 20 patterns + 8 templates + 17 pièges documentés
+- **v1.0** (actuelle) : knowledge base complète + 35 patterns + 8 templates + 25 pièges documentés
 - v0.9.4 : CSS persistants via meta natif Spectra
 - v0.9.3 : refonte WOW + workaround inline styles
 - v0.9.2 : accents français HTML entities
