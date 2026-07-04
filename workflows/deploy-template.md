@@ -1,6 +1,6 @@
 # Workflow : Deploy Template (Killer Feature 3)
 
-> **Promesse** : l'utilisateur dit « déploie le template SaaS » ou « installe le template formation » → le skill récupère un template complet de page (8-10 disponibles) et l'installe en draft sur le site cible avec adaptation automatique du contenu.
+> **Promesse** : l'utilisateur dit « déploie le template SaaS » ou « installe le template accueil » → le skill récupère un template complet de page (8 disponibles) et l'installe en draft sur le site cible avec adaptation automatique du contenu.
 
 ## Templates disponibles
 
@@ -9,26 +9,23 @@ Voir le dossier [`../templates/`](../templates/) pour les 8 templates production
 | Template ID | Use case | Patterns inclus |
 |-------------|----------|-----------------|
 | `landing-saas` | Landing page d'une app SaaS / outil web | Hero + Features 4-cols + Stats + Pricing 3-tiers + Testimonials + FAQ + CTA |
-| `page-formation` | Page d'une formation en ligne | Hero + Pourquoi nous choisir + Programme + Pricing + Témoignages + FAQ + CTA inscription |
+| `page-accueil` | Page d'accueil, tout secteur | Hero promesse + Stats + Bénéfices + About + Témoignages + Offre/CTA + FAQ + CTA final |
 | `blog-editorial` | Page magazine / blog éditorial | Hero éditorial + Posts grid + Newsletter + Categories |
 | `e-commerce-produit` | Page produit physique ou digital | Hero produit + Features + Galerie + Reviews + Pricing + Garanties + FAQ |
 | `page-agence` | Site vitrine d'agence digital / marketing | Hero impact + Services + Case studies + Team + Process + CTA |
 | `page-contact` | Page contact riche | Hero + Form + Map + Coordonnées + FAQ + Social |
 | `page-tarifs` | Page tarifs standalone | Hero pricing + Pricing 3-tiers + Comparatif tableau + FAQ + CTA |
 | `page-a-propos` | Page À propos d'une entreprise | Hero histoire + Timeline + Team + Valeurs + Stats + CTA |
-| `page-404` | Page d'erreur 404 customisée | Hero 404 + Suggestions liens + Search + CTA retour accueil |
-| `coming-soon` | Page coming soon / pré-launch | Hero countdown + Newsletter + Social + Téléchargement preview |
-
 ## Exemple de prompt
 
 ```
-Déploie le template page-formation sur https://playground.wordpress.net/scope:humble-hip-valley
+Déploie le template page-accueil sur https://playground.wordpress.net/scope:humble-hip-valley
 Remplace le contenu par :
-- Nom formation : "WordPress Mastery"
-- Prix : 297€ une fois
-- Durée : 6 modules sur 8 semaines
-- Public cible : freelances et agences débutantes
-- Formateur : Fabrice Ducarme
+- Marque : "Atelier Lumen"
+- Promesse : "Le café de spécialité torréfié à Marseille"
+- CTA principal : "Découvrir nos cafés" (/boutique/)
+- Bénéfices : origine tracée, livraison 48 h, abonnement flexible
+- Secteur : e-commerce café de spécialité
 ```
 
 ## Étapes du workflow
@@ -79,7 +76,7 @@ Avant le POST, résoudre `{{ASTRA_TEMPLATE}}` via le mapping suivant (selon le `
 
 | `template_name` (input) | `{{ASTRA_TEMPLATE}}` (résolu) | Justification |
 |------------------------|------------------------------|---------------|
-| `page-formation`       | `""` (vide = défaut Astra)    | Sidebar OK pour navigation cours |
+| `page-accueil`         | `""` (vide = défaut Astra)    | Pleine largeur pour la home |
 | `landing-saas`         | `""` (sidebar désactivable au Customizer) | Conversion = pas de distraction |
 | `page-agence`          | `""` (sidebar désactivable au Customizer) | Hero impact full-width |
 | `blog-editorial` (v1.0) | `""` (sidebar par défaut)     | Content + widgets utiles |
@@ -106,21 +103,22 @@ Si tu n'es pas certain d'une valeur valide pour le thème actif, **omet le champ
 ### Étape 7 : Récap
 
 ```markdown
-✅ Template `page-formation` déployé
+✅ Template `page-accueil` déployé
 
-**Page** : "WordPress Mastery"
+**Page** : "Atelier Lumen"
 **ID** : 42
-**Slug** : /wordpress-mastery/
+**Slug** : /accueil/
 **Status** : draft
 
-**Sections déployées** (7) :
-- Hero formation (uagb/container hero-cta-split)
-- Pourquoi nous choisir (uagb/container + 4× uagb/info-box)
-- Programme 6 modules (uagb/timeline)
-- Pricing one-shot (uagb/container + uagb/info-box pricing card)
+**Sections déployées** (8) :
+- Hero promesse (uagb/container hero-cta-split)
+- Preuves chiffrées (uagb/container + 4× stats)
+- Bénéfices clés (uagb/container + 3× uagb/info-box)
+- Qui on est / About (uagb/container + image)
 - Témoignages (uagb/testimonial 3 cards)
-- FAQ formation (uagb/faq + 8 questions)
-- CTA inscription (uagb/container gradient)
+- Offre / CTA (uagb/container + info-box)
+- FAQ (uagb/faq + questions)
+- CTA final (uagb/container gradient)
 
 **Palette appliquée** : WPF orange (`var(--ast-global-color-0)` = #FF8C00)
 

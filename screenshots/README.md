@@ -144,7 +144,7 @@ Exemple `preset_8.json` :
 ## TODO avant v1.0
 
 - [ ] Capturer les 9 patterns sur les 3 palettes minimum (27 screenshots)
-- [ ] Capturer les 3 templates (page-formation, landing-saas, page-agence) sur 3 palettes (9 screenshots)
+- [ ] Capturer les 3 templates (page-accueil, landing-saas, page-agence) sur 3 palettes (9 screenshots)
 - [ ] Ajouter les fixtures `_palettes/*.json` (3 fichiers minimum)
 - [ ] Implémenter le workflow GitHub Actions de régression visuelle
 - [ ] Marquer `tested-on-palettes` dans tous les frontmatters de patterns

@@ -1,6 +1,6 @@
 ---
 name: astra-spectra
-description: Génère des pages WordPress complètes avec Spectra (48 blocs Gutenberg) + Gutenberg core, avec ou sans Astra. Utiliser quand l'utilisateur demande de créer/générer/construire/refondre une page WordPress, une landing page, un site WordPress, ou mentionne Spectra, Astra, Gutenberg blocks, page builder, ou un template de page WP. 3 killer features cumulatives : génération depuis un brief en langage naturel, refonte intelligente d'une page existante, déploiement de templates clic-bouton (page-formation, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence). Spectra obligatoire au runtime, n'importe quel thème WP accepté, Astra optionnel. Toujours invoquer ce skill avant de générer du markup Gutenberg manuel quand Spectra est disponible sur le site cible ; pour du markup Gutenberg core pur (sans Spectra), utiliser plutôt le skill gutenberg-block-authoring.
+description: Génère des pages WordPress complètes avec Spectra (48 blocs Gutenberg) + Gutenberg core, avec ou sans Astra. Utiliser quand l'utilisateur demande de créer/générer/construire/refondre une page WordPress, une landing page, un site WordPress, ou mentionne Spectra, Astra, Gutenberg blocks, page builder, ou un template de page WP. 3 killer features cumulatives : génération depuis un brief en langage naturel, refonte intelligente d'une page existante, déploiement de templates clic-bouton (page-accueil, page-tarifs, page-contact, page-a-propos, blog-editorial, e-commerce-produit, landing-saas, page-agence). Spectra obligatoire au runtime, n'importe quel thème WP accepté, Astra optionnel. Toujours invoquer ce skill avant de générer du markup Gutenberg manuel quand Spectra est disponible sur le site cible ; pour du markup Gutenberg core pur (sans Spectra), utiliser plutôt le skill gutenberg-block-authoring.
 allowed-tools: Bash(curl *), Bash(npx playwright *), Bash(wp *), Read, Write, Edit, Glob, Grep, WebFetch
 ---
 
@@ -182,7 +182,7 @@ patterns/                           ← COMMENT construire (PAS du copier-coller
 └── article-content-rich.md         ← article éditorial mix core+uagb
 
 templates/                          ← BLUEPRINTS de pages complètes (composition de patterns)
-├── page-formation.md
+├── page-accueil.md
 ├── page-tarifs.md
 ├── page-contact.md
 ├── page-a-propos.md

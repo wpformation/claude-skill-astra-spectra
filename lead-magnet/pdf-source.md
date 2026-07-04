@@ -147,13 +147,13 @@ Chaque recette occupe 1.5 page : description, captures avant/après, code markup
 
 3 templates couvrent 80 % des besoins d'agence et de formateur :
 
-## Template 1 : page-formation
+## Template 1 : page-accueil
 
 9 sections : hero impact + bénéfices + programme détaillé + formateur + témoignages + tarifs + FAQ + CTA inscription + section OPCO.
 
 Prompt :
 ```
-/astra-spectra deploy template=page-formation \
+/astra-spectra deploy template=page-accueil \
   titre="Formation WordPress + IA" \
   duree="35h" \
   prix="1900 EUR HT" \
@@ -316,7 +316,7 @@ Résultat : 9 variables CSS `--ast-global-color-0..8` régénérées en moins de
 
 5. /astra-spectra refonte /a-propos/ en mode Spectra moderne, conserver tout le contenu
 
-6. /astra-spectra deploy template=page-formation titre="..." prix=... duree=... opco=true
+6. /astra-spectra deploy template=page-accueil titre="..." prix=... duree=... opco=true
 
 7. /astra-spectra apply palette colors='["#FF8C00", "#3a3a3a", ...]'
 
