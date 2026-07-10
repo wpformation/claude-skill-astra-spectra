@@ -6,7 +6,7 @@ allowed-tools: Bash(curl *), Bash(npx playwright *), Bash(wp *), Read, Write, Ed
 
 # Skill `claude-skill-astra-spectra` : knowledge base v1.0-rc6
 
-> **Ce skill n'est pas un template. C'est une base de connaissance opérationnelle pour générer des pages WordPress correctes du premier coup.** Il liste les 24 pièges Spectra documentés en production, les workflows validés, les conventions de code et les techniques natives à utiliser.
+> **Ce skill n'est pas un template. C'est une base de connaissance opérationnelle pour générer des pages WordPress correctes du premier coup.** Il liste les 25 pièges Spectra documentés en production, les workflows validés, les conventions de code et les techniques natives à utiliser.
 
 ---
 
@@ -16,7 +16,7 @@ Si tu es une instance Claude qui s'apprête à utiliser ce skill, **lis cette se
 
 ### Le skill assume du goût design + discipline visuelle. Si tu ne les as pas, RESTE STRICT.
 
-Plusieurs sessions ont produit du markup techniquement valide (`pre-flight: STATUS OK`, roundtrip diff:0, 24 quirks verts) mais **visuellement catastrophique** parce que l'instance Claude a inventé des moves design hors baselines, n'a pas screenshot avant de claim, et a livré 5+ sections d'un coup sans validation intermédiaire.
+Plusieurs sessions ont produit du markup techniquement valide (`pre-flight: STATUS OK`, roundtrip diff:0, 25 quirks verts) mais **visuellement catastrophique** parce que l'instance Claude a inventé des moves design hors baselines, n'a pas screenshot avant de claim, et a livré 5+ sections d'un coup sans validation intermédiaire.
 
 Le user a explicitement noté la différence entre des sessions qui produisent du « niveau débutant » et celles qui tiennent la route : **la différence n'est pas le talent, c'est la discipline.**
 
@@ -100,7 +100,7 @@ Pour passer en mode strict explicite, dis au user : « Je n'ai pas de tooling de
 
 **Lire AVANT de toucher un seul caractère de markup `uagb/*`** :
 
-1. [`references/spectra-attributes-quirks.md`](references/spectra-attributes-quirks.md) : les **24 pièges** Spectra qui font échouer du markup techniquement valide
+1. [`references/spectra-attributes-quirks.md`](references/spectra-attributes-quirks.md) : les **25 pièges** Spectra qui font échouer du markup techniquement valide
 2. [`references/i18n-rules.md`](references/i18n-rules.md) : règles strictes pour le français (HTML entities, espaces insécables typo)
 3. [`references/persistent-css-overrides.md`](references/persistent-css-overrides.md) : comment styler durablement via `_uag_custom_page_level_css` (le seul moyen pour que ça survive aux éditions Gutenberg)
 4. [`references/design-baselines.md`](references/design-baselines.md) : ⭐ **rulers concrets** typo/spacing par section (anti-improvisation)
@@ -142,7 +142,7 @@ Pré-requis optionnels (active fonctionnalités bonus) :
 SKILL.md                            ← TU ES ICI (entry point)
 
 references/                         ← LIRE EN PREMIER (knowledge base critique)
-├── spectra-attributes-quirks.md    ← 17 pièges Spectra documentés (OBLIGATOIRE)
+├── spectra-attributes-quirks.md    ← 25 pièges Spectra documentés (OBLIGATOIRE)
 ├── i18n-rules.md                   ← FR : entities + nbsp typo (OBLIGATOIRE FR)
 ├── persistent-css-overrides.md     ← _uag_custom_page_level_css (la SEULE technique fiable)
 ├── spectra-icons-list.md           ← whitelist icônes validées + fallback strategy
@@ -238,7 +238,7 @@ User : « fais-moi une landing pour ma formation BTS NDRC avec hero, 3 piliers,
         stats, about story, testimonials, FAQ et CTA final »
 
 Skill :
-  1. Lire references/spectra-attributes-quirks.md (17 pièges)
+  1. Lire references/spectra-attributes-quirks.md (25 pièges)
   2. Lire references/i18n-rules.md
   3. Lire patterns nécessaires : hero-image-overlay, features-numbered,
      stats-bar-editorial, about-story-split, testimonials-cards, faq-accordion,
@@ -284,7 +284,7 @@ Workflow : [`workflows/refonte-page-existante.md`](workflows/refonte-page-exista
     → Spectra version, Astra version, palette active, thème, hébergeur, mu-plugin présent
 
 ÉTAPE 2 : Lire la knowledge base critique
-  references/spectra-attributes-quirks.md  (les 17 pièges)
+  references/spectra-attributes-quirks.md  (les 25 pièges)
   references/i18n-rules.md                 (FR si applicable)
   references/persistent-css-overrides.md   (technique de styling)
 
