@@ -394,7 +394,7 @@ CTA :
 - « S'inscrire à la formation WordPress + IA » → /formation-wordpress/
 - « Suivre la veille WPFormation » (newsletter) → encart inscription
 
-Mentions légales : © 2026 WPFormation : Fabrice Ducarme : EI · SIRET 478 478 332 00032 · Qualiopi · Diffusion gratuite avec inscription newsletter, redistribution interdite sans accord.
+Mentions légales : © 2026 WPFormation : Fabrice Ducarme : EI · SIRET 478 478 332 00040 · Qualiopi · Diffusion gratuite avec inscription newsletter, redistribution interdite sans accord.
 
 ---
 
