@@ -21,6 +21,7 @@ Le 30 octobre, Fabrice a autorisé ce test en décision D18 : une page **brouill
 - Contrôle d'aller-retour `parse_blocks` puis `serialize_blocks` sur le serveur avant chaque écriture : identique.
 - Rendu dans le thème réel par un script de rendu de brouillon (connecté, sans publication), puis Playwright à 1440, 820 et 390 px.
 - Trois itérations, puis arrêt (plafond du `visual-validation-loop`).
+- Itération 4, après l'avis de Fabrice : fond des 2 sections sombres en `#222222` au lieu de `#0F172A`.
 
 ## Résultat de l'itération 3
 
@@ -40,12 +41,17 @@ Toutes les valeurs typographiques sont dans les plages de `references/design-bas
 
 Captures : `d18-v3-*-page-entiere.png` (trois largeurs), `d18-v3-bureau-t18-*.png` (sections), `d18-v1-bureau-page-entiere.png` (avant corrections). Sources : `d18-v3-markup.html`, `d18-v3-page-level.css`.
 
-Le rendu n'a pas encore été jugé par Fabrice : il reste « vérifié par mesures et captures », pas validé.
+## L'avis de Fabrice du 31/10/2026
 
-## 2 pièges absents du skill
+Sur l'itération 3, vue dans l'éditeur et en aperçu : « Le rendu est vraiment très bien, en dehors de l'espèce de bleu marine dans la zone HERO. Mais je trouve ça absolument magnifique. »
+
+L'itération 4 corrige ce seul reproche (piège 3 ci-dessous) : `d18-v4-*.png`, balisage `d18-v4-markup.html`. Les mesures de l'itération 3 ne changent pas (0 débordement, 1 H1, mêmes tailles). Elle n'a pas encore été revue par Fabrice.
+
+## 3 pièges absents du skill
 
 1. **Quirk #13 incomplet sous Astra 4.14.** Les trois métas recommandées (`ast-title-bar-display`, `site-content-layout`, `site-sidebar-layout`) laissent le titre de la page en `<h1 class="entry-title">` : double H1. La méta qui masque le titre est `site-post-title = disabled`, celle des 8 pages publiées du site. Avec elle : 1 seul H1.
 2. **Boutons ignorés quand le site hérite du thème.** Avec `uag_btn_inherit_from_theme = enabled`, l'attribut `inheritFromTheme` vaut `true` par défaut : Spectra n'émet ni couleur, ni bordure, ni arrondi pour `uagb/buttons-child`, et les deux boutons sortent au style du thème (capture v1). Correctif : `"inheritFromTheme": false` dans chaque bouton. Même ainsi, `paddingBtnTop/Left/...` des exemples ne produit aucun CSS en Spectra 2.20.5 : le padding 20/40 n'est obtenu que par le CSS de page.
+3. **Le « dark » de la palette n'est pas un fond de section.** Sur palette_3, `#0F172A` (color-2) est la couleur des titres. Les surfaces sombres du site, la barre de menu et le pied de page, sont en `#222222` (color-8). Posé en fond de section juste sous la barre de menu, `#0F172A` paraît bleu marine : c'est le seul reproche de Fabrice. Règle proposée : prendre le fond d'une section sombre dans la couleur calculée de l'en-tête ou du pied de page du site (une mesure `getComputedStyle` suffit), jamais dans le slot du texte des titres. Avec un fond identique au pied de page, le bandeau des chiffres ne s'en distingue plus que par le filet du pied.
 
 Autres constats :
 
