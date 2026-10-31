@@ -45,7 +45,7 @@ Captures : `d18-v3-*-page-entiere.png` (trois largeurs), `d18-v3-bureau-t18-*.pn
 
 Sur l'itération 3, vue dans l'éditeur et en aperçu : « Le rendu est vraiment très bien, en dehors de l'espèce de bleu marine dans la zone HERO. Mais je trouve ça absolument magnifique. »
 
-L'itération 4 corrige ce seul reproche (piège 3 ci-dessous) : `d18-v4-*.png`, balisage `d18-v4-markup.html`. Les mesures de l'itération 3 ne changent pas (0 débordement, 1 H1, mêmes tailles). Elle n'a pas encore été revue par Fabrice.
+L'itération 4 corrige ce seul reproche (piège 3 ci-dessous) : `d18-v4-*.png`, balisage `d18-v4-markup.html`. Les mesures de l'itération 3 ne changent pas (0 débordement, 1 H1, mêmes tailles). Fabrice l'a validée le même jour : « Ouais, c'est parfait. Je valide. »
 
 ## 3 pièges absents du skill
 
