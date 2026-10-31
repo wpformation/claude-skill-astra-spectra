@@ -148,6 +148,6 @@ Exemple `preset_8.json` :
 - [ ] Ajouter les fixtures `_palettes/*.json` (3 fichiers minimum)
 - [ ] Implémenter le workflow GitHub Actions de régression visuelle
 - [ ] Marquer `tested-on-palettes` dans tous les frontmatters de patterns
-- [ ] Tester sur un site client réel (cours-ndrc.fr palette_3 idéalement, qui sert de baseline régression)
+- [x] Tester sur un site client réel (cours-ndrc.fr palette_3 idéalement, qui sert de baseline régression) : fait le 31/10/2026 sur un brouillon de 3 sections, 2 pièges nouveaux relevés, voir `cours-ndrc-palette3/README.md`
 
 Tant que cette TODO n'est pas cochée à 100 %, ne pas tag v1.0. La leçon de la v0.8.2 : 17 fixes techniques validés ne valent rien si le rendu visuel ne marche pas en production.

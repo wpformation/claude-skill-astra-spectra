@@ -1,0 +1,30 @@
+/* === skill-generated v1.0 START === */
+.entry-content { padding-bottom: 0 !important; }
+.entry-content > .alignfull:last-child { margin-bottom: 0 !important; }
+.uagb-block-t18-hero-text .uagb-ifb-title { font-size: 76px !important; font-weight: 800 !important; line-height: 1.05 !important; letter-spacing: -2px !important; }
+.uagb-block-t18-hero-text .uagb-ifb-desc { font-size: 20px !important; line-height: 1.6 !important; }
+.uagb-ifb-title-prefix[class] { font-size: 14px !important; letter-spacing: 4px !important; text-transform: uppercase !important; }
+.uagb-block-t18-leviers-title .uagb-ifb-title, .uagb-block-t18-stats-title .uagb-ifb-title { font-size: 44px !important; font-weight: 800 !important; line-height: 1.15 !important; letter-spacing: -1px !important; }
+.uagb-block-t18-leviers-title .uagb-ifb-desc, .uagb-block-t18-stats-title .uagb-ifb-desc { font-size: 18px !important; line-height: 1.65 !important; }
+.uagb-block-t18-lev-1-num .uagb-ifb-title, .uagb-block-t18-lev-2-num .uagb-ifb-title, .uagb-block-t18-lev-3-num .uagb-ifb-title { font-size: 56px !important; font-weight: 800 !important; line-height: 1 !important; letter-spacing: -2px !important; margin: 0 !important; }
+.uagb-block-t18-lev-1-num .uagb-ifb-desc, .uagb-block-t18-lev-2-num .uagb-ifb-desc, .uagb-block-t18-lev-3-num .uagb-ifb-desc { font-size: 13px !important; font-weight: 700 !important; letter-spacing: 2px !important; text-transform: uppercase !important; }
+.uagb-block-t18-lev-1-text .uagb-ifb-title, .uagb-block-t18-lev-2-text .uagb-ifb-title, .uagb-block-t18-lev-3-text .uagb-ifb-title { font-size: 26px !important; font-weight: 800 !important; line-height: 1.3 !important; letter-spacing: -0.5px !important; }
+.uagb-block-t18-lev-1-text .uagb-ifb-desc, .uagb-block-t18-lev-2-text .uagb-ifb-desc, .uagb-block-t18-lev-3-text .uagb-ifb-desc { font-size: 16px !important; line-height: 1.7 !important; }
+[class*="uagb-block-t18-stat-"] .uagb-ifb-title { font-size: 56px !important; font-weight: 800 !important; line-height: 1 !important; letter-spacing: -2px !important; margin: 0 !important; }
+[class*="uagb-block-t18-stat-"] .uagb-ifb-desc { font-size: 13px !important; font-weight: 700 !important; letter-spacing: 2px !important; text-transform: uppercase !important; }
+.uagb-block-t18-cta-1 .wp-block-button__link, .uagb-block-t18-cta-2 .wp-block-button__link { padding: 20px 40px !important; border-radius: 8px !important; font-size: 16px !important; }
+@media (max-width: 1024px) {
+  .uagb-block-t18-hero-text .uagb-ifb-title { font-size: 54px !important; line-height: 1.1 !important; letter-spacing: -1.5px !important; }
+  .uagb-block-t18-hero-text .uagb-ifb-desc { font-size: 17px !important; }
+  .uagb-block-t18-leviers-title .uagb-ifb-title, .uagb-block-t18-stats-title .uagb-ifb-title { font-size: 34px !important; }
+  [class*="uagb-block-t18-stat-"] .uagb-ifb-title { font-size: 48px !important; }
+}
+@media (max-width: 600px) {
+  .uagb-block-t18-hero-text .uagb-ifb-title { font-size: 38px !important; line-height: 1.15 !important; letter-spacing: -1px !important; }
+  .uagb-block-t18-hero-text .uagb-ifb-desc { font-size: 16px !important; }
+  .uagb-ifb-title-prefix[class] { font-size: 13px !important; }
+  .uagb-block-t18-cta-1 .wp-block-button__link, .uagb-block-t18-cta-2 .wp-block-button__link { padding: 16px 32px !important; }
+  .uagb-block-t18-leviers-title .uagb-ifb-title, .uagb-block-t18-stats-title .uagb-ifb-title { font-size: 28px !important; }
+  [class*="uagb-block-t18-stat-"] .uagb-ifb-title { font-size: 40px !important; }
+}
+/* === skill-generated v1.0 END === */
