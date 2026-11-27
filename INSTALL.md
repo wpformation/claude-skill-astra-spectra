@@ -13,7 +13,7 @@ Guide pas-à-pas pour installer le skill et générer ta première page WordPres
 
 - WordPress **6.0+** installé (vérifie : Tableau de bord > Mises à jour)
 - PHP **7.4+** (vérifie : Outils > Santé du site > Info > Serveur)
-- **Spectra plugin** installé et activé : [wordpress.org/plugins/ultimate-addons-for-gutenberg](https://wordpress.org/plugins/ultimate-addons-for-gutenberg/)
+- **Spectra Legacy** installé et activé : [wordpress.org/plugins/ultimate-addons-for-gutenberg](https://wordpress.org/plugins/ultimate-addons-for-gutenberg/)
 - (Optionnel) **Astra theme** activé pour bénéficier du module Customizer
 - Permaliens en `/%postname%/` (Réglages > Permaliens)
 
@@ -35,8 +35,8 @@ git clone https://github.com/wpformation/claude-skill-astra-spectra.git astra-sp
 
 ### Option B : via téléchargement ZIP
 
-1. Télécharge le ZIP depuis [GitHub](https://github.com/wpformation/claude-skill-astra-spectra/archive/refs/heads/main.zip)
-2. Extrais dans `~/.claude/skills/astra-spectra/` (le dossier doit s'appeler exactement `astra-spectra`)
+1. Télécharge le ZIP depuis [GitHub](https://github.com/wpformation/claude-skill-astra-spectra/archive/refs/heads/master.zip)
+2. Ouvre le dossier `claude-skill-astra-spectra-master` de l’archive et extrais son contenu dans `~/.claude/skills/astra-spectra/` (le dossier doit s'appeler exactement `astra-spectra`)
 3. Vérifie que `~/.claude/skills/astra-spectra/SKILL.md` existe
 
 ### Option C : symlink depuis un repo local
