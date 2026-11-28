@@ -1,13 +1,11 @@
 # À faire : claude-skill-astra-spectra
 
-Mis à jour le 27/11/2026 par Codex (vérification de l’archive d’installation). Ce fichier est chargé à l'ouverture de chaque session : les points datés échus ou à 7 jours sont signalés dans la première réponse. Un point par ligne ; le détail reste dans l'issue, la pull request ou le document lié.
+Mis à jour le 28/11/2026 par Codex pour la mise en ligne du [guide du ZIP](https://github.com/wpformation/claude-skill-astra-spectra/pull/7). Ce fichier est chargé à l'ouverture de chaque session : les points datés échus ou à 7 jours sont signalés dans la première réponse. Un point par ligne ; le détail reste dans l'issue, la pull request ou le document lié.
 
 ## Attend Fabrice
 
 
 ## Travail des agents
-
-- [ ] 27/11/2026, intégrer le [guide d’installation](INSTALL.md) corrigé. Le ZIP de master s’ouvre et contient le fichier SKILL.md.
 
 - [ ] Intégrer les 3 pièges relevés sur cours-ndrc.fr le 31/10/2026 : `site-post-title = disabled` manque au quirk #13, `inheritFromTheme: false` aux boutons quand le site hérite du thème (padding des boutons seulement par CSS de page en Spectra 2.20.5), et le fond d'une section sombre pris dans la couleur de l'en-tête du site, pas dans le slot des titres. Lien : `screenshots/cours-ndrc-palette3/README.md`.
 - [ ] Liste « TODO avant v1.0 », 5 cases encore ouvertes : 27 captures des 9 patterns sur 3 palettes, 9 captures des 3 templates, fixtures `_palettes/*.json`, régression visuelle en GitHub Actions, `tested-on-palettes` dans les frontmatters des patterns. Pas d'étiquette v1.0 avant qu'elles soient toutes cochées (version actuelle : 1.0-rc6 du 02/05/2026). Lien : `screenshots/README.md`.
