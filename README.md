@@ -220,6 +220,7 @@ cd ~/.claude/skills/
 git clone https://github.com/wpformation/claude-skill-astra-spectra astra-spectra
 
 # 2. Sur ton WP cible : activer Spectra + créer un Application Password
+# Extension Spectra Legacy (blocs UAGB)
 wp plugin install ultimate-addons-for-gutenberg --activate
 # Puis WP admin > Profil > Application Passwords > nouveau « claude-skill-astra-spectra »
 
